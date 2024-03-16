@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 export type RootStackParamList = {
+  ForgotPasswordScreen: undefined
   SignInScreen: undefined
   SignUpScreen: undefined
   HomeScreen: undefined
