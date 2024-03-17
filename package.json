@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-navigation/material-bottom-tabs": "^6.2.27",
     "@react-navigation/native": "^6.1.14",
     "@react-navigation/native-stack": "^6.9.22",
     "iconsax-react-native": "^0.0.8",

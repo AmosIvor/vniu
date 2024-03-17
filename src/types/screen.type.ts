@@ -6,6 +6,8 @@ export type RootStackParamList = {
   SignUpScreen: undefined
   HomeScreen: undefined
   ProductDetailScreen: undefined
+
+  TabNavigation: undefined
 }
 
 export type HomeScreenProp = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>
