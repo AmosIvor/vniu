@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StatusBar, StyleSheet } from 'react-native'
 import { appColors } from 'src/constants.ts/appColors'
 import { appFonts } from 'src/constants.ts/appFonts'
 
@@ -6,7 +6,7 @@ export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: appColors.bgPrimary,
-    paddingTop: 24
+    paddingTop: StatusBar.currentHeight
   },
 
   section: {

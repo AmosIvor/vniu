@@ -18,7 +18,7 @@ const RowComponent = (props: Props) => {
       {children}
     </TouchableOpacity>
   ) : (
-    <View style={localStyle}> {children}</View>
+    <View style={localStyle}>{children}</View>
   )
 }
 export default RowComponent

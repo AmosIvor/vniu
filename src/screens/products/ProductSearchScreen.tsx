@@ -1,10 +1,12 @@
-import { View, Text } from 'react-native'
+import { ContainerComponent, TextComponent } from '@components'
+import { View, Text, StatusBar } from 'react-native'
+import { globalStyles } from 'src/styles/globalStyles'
 
 const ProductSearchScreen = () => {
   return (
-    <View>
-      <Text>ProductSearchScreen</Text>
-    </View>
+    <ContainerComponent isScroll isBack isImageBg title='Hello'>
+      <TextComponent text='Hello' />
+    </ContainerComponent>
   )
 }
 export default ProductSearchScreen
