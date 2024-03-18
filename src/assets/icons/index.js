@@ -13,3 +13,4 @@ export { default as IC_T_shirt } from './t_shirt.png';
 export { default as IC_Pants } from './pants.png';
 export { default as IC_Jeans } from './jean.png';
 export { default as IC_Shorts } from './shorts.png';
+export { default as IC_All } from './all.png';
