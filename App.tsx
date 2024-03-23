@@ -4,7 +4,7 @@ import { SafeAreaView, StatusBar } from 'react-native'
 const App = () => {
   return (
     <>
-      <StatusBar translucent barStyle='light-content' backgroundColor='transparent' />
+      <StatusBar translucent barStyle='dark-content' backgroundColor='transparent' />
 
       <NavigationContainer>
         <AppRouters />

@@ -1,6 +1,6 @@
 import { StatusBar, StyleSheet } from 'react-native'
-import { appColors } from 'src/constants.ts/appColors'
-import { appFonts } from 'src/constants.ts/appFonts'
+import { appColors } from 'src/constants/appColors'
+import { appFonts } from 'src/constants/appFonts'
 
 export const globalStyles = StyleSheet.create({
   container: {

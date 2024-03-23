@@ -2,12 +2,12 @@ import { useNavigation } from '@react-navigation/native'
 import { ReactNode } from 'react'
 import { View, Text, ScrollView, TouchableOpacity, ImageBackground, SafeAreaView } from 'react-native'
 
-import { appColors } from 'src/constants.ts/appColors'
+import { appColors } from 'src/constants/appColors'
 import { ArrowLeft } from 'iconsax-react-native'
 import { IMAGES } from '@assets/images'
 import { globalStyles } from 'src/styles/globalStyles'
-import { appFonts } from 'src/constants.ts/appFonts'
-import { RowComponent, TextComponent } from '@components'
+import { appFonts } from 'src/constants/appFonts'
+import { CircleComponent, RowComponent, TextComponent } from '@components'
 
 interface Props {
   isImageBg?: boolean
@@ -36,15 +36,14 @@ const ContainerComponent = (props: Props) => {
             styles={{
               paddingHorizontal: 16,
               paddingVertical: 8,
-              backgroundColor: 'coral',
               minWidth: 48,
               minHeight: 48
             }}
           >
             {isBack && (
-              <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 12, backgroundColor: 'red' }}>
+              <CircleComponent size={34} onPress={() => console.log('hello')} styles={{ marginRight: 12, zIndex: 1 }}>
                 <ArrowLeft size={24} color={appColors.text} />
-              </TouchableOpacity>
+              </CircleComponent>
             )}
 
             {title && (
@@ -53,7 +52,7 @@ const ContainerComponent = (props: Props) => {
                 font={appFonts.medium}
                 flex={1}
                 styles={{
-                  backgroundColor: 'yellow',
+                  marginLeft: -46,
                   textAlign: 'center'
                 }}
                 size={22}
