@@ -5,5 +5,6 @@ export const appColors = {
   bgPrimary: '#FEFEFE',
   gray: '#F5F6FA',
   black: '#000',
-  bgBlack: 'rbga(0, 0, 0, 0.2)'
+  bgBlack: 'rbga(0, 0, 0, 0.2)',
+  modal: 'rgba(0, 0, 0, 0.5)'
 }
