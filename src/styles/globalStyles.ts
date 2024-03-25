@@ -31,6 +31,12 @@ export const globalStyles = StyleSheet.create({
     elevation: 8
   },
 
+  tag: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 100
+  },
+
   text: {
     fontSize: 14,
     fontFamily: appFonts.regular,
