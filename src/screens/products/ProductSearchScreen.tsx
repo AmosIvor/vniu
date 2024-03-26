@@ -1,8 +1,8 @@
 import { ContainerComponent, InputComponent, RowComponent, SectionComponent, SpaceComponent } from '@components'
 import { ModalFiltering } from '@modals'
 import { SearchNormal, Sort } from 'iconsax-react-native'
-import { useEffect, useState } from 'react'
-import { LogBox, TouchableOpacity, View } from 'react-native'
+import { useState } from 'react'
+import { TouchableOpacity, View } from 'react-native'
 import { appColors } from 'src/constants/appColors'
 
 const ProductSearchScreen = () => {
@@ -10,7 +10,7 @@ const ProductSearchScreen = () => {
   const [isShowModalFilter, setIsShowModalFilter] = useState(false)
 
   return (
-    <ContainerComponent isScroll isBack isImageBg title='Search products'>
+    <ContainerComponent isBack isImageBg title='Search products'>
       <SpaceComponent height={10} />
 
       {/* search-bar */}
