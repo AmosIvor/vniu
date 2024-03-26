@@ -1,24 +1,25 @@
 import messagesData from '@assets/datas/messages.json'
 import { ContainerComponent } from '@components'
-import { Camera, Send, Sticker } from 'iconsax-react-native'
 import { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import {
   Bubble,
+  BubbleProps,
   GiftedChat,
   IMessage,
   InputToolbar,
+  InputToolbarProps,
   Send as SendGiftedChat,
+  SendProps,
   SystemMessage
 } from 'react-native-gifted-chat'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { appColors } from 'src/constants/appColors'
-import { appInfors } from 'src/constants/appInfors'
+import { globalStyles } from 'src/styles/globalStyles'
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<IMessage[]>([])
-  const [inputMessage, setInputMessage] = useState('')
   const [text, setText] = useState('')
 
   const insets = useSafeAreaInsets()
@@ -49,22 +50,18 @@ const ChatScreen = () => {
     ])
   }, [])
 
-  const handleInputText = (text: string) => {
-    setInputMessage(text)
-  }
-
   const onSend = useCallback((messages = []) => {
     setMessages((prevMsg) => GiftedChat.append(prevMsg, messages))
     console.log(messages)
   }, [])
 
-  const renderInputToolbar = (props: any) => {
+  const renderInputToolbar = (props: InputToolbarProps<IMessage>) => {
     return (
       <InputToolbar
         {...props}
-        containerStyle={{ backgroundColor: appColors.bgPrimary }}
+        containerStyle={{ backgroundColor: appColors.bgPrimary, borderWidth: 1 }}
         renderActions={() => (
-          <View style={{ height: 44, justifyContent: 'center', alignItems: 'center', left: 5 }}>
+          <View style={{ height: 49, justifyContent: 'center', alignItems: 'center', left: 5 }}>
             <Ionicons name='add' color={appColors.primary} size={28} />
           </View>
         )}
@@ -72,31 +69,37 @@ const ChatScreen = () => {
     )
   }
 
-  const renderBubble = (props: any) => {
+  const renderBubble = (props: Readonly<BubbleProps<IMessage>>) => {
     return (
       <Bubble
         {...props}
         textStyle={{
           right: {
-            color: '#000'
+            color: appColors.bgPrimary
           }
         }}
         wrapperStyle={{
-          left: {
-            backgroundColor: '#fff'
-          },
-          right: {
-            backgroundColor: 'coral'
-          }
+          left: [
+            {
+              backgroundColor: '#fff'
+            },
+            globalStyles.shadow
+          ],
+          right: [
+            {
+              backgroundColor: appColors.primary
+            },
+            globalStyles.shadow
+          ]
         }}
       />
     )
   }
 
-  const renderSend = (props: any) => (
+  const renderSend = (props: SendProps<IMessage>) => (
     <View
       style={{
-        height: 44,
+        height: 49,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -127,7 +130,7 @@ const ChatScreen = () => {
     <>
       <ContainerComponent isBack isChat>
         {/* chat-message */}
-        <View style={{ flex: 1, marginBottom: insets.bottom, backgroundColor: 'green' }}>
+        <View style={{ flex: 1, marginBottom: insets.bottom, backgroundColor: appColors.gray }}>
           <GiftedChat
             messages={messages}
             onSend={(messages: any) => onSend(messages)}
@@ -145,34 +148,6 @@ const ChatScreen = () => {
             scrollToBottom
           />
         </View>
-
-        {/* input bar */}
-        <View style={[styles.inputContainer]}>
-          <View style={[styles.inputMessageContainer]}>
-            <TextInput
-              style={[styles.input]}
-              placeholder='Type here...'
-              placeholderTextColor={appColors.black}
-              value={inputMessage}
-              onChangeText={handleInputText}
-            />
-
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <TouchableOpacity>
-                <Camera size={22} variant='Outline' color={appColors.black} />
-              </TouchableOpacity>
-
-              <TouchableOpacity>
-                <Sticker size={22} variant='Outline' color={appColors.black} />
-              </TouchableOpacity>
-            </View>
-
-            {/* button-send */}
-            <TouchableOpacity style={[styles.buttonSend]}>
-              <Send size={22} variant='Bold' color={appColors.primary} />
-            </TouchableOpacity>
-          </View>
-        </View>
       </ContainerComponent>
     </>
   )
@@ -180,46 +155,15 @@ const ChatScreen = () => {
 export default ChatScreen
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    backgroundColor: 'coral',
-    height: 72,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-
-  inputMessageContainer: {
-    height: 54,
-    width: appInfors.sizes.WIDTH - 32,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: appColors.bgPrimary,
-    borderRadius: 12,
-    borderColor: 'rgba(128, 128, 128, 0.4)',
-    borderWidth: 1
-  },
-
-  input: {
-    color: appColors.text,
-    flex: 1,
-    paddingHorizontal: 10
-  },
-
-  buttonSend: {
-    backgroundColor: appColors.bgPrimary,
-    padding: 4,
-    borderRadius: 100,
-    marginHorizontal: 6
-  },
-
   composer: {
     backgroundColor: '#fff',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: appColors.black,
+    borderColor: appColors.text2,
     paddingHorizontal: 10,
     paddingTop: 8,
     fontSize: 16,
-    marginVertical: 4
+    marginTop: 4,
+    marginBottom: 4
   }
 })

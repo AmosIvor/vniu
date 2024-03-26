@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ChatScreen from '@screens/chats/ChatScreen'
-import ExampleScreen from '@screens/chats/ExampleScreen'
 import HomeScreen from '@screens/homes/HomeScreen'
 import ProductDetailScreen from '@screens/products/ProductDetailScreen'
 import ProductSearchScreen from '@screens/products/ProductSearchScreen'
@@ -10,7 +9,6 @@ const AppRouters = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='ChatScreen' component={ChatScreen} />
-      <Stack.Screen name='ExampleScreen' component={ExampleScreen} />
 
       <Stack.Screen name='ProductSearchScreen' component={ProductSearchScreen} />
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
