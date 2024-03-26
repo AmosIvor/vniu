@@ -9,7 +9,13 @@ buildscript {
     }
     repositories {
         google()
-        mavenCentral()
+        mavenCentral{
+            content { 
+                excludeGroup "com.facebook.react" 
+            }
+        }
+
+        
     }
     dependencies {
         classpath("com.android.tools.build:gradle")

@@ -1,4 +1,4 @@
-import { ContainerComponent, TextComponent } from '@components'
+import { ContainerComponent, TextComponent } from 'src/components'
 import { View, Text, StatusBar } from 'react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 

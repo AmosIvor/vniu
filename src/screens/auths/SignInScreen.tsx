@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView, Keyboard } from 'react-native'
-import CustomInput from '@components/Input/CustomInput'
+import CustomInput from 'src/components/Input/CustomInput'
 import CUSTOM_COLOR from 'src/constants/colors'
 let checkEmail = false
 let checkName = false

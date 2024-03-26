@@ -1,4 +1,4 @@
-import { IMG_Product } from '@assets/images'
+import { IMG_Product } from '@assets/images/index'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
@@ -7,8 +7,8 @@ import EvilIcon from 'react-native-vector-icons/EvilIcons'
 import { IC_All, IC_Jeans, IC_Pants, IC_Shirt, IC_Shorts, IC_T_shirt } from '@assets/icons'
 import { ScrollView, TouchableOpacity } from 'react-native'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import CustomBackdrop from '@components/CustomBackdrop'
-import FilterView from '@components/FilterView'
+import CustomBackdrop from 'src/components/CustomBackdrop'
+import FilterView from 'src/components/FilterView'
 import CUSTOM_COLOR from 'src/constants/colors'
 const HomeScreen = () => {
   const { colors } = useTheme()
