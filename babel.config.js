@@ -9,16 +9,18 @@ module.exports = {
         extensions: ['.ios.js', '.android.js', '.ios.jsx', '.android.jsx', '.js', '.jsx', '.json', '.ts', '.tsx'],
         root: ['.'],
         alias: {
-          '@api': './src/api',
-          '@assets': './src/assets',
+          '@apis': './src/apis/index',
+          '@assets': './src/assets/index',
           '@components': './src/components/index',
-          '@screens': './src/screens',
+          '@constants': './src/constants/index',
+          '@hooks': './src/hooks/index',
+          '@modals': './src/modals/index',
+          '@navigators': './src/navigators/index',
+          '@screens': './src/screens/',
+          '@styles': './src/styles/',
           '@theme': './src/theme',
-          '@utils': './src/utils',
-          '@routers': './src/routers',
-          '@navigators': './src/navigators',
           '@types': './src/types/',
-          '@modals': './src/modals'
+          '@utils': './src/utils/'
         }
       }
     ]

@@ -14,10 +14,10 @@ import {
 
 import { appColors } from 'src/constants/appColors'
 import { ArrowLeft } from 'iconsax-react-native'
-import { IMAGES } from '@assets/images'
 import { globalStyles } from 'src/styles/globalStyles'
 import { appFonts } from 'src/constants/appFonts'
 import { CircleComponent, RowComponent, SpaceComponent, TextComponent } from '@components'
+import { IMAGES } from '@assets'
 
 interface Props {
   isImageBg?: boolean

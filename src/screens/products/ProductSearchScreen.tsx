@@ -1,9 +1,16 @@
-import { ContainerComponent, InputComponent, RowComponent, SectionComponent, SpaceComponent } from '@components'
+import {
+  ContainerComponent,
+  InputComponent,
+  RowComponent,
+  SectionComponent,
+  SpaceComponent,
+  TextComponent
+} from '@components'
 import { ModalFiltering } from '@modals'
 import { SearchNormal, Sort } from 'iconsax-react-native'
 import { useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { appColors } from 'src/constants/appColors'
+import { appColors, appFonts } from '@constants'
 
 const ProductSearchScreen = () => {
   const [search, setSearch] = useState('')
@@ -48,6 +55,11 @@ const ProductSearchScreen = () => {
           </TouchableOpacity>
         </RowComponent>
         <ModalFiltering isVisible={isShowModalFilter} onClosed={() => setIsShowModalFilter(false)} />
+      </SectionComponent>
+
+      <SectionComponent>
+        <TextComponent font={appFonts.medium} size={20} text='Hello' />
+        <TextComponent font={appFonts.regular} size={20} text='Hello' />
       </SectionComponent>
     </ContainerComponent>
   )

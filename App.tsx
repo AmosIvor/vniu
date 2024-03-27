@@ -1,4 +1,4 @@
-import AppRouters from '@navigators/AppRouters'
+import { AppRouters } from '@navigators'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
