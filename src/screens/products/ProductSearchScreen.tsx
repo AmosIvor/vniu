@@ -1,4 +1,4 @@
-import { ContainerComponent, InputComponent, RowComponent, SectionComponent, SpaceComponent } from '@components'
+import { ContainerComponent, InputComponent, RowComponent, SectionComponent, SpaceComponent } from 'src/components'
 import { ModalFiltering } from '@modals'
 import { SearchNormal, Sort } from 'iconsax-react-native'
 import { useState } from 'react'

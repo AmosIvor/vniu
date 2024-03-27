@@ -16,9 +16,8 @@ import { appColors } from 'src/constants/appColors'
 import { ArrowLeft } from 'iconsax-react-native'
 import { IMAGES } from '@assets/images'
 import { globalStyles } from 'src/styles/globalStyles'
-import { appFonts } from 'src/constants/appFonts'
-import { CircleComponent, RowComponent, SpaceComponent, TextComponent } from '@components'
-
+import { appFonts } from 'src/constants.ts/appFonts'
+import { RowComponent, TextComponent } from 'src/components/'
 interface Props {
   isImageBg?: boolean
   isScroll?: boolean
