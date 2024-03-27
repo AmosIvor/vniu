@@ -1,6 +1,6 @@
 import { View, Text, StyleProp, TextStyle } from 'react-native'
-import { appColors } from 'src/constants.ts/appColors'
-import { appFonts } from 'src/constants.ts/appFonts'
+import { appColors } from 'src/constants/appColors'
+import { appFonts } from 'src/constants/appFonts'
 import { globalStyles } from 'src/styles/globalStyles'
 
 interface Props {

@@ -7,6 +7,7 @@ export type RootStackParamList = {
   HomeScreen: undefined
   ProductDetailScreen: undefined
   ProductSearchScreen: undefined
+  ChatScreen: undefined
 
   TabNavigation: undefined
 }
@@ -15,3 +16,6 @@ export type HomeScreenProp = NativeStackScreenProps<RootStackParamList, 'HomeScr
 export type ProductSearchScreenProp = NativeStackScreenProps<RootStackParamList, 'ProductSearchScreen'>
 
 export type ProductDetailScreen = NativeStackScreenProps<RootStackParamList, 'ProductDetailScreen'>
+
+export type ChatScreenProp = NativeStackScreenProps<RootStackParamList, 'ChatScreen'>
+export type TabNavigation = NativeStackScreenProps<RootStackParamList, 'TabNavigation'>

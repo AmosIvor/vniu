@@ -1,6 +1,6 @@
 import { StatusBar, StyleSheet } from 'react-native'
-import { appColors } from 'src/constants.ts/appColors'
-import { appFonts } from 'src/constants.ts/appFonts'
+import { appColors } from 'src/constants/appColors'
+import { appFonts } from 'src/constants/appFonts'
 
 export const globalStyles = StyleSheet.create({
   container: {
@@ -29,6 +29,12 @@ export const globalStyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 8
+  },
+
+  tag: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 100
   },
 
   text: {

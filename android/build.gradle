@@ -14,8 +14,6 @@ buildscript {
                 excludeGroup "com.facebook.react" 
             }
         }
-
-        
     }
     dependencies {
         classpath("com.android.tools.build:gradle")

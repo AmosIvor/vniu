@@ -2,20 +2,18 @@ import AppRouters from '@navigators/AppRouters'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaView, StatusBar } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { Host } from 'react-native-portalize'
 const App = () => {
   return (
-    <SafeAreaProvider style={{ flex: 1 }}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar translucent barStyle='light-content' backgroundColor='transparent' />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar translucent barStyle='dark-content' backgroundColor='transparent' />
+
+      <Host>
         <NavigationContainer>
-          <BottomSheetModalProvider>
-            <AppRouters />
-          </BottomSheetModalProvider>
+          <AppRouters />
         </NavigationContainer>
-      </GestureHandlerRootView>
-    </SafeAreaProvider>
+      </Host>
+    </GestureHandlerRootView>
   )
 }
 export default App

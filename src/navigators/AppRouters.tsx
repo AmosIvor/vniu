@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import ChatScreen from '@screens/chats/ChatScreen'
 import ForgotPasswordScreen from '@screens/auths/ForgotPasswordScreen'
 import SignInScreen from '@screens/auths/SignInScreen'
 import SignUpScreen from '@screens/auths/SignUpScreen'

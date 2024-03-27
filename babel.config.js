@@ -16,7 +16,9 @@ module.exports = {
           '@theme': './src/theme',
           '@utils': './src/utils',
           '@routers': './src/routers',
-          '@navigators': './src/navigators'
+          '@navigators': './src/navigators',
+          '@types': './src/types/',
+          '@modals': './src/modals'
         }
       }
     ]
