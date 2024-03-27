@@ -1,3 +1,4 @@
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import AppRouters from '@navigators/AppRouters'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaView, StatusBar } from 'react-native'
@@ -10,7 +11,9 @@ const App = () => {
 
       <Host>
         <NavigationContainer>
-          <AppRouters />
+          <BottomSheetModalProvider>
+            <AppRouters />
+          </BottomSheetModalProvider>
         </NavigationContainer>
       </Host>
     </GestureHandlerRootView>

@@ -12,7 +12,7 @@ import { RootStackParamList } from 'src/types/screen.type'
 const AppRouters = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   return (
-    <Stack.Navigator initialRouteName='TabNavigation' screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName='ProductSearchScreen' screenOptions={{ headerShown: false }}>
       <Stack.Screen name='ProductSearchScreen' component={ProductSearchScreen} />
       <Stack.Screen name='ForgotPasswordScreen' component={ForgotPasswordScreen} />
       <Stack.Screen name='SignUpScreen' component={SignUpScreen} />

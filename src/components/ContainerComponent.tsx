@@ -11,12 +11,12 @@ import {
   StyleProp,
   ViewStyle
 } from 'react-native'
-
+import { CircleComponent, SpaceComponent } from 'src/components'
 import { appColors } from 'src/constants/appColors'
 import { ArrowLeft } from 'iconsax-react-native'
 import { IMAGES } from '@assets/images'
 import { globalStyles } from 'src/styles/globalStyles'
-import { appFonts } from 'src/constants.ts/appFonts'
+import { appFonts } from 'src/constants/appFonts'
 import { RowComponent, TextComponent } from 'src/components/'
 interface Props {
   isImageBg?: boolean
@@ -81,7 +81,7 @@ const ContainerComponent = (props: Props) => {
                 <RowComponent>
                   <CircleComponent size={48}>
                     <Image
-                      source={IMAGES.avatar}
+                      source={require('src/assets/images/splash.png')}
                       style={{ width: '100%', height: '100%', borderRadius: 100 }}
                       resizeMode='cover'
                     />
@@ -122,7 +122,7 @@ const ContainerComponent = (props: Props) => {
   }
 
   return isImageBg ? (
-    <ImageBackground source={IMAGES.splash} style={{ flex: 1 }} imageStyle={{ flex: 1 }}>
+    <ImageBackground source={require('src/assets/images/splash.png')} style={{ flex: 1 }} imageStyle={{ flex: 1 }}>
       <SafeAreaView style={[globalStyles.container]}>{headerComponent()}</SafeAreaView>
     </ImageBackground>
   ) : (
