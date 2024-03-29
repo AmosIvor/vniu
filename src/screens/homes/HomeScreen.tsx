@@ -1,4 +1,4 @@
-import { IMG_Product } from '@assets/images/index'
+import { IMAGES } from '@assets/images'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
@@ -117,7 +117,7 @@ const HomeScreen = () => {
           <View style={styles.productListWrapper}>
             {productList.map((product) => (
               <View key={product.id} style={styles.productContainer}>
-                <Image source={IMG_Product} style={styles.productImage} />
+                <Image source={IMAGES.product} style={styles.productImage} />
                 <Text style={styles.productName}>{product.name}</Text>
                 <Text style={styles.productPrice}>
                   ${product.price} <Text style={styles.discount}>-{product.discount}%</Text>

@@ -1,16 +1,16 @@
 import React from 'react'
 import { View, Text, TextInput, Image, TouchableOpacity, Button } from 'react-native'
-import { IMG_ICON_PREVIOUS, IMG_LOGO } from '@assets/images'
+import { IMAGES } from '@assets/images'
 const ForgotPasswordScreen = () => {
   return (
     <View
       style={{ flex: 1, paddingVertical: 20, paddingHorizontal: 17, justifyContent: 'center', alignItems: 'center' }}
     >
       <TouchableOpacity style={{ position: 'absolute', left: 10, top: 10 }}>
-        <Image source={IMG_ICON_PREVIOUS} style={{ width: 24, height: 24, padding: 8 }} />
+        <Image source={IMAGES.IMG_ICON_PREVIOUS} style={{ width: 24, height: 24, padding: 8 }} />
       </TouchableOpacity>
       <Text style={{ fontSize: 28, fontWeight: 'bold', marginTop: 50 }}>Forgot Password</Text>
-      <Image source={IMG_LOGO} style={{ width: '100%', height: 110, marginBottom: 30 }} />
+      <Image source={IMAGES.logo} style={{ width: '100%', height: 110, marginBottom: 30 }} />
       <Text style={{ color: '#8F959E', marginBottom: 3, fontSize: 16 }}>Email address</Text>
       <TextInput
         style={{ width: '100%', height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 100 }}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Image, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet } from 'react-native'
-import { IMG_ICON_PREVIOUS } from '@assets/images'
+import { IMAGES } from '@assets/images'
 const SignUpScreen = () => {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -11,7 +11,7 @@ const SignUpScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity style={styles.backButton}>
-        <Image source={IMG_ICON_PREVIOUS} />
+        <Image source={IMAGES.IMG_ICON_PREVIOUS} />
       </TouchableOpacity>
 
       <Text style={styles.title}>Sign Up</Text>
