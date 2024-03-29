@@ -1,5 +1,6 @@
-import messagesData from '@assets/datas/messages.json'
+import { DATAS } from '@assets'
 import { ContainerComponent } from '@components'
+import { appColors, appInfors } from '@constants'
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
@@ -15,7 +16,6 @@ import {
 } from 'react-native-gifted-chat'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { appColors } from 'src/constants/appColors'
 import { globalStyles } from 'src/styles/globalStyles'
 
 const ChatScreen = () => {
@@ -26,7 +26,7 @@ const ChatScreen = () => {
 
   useEffect(() => {
     setMessages([
-      ...messagesData.map((msg) => {
+      ...DATAS.messages.map((msg) => {
         return {
           _id: msg.id,
           text: msg.msg,

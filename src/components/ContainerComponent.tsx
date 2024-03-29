@@ -11,13 +11,13 @@ import {
   StyleProp,
   ViewStyle
 } from 'react-native'
-import { CircleComponent, SpaceComponent } from 'src/components'
 import { appColors } from 'src/constants/appColors'
 import { ArrowLeft } from 'iconsax-react-native'
-import { IMAGES } from '@assets/images'
 import { globalStyles } from 'src/styles/globalStyles'
 import { appFonts } from 'src/constants/appFonts'
-import { RowComponent, TextComponent } from 'src/components/'
+import { CircleComponent, RowComponent, SpaceComponent, TextComponent } from '@components'
+import { IMAGES } from '@assets'
+
 interface Props {
   isImageBg?: boolean
   isScroll?: boolean

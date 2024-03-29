@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Image, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet } from 'react-native'
-import { IMAGES } from '@assets/images'
+import { IMAGES } from '@assets'
 const SignUpScreen = () => {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')

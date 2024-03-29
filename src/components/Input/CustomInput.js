@@ -1,26 +1,19 @@
-import {
-  View,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  Text,
-  KeyboardAvoidingView,
-} from 'react-native';
-import React, { useState } from 'react';
-import { EyeIcon1 } from '../../assets/icons';
-import { EyeIcon2 } from '../../assets/icons';
-import { StyleSheet } from 'react-native';
-import CUSTOM_COLOR from '../../constants/colors';
-import FONT_FAMILY from '../../constants/fonts';
-import SCALE from '../../constants/reponsive';
+import { View, TextInput, Image, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native'
+import React, { useState } from 'react'
+import { EyeIcon1 } from '../../assets/icons'
+import { EyeIcon2 } from '../../assets/icons'
+import { StyleSheet } from 'react-native'
+import CUSTOM_COLOR from '../../constants/colors'
+import FONT_FAMILY from '../../constants/fonts'
+import SCALE from '../../constants/reponsive'
 const CustomInput = (props) => {
-  const [isSecureEntry, setIsSecureEntry] = useState(true);
-  const [isEmailInput, setIsEmailInput] = useState(false);
+  const [isSecureEntry, setIsSecureEntry] = useState(true)
+  const [isEmailInput, setIsEmailInput] = useState(false)
 
   const handleEmailFocus = () => {
-    setIsEmailInput(true);
-    props.onFocus();
-  };
+    setIsEmailInput(true)
+    props.onFocus()
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -31,36 +24,29 @@ const CustomInput = (props) => {
             alignItems: 'center',
             borderColor: 'gray',
             borderWidth: 1,
-            borderRadius: 8,
+            borderRadius: 8
           }}
         >
           <TextInput
             secureTextEntry={isSecureEntry}
             placeholder={props.label}
-            placeholderTextColor="grey"
+            placeholderTextColor='grey'
             style={{
               flex: 1,
               borderColor: 'gray',
-              padding: 8,
+              padding: 8
             }}
             onFocus={props.onFocus}
             onChangeText={props.onChangeText}
           />
           <TouchableOpacity
             onPress={() => {
-              setIsSecureEntry(!isSecureEntry);
+              setIsSecureEntry(!isSecureEntry)
             }}
           >
-            <Image
-              source={isSecureEntry ? EyeIcon1 : EyeIcon2}
-              style={{ width: 24, height: 24, marginLeft: 8 }}
-            />
+            <Image source={isSecureEntry ? EyeIcon1 : EyeIcon2} style={{ width: 24, height: 24, marginLeft: 8 }} />
           </TouchableOpacity>
-          {props.error && (
-            <Text style={{ marginTop: 7, color: '#FFF', fontSize: 12 }}>
-              {props.error}
-            </Text>
-          )}
+          {props.error && <Text style={{ marginTop: 7, color: '#FFF', fontSize: 12 }}>{props.error}</Text>}
           <View style={{ width: 10 }} />
         </View>
       ) : (
@@ -70,35 +56,33 @@ const CustomInput = (props) => {
             alignItems: 'center',
             borderColor: 'gray',
             borderWidth: 1,
-            borderRadius: 8,
+            borderRadius: 8
           }}
         >
           <TextInput
             editable
             multiline={false}
             placeholder={props.label}
-            placeholderTextColor="grey"
+            placeholderTextColor='grey'
             style={{
               flex: 1,
               borderColor: 'gray',
-              padding: 8,
+              padding: 8
             }}
             secureTextEntry={false}
-            keyboardType="email-address"
+            keyboardType='email-address'
             onFocus={handleEmailFocus}
             onChangeText={(text) => props.onChangeText(text)}
           />
           {isEmailInput && props.error && (
-            <Text style={{ marginTop: 7, color: '#FFF', fontSize: 12 }}>
-              {props.error}
-            </Text>
+            <Text style={{ marginTop: 7, color: '#FFF', fontSize: 12 }}>{props.error}</Text>
           )}
           <View style={{ width: 10 }} />
         </View>
       )}
     </KeyboardAvoidingView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -109,15 +93,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     // paddingHorizontal: 30,
     // marginTop: SCALE.reSizeHeight(20),
-    marginBottom: SCALE.reSizeHeight(20),
+    marginBottom: SCALE.reSizeHeight(20)
   },
   IconPassword: {
     width: SCALE.reSizeWidth(24),
     height: SCALE.reSizeHeight(24),
     left: SCALE.reSizeWidth(280),
     top: SCALE.reSizeHeight(12),
-    position: 'absolute',
-  },
-});
+    position: 'absolute'
+  }
+})
 
-export default CustomInput;
+export default CustomInput

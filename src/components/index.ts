@@ -1,3 +1,4 @@
+import CustomBackdrop from './CustomBackdrop'
 import ButtonComponent from './ButtonComponent'
 import CategoriesComponent from './CategoriesComponent'
 import CircleComponent from './CircleComponent'
@@ -10,6 +11,8 @@ import SectionComponent from './SectionComponent'
 import SpaceComponent from './SpaceComponent'
 import TagComponent from './TagComponent'
 import TextComponent from './TextComponent'
+import FilterView from './FilterView'
+import CustomInput from './Input/CustomInput'
 
 export {
   RowComponent,
@@ -23,5 +26,8 @@ export {
   TagComponent,
   ButtonComponent,
   RangeSliderComponent,
-  RatingComponent
+  RatingComponent,
+  CustomBackdrop,
+  FilterView,
+  CustomInput
 }
