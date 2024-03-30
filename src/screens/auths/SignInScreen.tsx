@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView, Keyboard } from 'react-native'
 import { CustomInput } from '@components'
-import CUSTOM_COLOR from 'src/constants/colors'
+import { appColors } from '@constants'
 let checkEmail = false
 let checkName = false
 let checkPassword1 = false
@@ -44,10 +44,10 @@ const SignInScreen = () => {
       }
     }
   }
-  const handleOnchange = (text, input) => {
+  const handleOnchange = (text: any, input: string) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }))
   }
-  const handleError = (error, input) => {
+  const handleError = (error: string | null, input: string) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }))
   }
   return (
@@ -56,7 +56,7 @@ const SignInScreen = () => {
         <Text style={{ fontSize: 28, fontWeight: 'bold', color: 'black', paddingBottom: 14 }}>Sign in</Text>
         <Text style={{ fontSize: 18, paddingBottom: 4 }}>Welcome! Don't have an account?</Text>
         <TouchableOpacity>
-          <Text style={{ fontSize: 18, color: CUSTOM_COLOR.Primary, marginBottom: 12 }}>Sign Up</Text>
+          <Text style={{ fontSize: 18, color: appColors.Primary, marginBottom: 12 }}>Sign Up</Text>
         </TouchableOpacity>
         <View style={{ alignSelf: 'stretch' }}>
           <Image
@@ -67,20 +67,20 @@ const SignInScreen = () => {
         {/* <View style={{ height: 100 }} /> */}
         <CustomInput
           label='Email'
-          onChangeText={(text) => handleOnchange(text, 'Email')}
+          onChangeText={(text: any) => handleOnchange(text, 'Email')}
           error={errors.Email}
           onFocus={() => handleError(null, 'Email')}
         />
 
         <CustomInput
           label='Password'
-          onChangeText={(text) => handleOnchange(text, 'Password')}
+          onChangeText={(text: any) => handleOnchange(text, 'Password')}
           error={errors.Password}
           onFocus={() => handleError(null, 'Password')}
         />
         <TouchableOpacity
           style={{
-            backgroundColor: CUSTOM_COLOR.Primary,
+            backgroundColor: appColors.Primary,
             paddingVertical: 12,
             borderRadius: 8,
             marginBottom: 10,
@@ -90,7 +90,7 @@ const SignInScreen = () => {
           <Text style={{ color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>LOGIN</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={{ color: CUSTOM_COLOR.Primary, textAlign: 'right', marginVertical: 10 }}>Forgot password?</Text>
+          <Text style={{ color: appColors.Primary, textAlign: 'right', marginVertical: 10 }}>Forgot password?</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

@@ -1,14 +1,14 @@
-import { IMAGES } from '@assets'
 import React, { useCallback, useRef, useState } from 'react'
+import { ScrollView, TouchableOpacity } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import EvilIcon from 'react-native-vector-icons/EvilIcons'
-import { IC_All, IC_Jeans, IC_Pants, IC_Shirt, IC_Shorts, IC_T_shirt } from '@assets/icons'
-import { ScrollView, TouchableOpacity } from 'react-native'
+import { ICONS, IMAGES } from '@assets'
+
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { FilterView } from '@components'
-import CUSTOM_COLOR from 'src/constants/colors'
+import { appColors } from '@constants'
 const HomeScreen = () => {
   const { colors } = useTheme()
   const [categoryIndex, setCategoryIndex] = useState(0)
@@ -19,15 +19,15 @@ const HomeScreen = () => {
   }, [])
 
   const categoryIcons = [
-    { id: '1', icon: IC_All, name: 'All' },
-    { id: '2', icon: IC_Shirt, name: 'Shirt' },
-    { id: '3', icon: IC_T_shirt, name: 'T-shirt' },
-    { id: '4', icon: IC_Jeans, name: 'Jeans' },
-    { id: '5', icon: IC_Pants, name: 'Pants' },
-    { id: '6', icon: IC_Shorts, name: 'Shorts' }
+    { id: '1', icon: ICONS.icAll, name: 'All' },
+    { id: '2', icon: ICONS.icShirt, name: 'Shirt' },
+    { id: '3', icon: ICONS.icTshirt, name: 'T-shirt' },
+    { id: '4', icon: ICONS.icJeans, name: 'Jeans' },
+    { id: '5', icon: ICONS.icPants, name: 'Pants' },
+    { id: '6', icon: ICONS.icShorts, name: 'Shorts' }
   ]
 
-  const renderCategoryIcon = ({ item }) => (
+  const renderCategoryIcon = ({ item }: { item: any }) => (
     <View style={styles.categoryItem}>
       <Image source={item.icon} style={styles.categoryImage} />
       <Text style={styles.categoryName}>{item.name}</Text>
@@ -91,16 +91,6 @@ const HomeScreen = () => {
             <MaterialCommunityIcons name='image-search-outline' size={24} color='#333' />
           </TouchableOpacity>
         </View>
-
-        {/* Category Icons */}
-        {/* <View style={styles.categoryContainer}>
-          <MaterialCommunityIcons name='view-module' size={24} color='#333' />
-          <Image source={IC_Shirt} style={{ width: 20, height: 20 }} />
-          <Image source={IC_T_shirt} style={{ width: 20, height: 20 }} />
-          <Image source={IC_Jeans} style={{ width: 20, height: 20 }} />
-          <Image source={IC_Pants} style={{ width: 20, height: 20 }} />
-          <Image source={IC_Shorts} style={{ width: 20, height: 20 }} />
-        </View> */}
 
         <FlatList
           horizontal
@@ -171,7 +161,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: CUSTOM_COLOR.Primary
+    color: appColors.Primary
   },
   searchContainer: {
     flexDirection: 'row',

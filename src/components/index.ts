@@ -1,4 +1,4 @@
-import CustomBackdrop from './CustomBackdrop'
+// import CustomBackdrop from './CustomBackdrop'
 import ButtonComponent from './ButtonComponent'
 import CategoriesComponent from './CategoriesComponent'
 import CircleComponent from './CircleComponent'
@@ -27,7 +27,6 @@ export {
   ButtonComponent,
   RangeSliderComponent,
   RatingComponent,
-  CustomBackdrop,
   FilterView,
   CustomInput
 }

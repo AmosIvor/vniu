@@ -1,12 +1,9 @@
 import { View, TextInput, Image, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
-import { EyeIcon1 } from '../../assets/icons'
-import { EyeIcon2 } from '../../assets/icons'
+import { ICONS } from '@assets'
 import { StyleSheet } from 'react-native'
-import CUSTOM_COLOR from '../../constants/colors'
-import FONT_FAMILY from '../../constants/fonts'
-import SCALE from '../../constants/reponsive'
-const CustomInput = (props) => {
+import { appInfors, appColors } from '@constants'
+const CustomInput = (props: any) => {
   const [isSecureEntry, setIsSecureEntry] = useState(true)
   const [isEmailInput, setIsEmailInput] = useState(false)
 
@@ -44,7 +41,10 @@ const CustomInput = (props) => {
               setIsSecureEntry(!isSecureEntry)
             }}
           >
-            <Image source={isSecureEntry ? EyeIcon1 : EyeIcon2} style={{ width: 24, height: 24, marginLeft: 8 }} />
+            <Image
+              source={isSecureEntry ? ICONS.eyeIcon1 : ICONS.eyeIcon2}
+              style={{ width: 24, height: 24, marginLeft: 8 }}
+            />
           </TouchableOpacity>
           {props.error && <Text style={{ marginTop: 7, color: '#FFF', fontSize: 12 }}>{props.error}</Text>}
           <View style={{ width: 10 }} />
@@ -86,20 +86,20 @@ const CustomInput = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    // width: SCALE.reSizeWidth(343),
-    // height: SCALE.reSizeHeight(53),
+    // width: appInfors.sizes.reSizeWidth(343),
+    // height: appInfors.sizes.reSizeHeight(53),
     // borderRadius: 12,
-    borderColor: CUSTOM_COLOR.LightGray,
+    borderColor: appColors.LightGray,
     borderWidth: 1,
     // paddingHorizontal: 30,
-    // marginTop: SCALE.reSizeHeight(20),
-    marginBottom: SCALE.reSizeHeight(20)
+    // marginTop: appInfors.sizes.reSizeHeight(20),
+    marginBottom: appInfors.sizes.reSizeHeight(20)
   },
   IconPassword: {
-    width: SCALE.reSizeWidth(24),
-    height: SCALE.reSizeHeight(24),
-    left: SCALE.reSizeWidth(280),
-    top: SCALE.reSizeHeight(12),
+    width: appInfors.sizes.reSizeWidth(24),
+    height: appInfors.sizes.reSizeHeight(24),
+    left: appInfors.sizes.reSizeWidth(280),
+    top: appInfors.sizes.reSizeHeight(12),
     position: 'absolute'
   }
 })
