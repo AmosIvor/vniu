@@ -1,3 +1,4 @@
 import AppRouters from './AppRouters'
+import RootNavigator from './RootNavigator'
 
-export { AppRouters }
+export { RootNavigator, AppRouters }

@@ -9,7 +9,8 @@ import { ICONS, IMAGES } from '@assets'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { FilterView } from '@components'
 import { appColors } from '@constants'
-const HomeScreen = () => {
+import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
+const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
   const { colors } = useTheme()
   const [categoryIndex, setCategoryIndex] = useState(0)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -105,7 +106,15 @@ const HomeScreen = () => {
         <ScrollView contentContainerStyle={styles.productListContainer}>
           <View style={styles.productListWrapper}>
             {productList.map((product) => (
-              <View key={product.id} style={styles.productContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Details', {
+                    id: '123'
+                  })
+                }}
+                key={product.id}
+                style={styles.productContainer}
+              >
                 <Image source={IMAGES.product} style={styles.productImage} />
                 <Text style={styles.productName}>{product.name}</Text>
                 <Text style={styles.productPrice}>
@@ -120,7 +129,7 @@ const HomeScreen = () => {
                   <Text style={styles.rating}>{product.rating}</Text>
                   <Text style={styles.soldCount}>{product.soldCount} solded</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
