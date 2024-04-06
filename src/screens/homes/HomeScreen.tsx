@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
   const renderCategoryIcon = ({ item }: { item: any }) => (
     <View style={styles.categoryItem}>
       <Image source={item.icon} style={styles.categoryImage} />
-      <Text style={styles.categoryName}>{item.name}</Text>
+      <Text style={{ marginTop: 5, color: colors.text, fontSize: 12 }}>{item.name}</Text>
     </View>
   )
   const productList = [
@@ -93,6 +93,42 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
           </TouchableOpacity>
         </View>
 
+        {/* FilterView */}
+        <View
+          style={{
+            flexDirection: 'row',
+            paddingHorizontal: 24,
+            gap: 12,
+            alignItems: 'flex-end',
+            alignContent: 'flex-end',
+            alignSelf: 'flex-end'
+          }}
+        >
+          <TouchableOpacity
+            onPress={openFilterModal}
+            style={{
+              width: 52,
+              aspectRatio: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 52
+            }}
+          >
+            <MaterialCommunityIcons name='sort' size={24} color='#333' />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={openFilterModal}
+            style={{
+              width: 52,
+              aspectRatio: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 52
+            }}
+          >
+            <MaterialCommunityIcons name='filter' size={24} color='#333' />
+          </TouchableOpacity>
+        </View>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -101,7 +137,6 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
           renderItem={renderCategoryIcon}
           contentContainerStyle={styles.categoryContainer}
         />
-
         {/* Product List */}
         <ScrollView contentContainerStyle={styles.productListContainer}>
           <View style={styles.productListWrapper}>
@@ -116,8 +151,10 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
                 style={styles.productContainer}
               >
                 <Image source={IMAGES.product} style={styles.productImage} />
-                <Text style={styles.productName}>{product.name}</Text>
-                <Text style={styles.productPrice}>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>
+                  {product.name}
+                </Text>
+                <Text style={{ fontSize: 14, marginTop: 4, color: colors.text }}>
                   ${product.price} <Text style={styles.discount}>-{product.discount}%</Text>
                 </Text>
                 <View style={styles.productDetails}>
@@ -126,7 +163,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
                 </View>
                 <View style={styles.ratingContainer}>
                   <MaterialCommunityIcons name='star' size={16} color='#333' />
-                  <Text style={styles.rating}>{product.rating}</Text>
+                  <Text style={{ marginLeft: 4, fontWeight: 'bold', color: colors.text }}>{product.rating}</Text>
                   <Text style={styles.soldCount}>{product.soldCount} solded</Text>
                 </View>
               </TouchableOpacity>
@@ -226,7 +263,7 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'cover'
+    resizeMode: 'cover',
   },
   productName: {
     fontSize: 16,

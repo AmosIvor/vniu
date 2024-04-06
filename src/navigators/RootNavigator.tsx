@@ -26,10 +26,12 @@ const RootStack = createNativeStackNavigator<RootStackParamList>()
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, T>
 
-const RootNavigator = () => {
+const RootNavigator = ({ toggleTheme }: any) => {
   return (
     <RootStack.Navigator initialRouteName='TabsStack' screenOptions={{ headerShown: false }}>
-      <RootStack.Screen name='TabsStack' component={TabNavigation} />
+      <RootStack.Screen name='TabsStack'>
+        {(props) => <TabNavigation {...props} toggleTheme={toggleTheme} />}
+      </RootStack.Screen>
       <RootStack.Screen name='Details' component={ProductDetailScreen} />
       <RootStack.Screen name='SignInScreen' component={SignInScreen} />
       <RootStack.Screen name='SignUpScreen' component={SignUpScreen} />

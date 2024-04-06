@@ -26,7 +26,7 @@ export type TabsStackScreenProps<T extends keyof TabsStackParamList> = Composite
   RootStackScreenProps<'TabsStack'>
 >
 
-const TabsNavigator = () => {
+const TabsNavigator = ({ toggleTheme }: any) => {
   return (
     <TabsStack.Navigator
       screenOptions={{
@@ -74,13 +74,14 @@ const TabsNavigator = () => {
 
       <TabsStack.Screen
         name='Profile'
-        component={ProfileScreen}
         options={{
           tabBarIcon(props) {
             return <MaterialCommunityIcons name='account' {...props} />
           }
         }}
-      />
+      >
+        {(props) => <ProfileScreen {...props} toggleTheme={toggleTheme} />}
+      </TabsStack.Screen>
     </TabsStack.Navigator>
   )
 }
