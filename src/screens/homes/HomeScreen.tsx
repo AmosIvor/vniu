@@ -1,4 +1,6 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { DATABASE_URL } from 'react-native-dotenv'
+
 import { ScrollView, TouchableOpacity } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
@@ -44,6 +46,16 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
     // Add more product objects as needed
   ]
 
+  const returnUrl = DATABASE_URL + '/api/User/get-all'
+  console.log('🚀 ~ HomeScreen ~ DATABASE_URL:', DATABASE_URL)
+  console.log('returnUrl: ' + returnUrl)
+
+  useEffect(() => {
+    fetch(returnUrl)
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error(error))
+  }, [])
   return (
     <ScrollView>
       <SafeAreaView style={{ paddingVertical: 24, gap: 24 }}>
@@ -263,7 +275,7 @@ const styles = StyleSheet.create({
   productImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
   productName: {
     fontSize: 16,

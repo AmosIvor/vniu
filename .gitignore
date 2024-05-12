@@ -69,3 +69,7 @@ yarn-error.log
 .vscode/
 
 *.lock
+
+# env
+
+*.env

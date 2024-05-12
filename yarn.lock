@@ -1136,7 +1136,7 @@
   resolved "https://registry.npmjs.org/@babel/regjsgen/-/regjsgen-0.8.0.tgz"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.20.0", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.20.0", "@babel/runtime@^7.20.6", "@babel/runtime@^7.8.4":
   version "7.24.0"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.24.0.tgz"
   integrity sha512-Chk32uHMg6TnQdvw2e9IlqPpFX/6NLuK0Ys2PqLb7/gL5uFn9mXvK715FGLlOLQrcO4qIkNHkvPGktzzXexsFw==
@@ -2130,6 +2130,11 @@
   version "15.7.11"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.11.tgz"
   integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
+
+"@types/react-native-dotenv@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.npmjs.org/@types/react-native-dotenv/-/react-native-dotenv-0.2.2.tgz"
+  integrity sha512-YDgO2hdTK5PaxZrIFtVXrjeFOhJ+7A9a8VDUK4QmHCPGIB5i6DroLG9IpItX5qCshz7aPsQfgy9X3w82Otd4HA==
 
 "@types/react-native-vector-icons@^6.4.18":
   version "6.4.18"
@@ -3354,6 +3359,11 @@ domutils@^3.0.1:
     dom-serializer "^2.0.0"
     domelementtype "^2.3.0"
     domhandler "^5.0.3"
+
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.4.5.tgz"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 eastasianwidth@^0.2.0:
   version "0.2.0"
@@ -6320,6 +6330,13 @@ react-native-date-picker@^4.3.7:
   version "4.4.0"
   resolved "https://registry.npmjs.org/react-native-date-picker/-/react-native-date-picker-4.4.0.tgz"
   integrity sha512-Axx3byihwwhKRLRVjPAr/UaEysapkRcKmjjM8/05UaVm4Q0xDn2RFUcRdy1QAahhRcjLjlVYhepxvU5bdgy7ZQ==
+
+react-native-dotenv@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.npmjs.org/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz"
+  integrity sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==
+  dependencies:
+    dotenv "^16.4.5"
 
 react-native-element-dropdown@^2.10.4:
   version "2.10.4"
