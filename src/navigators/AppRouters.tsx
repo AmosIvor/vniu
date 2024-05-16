@@ -1,13 +1,15 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import HomeScreen from '@screens/homes/HomeScreen'
-import ProductDetailScreen from '@screens/products/ProductDetailScreen'
+import ChatScreen from '@screens/chats/ChatScreen'
+import ProductSearchScreen from '@screens/products/ProductSearchScreen'
 import { RootStackParamList } from 'src/types/screen.type'
+import TabsNavigator from './TabsNavigator'
 const AppRouters = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>()
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='HomeScreen' component={HomeScreen} />
-      <Stack.Screen name='ProductDetailScreen' component={ProductDetailScreen} />
+    <Stack.Navigator initialRouteName='TabNavigation' screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='ProductSearchScreen' component={ProductSearchScreen} />
+      <Stack.Screen name='ChatScreen' component={ChatScreen} />
+      <Stack.Screen name='TabNavigation' component={TabsNavigator} />
     </Stack.Navigator>
   )
 }
