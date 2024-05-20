@@ -7,6 +7,7 @@ import ChatScreen from '@screens/chats/ChatScreen'
 import SignInScreen from '@screens/auths/SignInScreen'
 import SignUpScreen from '@screens/auths/SignUpScreen'
 import ProductDetailScreen from '@screens/products/ProductDetailScreen'
+import { getStringStorage } from 'src/functions/storageFunctions'
 
 export type RootStackParamList = {
   TabsStack: NavigatorScreenParams<TabsStackParamList>
@@ -28,7 +29,10 @@ export type RootStackScreenProps<T extends keyof RootStackParamList> = NativeSta
 
 const RootNavigator = ({ toggleTheme }: any) => {
   return (
-    <RootStack.Navigator initialRouteName='TabsStack' screenOptions={{ headerShown: false }}>
+    <RootStack.Navigator
+      initialRouteName={getStringStorage('accessToken') ? 'TabsStack' : 'SignInScreen'}
+      screenOptions={{ headerShown: false }}
+    >
       <RootStack.Screen name='TabsStack'>
         {(props) => <TabNavigation {...props} toggleTheme={toggleTheme} />}
       </RootStack.Screen>
