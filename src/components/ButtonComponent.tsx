@@ -17,13 +17,29 @@ interface Props {
   onPress?: () => void
   iconFlex?: 'right' | 'left'
   isDisable?: boolean
+  isFullWidth?: boolean
 }
 
 const ButtonComponent = (props: Props) => {
-  const { icon, text, textColor, textFont, textStyles, color, iconFlex, isDisable, onPress, styles, type } = props
+  const {
+    icon,
+    text,
+    textColor,
+    textFont,
+    textStyles,
+    color,
+    iconFlex,
+    isDisable,
+    onPress,
+    styles,
+    type,
+    isFullWidth
+  } = props
+
+  const viewStyle = isFullWidth ? '100%' : 'auto'
 
   return type === 'primary' ? (
-    <View style={{ alignItems: 'center' }}>
+    <View style={{ alignItems: 'center', width: viewStyle }}>
       <TouchableOpacity
         disabled={isDisable}
         onPress={onPress}
@@ -44,12 +60,12 @@ const ButtonComponent = (props: Props) => {
             text={text}
             color={textColor ?? appColors.bgPrimary}
             styles={[
-              textStyles,
               {
                 marginLeft: icon ? 12 : 0,
                 fontSize: 16,
                 textAlign: 'center'
-              }
+              },
+              textStyles
             ]}
             flex={icon && iconFlex === 'right' ? 1 : 0}
             font={textFont ?? appFonts.medium}
@@ -59,7 +75,7 @@ const ButtonComponent = (props: Props) => {
       </TouchableOpacity>
     </View>
   ) : (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={styles}>
       {icon && icon}
       {text && <TextComponent flex={0} text={text} color={type === 'link' ? appColors.primary : appColors.text} />}
     </TouchableOpacity>
