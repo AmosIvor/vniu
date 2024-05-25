@@ -11,9 +11,8 @@ import {
 import { appColors, appFonts } from '@constants'
 import { useTheme } from '@react-navigation/native'
 import { Bag2, InfoCircle, Lock, LogoutCurve, Moon, Setting2, Verify } from 'iconsax-react-native'
-import React, { useContext } from 'react'
-import { Image, StyleSheet, View } from 'react-native'
-import { AppContext } from 'src/contexts/app.context'
+import React from 'react'
+import { Image, View } from 'react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 import { MenuOptionComponent } from './components'
 
