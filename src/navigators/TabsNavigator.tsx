@@ -75,15 +75,14 @@ const TabsNavigator = ({ toggleTheme }: any) => {
 
       <TabsStack.Screen
         name='Profile'
+        component={ProfileScreen}
         options={{
           headerShown: false,
           tabBarIcon(props) {
             return <MaterialCommunityIcons name='account' {...props} />
           }
         }}
-      >
-        {(props) => <ProfileScreen {...props} toggleTheme={toggleTheme} />}
-      </TabsStack.Screen>
+      />
     </TabsStack.Navigator>
   )
 }

@@ -32,8 +32,8 @@ module.exports = {
           '@screens': './src/screens/',
           '@styles': './src/styles/',
           '@theme': './src/theme',
-          '@types': './src/types/',
-          '@utils': './src/utils/'
+          '@appTypes': './src/types/',
+          '@utils': './src/utils/index'
         }
       }
     ]

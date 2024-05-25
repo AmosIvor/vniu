@@ -1,6 +1,8 @@
+import { chatApi } from '@apis'
 import { DATAS } from '@assets'
 import { ContainerComponent } from '@components'
 import { appColors } from '@constants'
+import { useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
@@ -49,6 +51,11 @@ const ChatScreen = () => {
       }
     ])
   }, [])
+
+  const { data: chatRoomData } = useQuery({
+    queryKey: ['chatroom', 'CS0001'],
+    queryFn: () => chatApi.getChatRoomByUser('CS0001')
+  })
 
   const onSend = useCallback((messages = []) => {
     setMessages((prevMsg) => GiftedChat.append(prevMsg, messages))
