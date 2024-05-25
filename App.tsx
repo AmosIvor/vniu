@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react'
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native'
-import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
+import { appThemes } from '@constants'
+import { AppContext } from '@contexts'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { RootNavigator } from '@navigators'
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import React, { useContext } from 'react'
+import { StatusBar, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Host } from 'react-native-portalize'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import { RootNavigator } from '@navigators'
-import { appThemes } from '@constants'
-import { AppContext } from '@contexts'
 
 const App = () => {
   const deviceColorScheme = useColorScheme()

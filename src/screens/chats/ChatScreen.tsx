@@ -1,6 +1,6 @@
 import { DATAS } from '@assets'
 import { ContainerComponent } from '@components'
-import { appColors, appInfors } from '@constants'
+import { appColors } from '@constants'
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import {

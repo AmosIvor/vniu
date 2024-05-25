@@ -1,6 +1,6 @@
 import { TextComponent } from '@components'
 import { ReactNode } from 'react'
-import { View, Text, StyleProp, ViewStyle, TextStyle, TouchableOpacity } from 'react-native'
+import { StyleProp, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { appColors } from 'src/constants/appColors'
 import { appFonts } from 'src/constants/appFonts'
 import { globalStyles } from 'src/styles/globalStyles'

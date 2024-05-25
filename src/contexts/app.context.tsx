@@ -1,6 +1,5 @@
 import { appThemes } from '@constants'
 import { createContext, useState } from 'react'
-import { Text, View } from 'react-native'
 
 interface AppContextInterface {
   themeTest: string

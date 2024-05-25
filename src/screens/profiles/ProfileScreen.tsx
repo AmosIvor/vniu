@@ -9,23 +9,18 @@ import {
   TextComponent
 } from '@components'
 import { appColors, appFonts } from '@constants'
-import { Theme, useTheme } from '@react-navigation/native'
+import { useTheme } from '@react-navigation/native'
 import { Bag2, InfoCircle, Lock, LogoutCurve, Moon, Setting2, Verify } from 'iconsax-react-native'
-import React, { useContext, useEffect } from 'react'
-import { Button, Image, StyleSheet, Text, View } from 'react-native'
+import React, { useContext } from 'react'
+import { Image, StyleSheet, View } from 'react-native'
+import { AppContext } from 'src/contexts/app.context'
 import { globalStyles } from 'src/styles/globalStyles'
 import { MenuOptionComponent } from './components'
-import { AppContext } from 'src/contexts/app.context'
 
-const ProfileScreen = ({ toggleTheme }: any) => {
+const ProfileScreen = () => {
   const { colors } = useTheme()
-  const { themeTest } = useContext(AppContext)
 
   return (
-    // <View style={styles.container}>
-    //   <Text style={{ color: colors.text }}>Profile screen.</Text>
-    //   <Button title='Toggle Theme' onPress={toggleTheme} />
-    // </View>
     <ContainerComponent styles={{ backgroundColor: colors.background }}>
       <SpaceComponent height={10} />
 
@@ -110,11 +105,5 @@ const ProfileScreen = ({ toggleTheme }: any) => {
     </ContainerComponent>
   )
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-})
+
 export default ProfileScreen
