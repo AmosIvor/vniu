@@ -8,10 +8,10 @@ module.exports = {
     //   },
     // ],
     [
-      "module:react-native-dotenv",
+      'module:react-native-dotenv',
       {
-        moduleName: "react-native-dotenv",
-      },
+        moduleName: 'react-native-dotenv'
+      }
     ],
     'nativewind/babel',
     'react-native-reanimated/plugin',
@@ -25,6 +25,7 @@ module.exports = {
           '@assets': './src/assets/index',
           '@components': './src/components/index',
           '@constants': './src/constants/index',
+          '@contexts': './src/contexts/index',
           '@hooks': './src/hooks/index',
           '@modals': './src/modals/index',
           '@navigators': './src/navigators/index',
@@ -35,7 +36,6 @@ module.exports = {
           '@utils': './src/utils/'
         }
       }
-    ],
-
+    ]
   ]
 }

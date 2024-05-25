@@ -1,6 +1,8 @@
 import { RowComponent, SpaceComponent, TextComponent } from '@components'
-import { appColors, appFonts } from '@constants'
-import { ReactNode } from 'react'
+import { appColors, appFonts, appThemes } from '@constants'
+import { AppContext } from '@contexts'
+import { useTheme } from '@react-navigation/native'
+import { ReactNode, useContext, useMemo } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SwitchToggle from 'react-native-switch-toggle'
 
@@ -10,11 +12,16 @@ interface Props {
   icon: ReactNode
   onPress?: () => void
   isLogout?: boolean
-  onPressToggle?: () => void
 }
 
 const MenuOptionComponent = (props: Props) => {
-  const { isToggle, isLogout, onPress, icon, text, onPressToggle } = props
+  const { isToggle, isLogout, onPress, icon, text } = props
+  const { themeTest, setThemeTest } = useContext(AppContext)
+  const { colors } = useTheme()
+  const isSwitchOn = useMemo(() => (themeTest === 'light' ? false : true), [themeTest])
+  const onPressToggle = () => {
+    setThemeTest((prevTheme) => (prevTheme === appThemes.light ? appThemes.dark : appThemes.light))
+  }
   return (
     <RowComponent
       styles={{
@@ -34,7 +41,7 @@ const MenuOptionComponent = (props: Props) => {
           {/* content */}
           <TextComponent
             text={text}
-            color={isLogout ? appColors.Red : appColors.text}
+            color={isLogout ? appColors.Red : colors.text}
             font={appFonts.semiBold}
             size={19}
           />
@@ -43,8 +50,9 @@ const MenuOptionComponent = (props: Props) => {
 
       {isToggle && (
         <SwitchToggle
-          switchOn={false}
-          onPress={onPressToggle ?? (() => {})}
+          switchOn={isSwitchOn}
+          // onPress={onPressToggle ?? (() => {})}
+          onPress={onPressToggle}
           containerStyle={{
             width: 50,
             height: 24,
@@ -54,7 +62,7 @@ const MenuOptionComponent = (props: Props) => {
           circleColorOff={appColors.bgPrimary}
           circleColorOn={appColors.primary}
           backgroundColorOn={appColors.bgPrimary}
-          backgroundColorOff={appColors.primary}
+          backgroundColorOff={appColors.SilverSand}
           circleStyle={{
             width: 16,
             height: 16,

@@ -9,6 +9,7 @@
       "@assets": ["src/assets/index"],
       "@components": ["src/components/index"],
       "@constants": ["src/constants/index"],
+      "@contexts": ["src/contexts/index"],
       "@hooks": ["src/hooks/index"],
       "@modals": ["src/modals/index"],
       "@navigators": ["src/navigators/index"],

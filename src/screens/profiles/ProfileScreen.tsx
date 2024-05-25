@@ -9,21 +9,24 @@ import {
   TextComponent
 } from '@components'
 import { appColors, appFonts } from '@constants'
-import { useTheme } from '@react-navigation/native'
+import { Theme, useTheme } from '@react-navigation/native'
 import { Bag2, InfoCircle, Lock, LogoutCurve, Moon, Setting2, Verify } from 'iconsax-react-native'
-import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { Button, Image, StyleSheet, Text, View } from 'react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 import { MenuOptionComponent } from './components'
+import { AppContext } from 'src/contexts/app.context'
 
 const ProfileScreen = ({ toggleTheme }: any) => {
   const { colors } = useTheme()
+  const { themeTest } = useContext(AppContext)
+
   return (
     // <View style={styles.container}>
     //   <Text style={{ color: colors.text }}>Profile screen.</Text>
     //   <Button title='Toggle Theme' onPress={toggleTheme} />
     // </View>
-    <ContainerComponent>
+    <ContainerComponent styles={{ backgroundColor: colors.background }}>
       <SpaceComponent height={10} />
 
       {/* header */}
@@ -57,7 +60,7 @@ const ProfileScreen = ({ toggleTheme }: any) => {
                 alignItems: 'flex-start'
               }}
             >
-              <TextComponent text='Amos Ivor' font={appFonts.semiBold} color={appColors.text} size={19} />
+              <TextComponent text='Amos Ivor' font={appFonts.semiBold} color={colors.text} size={19} />
 
               <TextComponent text='Verified Profile' font={appFonts.regular} color={appColors.text2} size={14} />
             </View>
@@ -85,24 +88,19 @@ const ProfileScreen = ({ toggleTheme }: any) => {
 
       <SectionComponent>
         {/* darkmode */}
-        <MenuOptionComponent
-          text='Dark Mode'
-          icon={<Moon size={24} color={appColors.text} />}
-          onPressToggle={toggleTheme}
-          isToggle
-        />
+        <MenuOptionComponent text='Dark Mode' icon={<Moon size={24} color={colors.text} />} isToggle />
 
         {/* account information */}
-        <MenuOptionComponent text='Account Information' icon={<InfoCircle size={24} color={appColors.text} />} />
+        <MenuOptionComponent text='Account Information' icon={<InfoCircle size={24} color={colors.text} />} />
 
         {/* password */}
-        <MenuOptionComponent text='Password' icon={<Lock size={24} color={appColors.text} />} />
+        <MenuOptionComponent text='Password' icon={<Lock size={24} color={colors.text} />} />
 
         {/* order */}
-        <MenuOptionComponent text='My Order' icon={<Bag2 size={24} color={appColors.text} />} />
+        <MenuOptionComponent text='My Order' icon={<Bag2 size={24} color={colors.text} />} />
 
         {/* settings */}
-        <MenuOptionComponent text='Setting' icon={<Setting2 size={24} color={appColors.text} />} />
+        <MenuOptionComponent text='Setting' icon={<Setting2 size={24} color={colors.text} />} />
 
         <SpaceComponent height={60} />
 
