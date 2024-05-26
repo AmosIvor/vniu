@@ -39,5 +39,6 @@ export const appColors = {
   SecondaryColor: '#FF9933',
   SecondaryColorText: 'rgba(255, 255, 255, 0.8)',
   MovieBackground: '#24233B',
-  IconBackground: '#3B3B51'
+  IconBackground: '#3B3B51',
+  active: '#6ec531'
 }

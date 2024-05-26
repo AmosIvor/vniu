@@ -5,6 +5,7 @@ import { appColors, appFonts } from '@constants'
 import { ArrowLeft } from 'iconsax-react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 import { CircleComponent, RowComponent, SpaceComponent, TextComponent } from '@components'
+import { IMAGES } from '@assets'
 
 interface Props {
   isImageBg?: boolean
@@ -69,7 +70,7 @@ const ContainerComponent = (props: Props) => {
                 <RowComponent>
                   <CircleComponent size={48}>
                     <Image
-                      source={require('src/assets/images/splash.png')}
+                      source={IMAGES.avatar}
                       style={{ width: '100%', height: '100%', borderRadius: 100 }}
                       resizeMode='cover'
                     />
