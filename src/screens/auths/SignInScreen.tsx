@@ -95,7 +95,14 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
         <Text style={{ fontSize: 28, fontWeight: 'bold', color: 'black', paddingBottom: 14 }}>Sign in</Text>
         <Text style={{ fontSize: 18, paddingBottom: 4 }}>Welcome! Don't have an account?</Text>
         <TouchableOpacity>
-          <Text style={{ fontSize: 18, color: appColors.Primary, marginBottom: 12 }}>Sign Up</Text>
+          <Text
+            style={{ fontSize: 18, color: appColors.Primary, marginBottom: 12 }}
+            onPress={() => {
+              navigation.navigate('SignUpScreen')
+            }}
+          >
+            Sign Up
+          </Text>
         </TouchableOpacity>
         <View style={{ alignSelf: 'stretch' }}>
           <Image
@@ -119,7 +126,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
         />
 
         <TouchableOpacity
-          onPress={!validate.isValid ? handleSubmitForm : Alert.alert('Failure')}
+          onPress={!validate.isValid ? handleSubmitForm : Alert.alert('Failure: ' + errors)}
           style={{
             backgroundColor: appColors.Primary,
             paddingVertical: 12,
