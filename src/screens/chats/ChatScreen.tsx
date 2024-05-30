@@ -66,7 +66,8 @@ const ChatScreen = () => {
   useEffect(() => {
     const connect = new HubConnectionBuilder()
       .configureLogging(LogLevel.Debug)
-      .withUrl('http://10.0.2.2:5000/chathub', {
+      // .withUrl('http://10.0.2.2:5000/chathub', {
+      .withUrl('https://vniuapi20240429122410.azurewebsites.net/chathub', {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets
       })

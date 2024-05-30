@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
-import { Image, Text, TouchableOpacity, ScrollView, TextInput, StyleSheet, Alert, Keyboard } from 'react-native'
+import {
+  Image,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  TextInput,
+  StyleSheet,
+  Alert,
+  Keyboard,
+  ActivityIndicator
+} from 'react-native'
 import { IMAGES } from '@assets'
 import { appColors } from '@constants'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { DATABASE_URL } from 'react-native-dotenv'
 import { setStorage } from 'src/functions/storageFunctions'
-import axios from 'axios'
 
 const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
   const [fullName, setFullName] = useState('')
@@ -13,6 +22,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const validate = () => {
     Keyboard.dismiss()
@@ -70,32 +80,39 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
       return
     }
 
-    console.log('Sign up')
+    setLoading(true)
 
     try {
-      const response = await axios.post(
-        DATABASE_URL + '/api/Auth/register',
-        {
+      const response = await fetch(`${DATABASE_URL}/api/Auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           userName: fullName,
           email: email,
           password: password,
           phone: phoneNumber
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
+        })
+      })
 
-      if (response.data.message === 'Register Successfully') {
-        const data = response.data.data
-        console.log('Sign up successful:', data)
-        setStorage('userName', data.user.userName)
-        setStorage('email', data.user.email)
-        setStorage('id', data.user.id)
+      const data = await response.json()
+      console.log('🚀 ~ handleSubmitForm ~ data:', data)
+
+      if (data.message === 'Register Successfully') {
+        console.log('Sign up successful:', data.data)
+        setStorage('userName', data.data.userName)
+        setStorage('email', data.data.email)
+        setStorage('id', data.data.id)
+        Alert.alert('Register Success', 'Please input Login Form to Login')
         navigation.navigate('SignInScreen')
       } else {
-        Alert.alert('Register failed', 'Unable to register')
+        Alert.alert('Register failed', data.title)
       }
     } catch (error) {
       console.log('Register failed', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -140,9 +157,13 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
         keyboardType='phone-pad'
       />
 
-      <TouchableOpacity style={styles.signUpButton} onPress={handleSubmitForm}>
-        <Text style={styles.signUpButtonText}>Sign Up</Text>
-      </TouchableOpacity>
+      {loading ? (
+        <ActivityIndicator size='large' color={appColors.Primary} style={styles.loading} />
+      ) : (
+        <TouchableOpacity style={styles.signUpButton} onPress={handleSubmitForm}>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   )
 }
@@ -153,6 +174,7 @@ const styles = StyleSheet.create({
     padding: 20
   },
   backButton: {
+    top: 30,
     width: 30,
     height: 30,
     backgroundColor: '#E0E0E0',
@@ -194,6 +216,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold'
+  },
+  loading: {
+    marginVertical: 16
   }
 })
 

@@ -1,27 +1,24 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, Image, ScrollView, Keyboard, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Image, ScrollView, Keyboard, Alert, ActivityIndicator } from 'react-native'
 import { CustomInput } from '@components'
 import { appColors } from '@constants'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { getAllKeysStorage, getStringStorage, setStorage } from 'src/functions/storageFunctions'
 import { DATABASE_URL } from 'react-native-dotenv'
-import axios from 'axios'
 
-let checkEmail = false
-let checkName = false
-let checkPassword1 = false
-let checkPassword2 = false
 const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
   const [showPassword, setShowPassword] = React.useState(false)
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
-  }
   const [inputs, setInputs] = useState({
     Email: '',
     Password: ''
   })
   const [errors, setErrors] = useState({})
+  const [loading, setLoading] = useState(false)
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   const validate = () => {
     Keyboard.dismiss()
     let isValid = true
@@ -32,62 +29,64 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
     ) {
       handleError('Please input a valid email', 'Email')
       isValid = false
-    } else {
-      checkEmail = true
     }
 
     if (!inputs.Password) {
       handleError('Please input password', 'Password')
       isValid = false
-    } else {
-      if (inputs.Password.length < 8) {
-        handleError('Min password length of 8', 'Password')
-        isValid = false
-      } else {
-        checkPassword1 = true
-        checkPassword2 = true
-      }
+    } else if (inputs.Password.length < 8) {
+      handleError('Min password length of 8', 'Password')
+      isValid = false
     }
+
+    return isValid
   }
+
   const handleOnchange = (text: any, input: string) => {
     setInputs((prevState) => ({ ...prevState, [input]: text }))
   }
+
   const handleError = (error: string | null, input: string) => {
     setErrors((prevState) => ({ ...prevState, [input]: error }))
   }
+
   const handleSubmitForm = async () => {
-    console.log('Login')
-    console.log('🚀 ~ file: LoginScreen.js:81 ~ handleSubmitForm ~ inputs:', inputs)
-    let data
+    if (!validate()) {
+      return
+    }
+
+    setLoading(true)
+
     try {
-      const response = await axios.post(
-        DATABASE_URL + '/api/Auth/login',
-        {
+      const response = await fetch(`${DATABASE_URL}/api/Auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
           email: inputs.Email,
           password: inputs.Password
-        },
-        { headers: { 'Content-Type': 'application/json' } }
-      )
-      if (response.data.message === 'Login Successfully') {
-        data = response.data.data
-        console.log('🚀 ~ handleSubmitForm ~ data:', data)
-        setStorage('accessToken', data.accessToken)
-        setStorage('userName', data.user.userName)
-        setStorage('email', data.user.email)
-        setStorage('id', data.user.id)
+        })
+      })
+
+      const data = await response.json()
+
+      if (data.message === 'Login Successfully') {
+        setStorage('accessToken', data.data.accessToken)
+        setStorage('userName', data.data.user.userName)
+        setStorage('email', data.data.user.email)
+        setStorage('id', data.data.user.id)
         navigation.navigate('TabsStack')
       } else {
-        Alert.alert(`Login Fail!!`)
+        Alert.alert('Login Failed', 'Invalid email or password')
       }
-      return response
     } catch (error) {
-      Alert.alert(`Login Fail!!`)
+      Alert.alert('Login Failed', 'An error occurred while logging in')
       console.log('Login fail', error)
-      throw error
+    } finally {
+      setLoading(false)
     }
   }
-
-  //
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
@@ -106,11 +105,11 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
         </TouchableOpacity>
         <View style={{ alignSelf: 'stretch' }}>
           <Image
+            resizeMode='contain'
             source={require('../../assets/images/logo.png')}
-            style={{ width: '100%', height: 110, marginBottom: 30 }}
+            style={{ width: '100%', height: 100, marginBottom: 30 }}
           />
         </View>
-        {/* <View style={{ height: 100 }} /> */}
         <CustomInput
           label='Email'
           onChangeText={(text: any) => handleOnchange(text, 'Email')}
@@ -123,28 +122,25 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
           onChangeText={(text: any) => handleOnchange(text, 'Password')}
           error={errors.Password}
           onFocus={() => handleError(null, 'Password')}
+          secureTextEntry={!showPassword}
         />
 
-        <TouchableOpacity
-          onPress={!validate.isValid ? handleSubmitForm : Alert.alert('Failure: ' + errors)}
-          style={{
-            backgroundColor: appColors.Primary,
-            paddingVertical: 12,
-            borderRadius: 8,
-            marginBottom: 10,
-            marginTop: 5
-          }}
-        >
-          <Text style={{ color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>LOGIN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            console.log('id: ', getStringStorage('id'))
-            console.log('accessToken: ', getStringStorage('accessToken'))
-          }}
-        >
-          <Text style={{ color: appColors.Primary, textAlign: 'right', marginVertical: 10 }}>Forgot password?</Text>
-        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator size='large' color={appColors.Primary} style={{ marginVertical: 16 }} />
+        ) : (
+          <TouchableOpacity
+            onPress={handleSubmitForm}
+            style={{
+              backgroundColor: appColors.Primary,
+              paddingVertical: 12,
+              borderRadius: 8,
+              marginBottom: 10,
+              marginTop: 5
+            }}
+          >
+            <Text style={{ color: 'white', textAlign: 'center', fontSize: 16, fontWeight: 'bold' }}>LOGIN</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   )

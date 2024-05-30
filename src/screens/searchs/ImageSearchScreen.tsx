@@ -17,6 +17,9 @@ import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
+import { IMAGES } from '@assets'
+
+//TTT
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload'
 const CLOUDINARY_UPLOAD_PRESET = 'ma9g4xzz'
 const FASTAPI_URL = 'https://vniuimagesearch.azurewebsites.net/search/'
@@ -143,6 +146,9 @@ const ImageSearchScreen = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Image source={IMAGES.IMG_ICON_PREVIOUS} />
+      </TouchableOpacity>
       <Text style={styles.header}> IMAGE SEARCH</Text>
       <View style={styles.pickImageContainer}>
         <Text style={styles.instruction}>Please pick an image</Text>
@@ -172,6 +178,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  backButton: {
+    position: 'absolute',
+    left: 30,
+    top: 30,
+    width: 30,
+    height: 30,
+    backgroundColor: '#E0E0E0',
+    padding: 8,
+    borderRadius: 4,
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start'
   },
   image: {
     width: 200,

@@ -6,7 +6,7 @@ import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import EvilIcon from 'react-native-vector-icons/EvilIcons'
 import { useTheme } from '@react-navigation/native'
-
+import { IMAGES } from '@assets'
 const SearchScreen = () => {
   const { colors } = useTheme()
 
@@ -74,6 +74,9 @@ const SearchScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Image source={IMAGES.IMG_ICON_PREVIOUS} />
+      </TouchableOpacity>
       <View style={styles.header}>
         <View style={styles.search}>
           <TextInput
@@ -84,7 +87,6 @@ const SearchScreen = () => {
             hitSlop={{ top: 20, bottom: 20, left: 100, right: 50 }}
           />
         </View>
-        <EvilIcon name='search' size={24} color={colors.text} style={{ opacity: 0.5 }} />
       </View>
       <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
         <View>
@@ -104,6 +106,18 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: '#fff'
+  },
+  backButton: {
+    position: 'absolute',
+    left: 30,
+    top: 30,
+    width: 30,
+    height: 30,
+    backgroundColor: '#E0E0E0',
+    padding: 8,
+    borderRadius: 4,
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start'
   },
   productListContainer: {
     flexGrow: 1,
@@ -165,6 +179,7 @@ const styles = StyleSheet.create({
   header: {
     width: '90%',
     margin: 50,
+    marginTop: 80,
     height: 50,
     marginBottom: '2%',
     flexDirection: 'row',

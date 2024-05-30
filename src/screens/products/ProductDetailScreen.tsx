@@ -86,13 +86,14 @@ const ProductDetailScreen = ({
                 justifyContent: 'center',
                 borderRadius: 52,
                 borderWidth: 1,
-                borderColor: '#fff'
+                backgroundColor: 'gray',
+                borderColor: 'black'
               }}
             >
               <MaterialCommunityIcons name='keyboard-backspace' size={24} color={'#fff'} />
             </TouchableOpacity>
             <View style={{ flex: 1 }} />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 width: 52,
                 aspectRatio: 1,
@@ -117,7 +118,7 @@ const ProductDetailScreen = ({
               }}
             >
               <MaterialCommunityIcons name='cart' size={24} color={'#fff'} />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </ImageBackground>
 
@@ -231,7 +232,7 @@ const ProductDetailScreen = ({
           </Text>
 
           <View style={{ flex: 1 }} />
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+          {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
             <TouchableOpacity
               style={{
                 backgroundColor: colors.primary,
@@ -268,7 +269,7 @@ const ProductDetailScreen = ({
                 <MaterialCommunityIcons name='cart' size={24} color={colors.text} />
               </View>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </SafeAreaView>
