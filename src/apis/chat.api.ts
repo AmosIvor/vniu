@@ -1,4 +1,4 @@
-import { ChatRoomResponseType, MessageRequestType, MessageResponseType } from '@appTypes/chat.type'
+import { ChatRoomResponseType, ChatbotResponseType, MessageRequestType, MessageResponseType } from '@appTypes/chat.type'
 import { SuccessResponse } from '@appTypes/utils.type'
 import { apis } from '@constants'
 
@@ -15,6 +15,10 @@ const chatApi = {
 
   sendMessageByUser({ userId, body }: { userId: string; body: MessageRequestType }) {
     return http.post<SuccessResponse<MessageResponseType>>(`api/Chat/chatrooms/${userId}/messages`, body)
+  },
+
+  chatbotResponse(userMessage: string) {
+    return http.post<SuccessResponse<ChatbotResponseType>>(`api/Chat/chatbot`, userMessage)
   }
 }
 
