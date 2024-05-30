@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '@react-navigation/native'
+import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
+import axios from 'axios'
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
-const product = {
+const productInit = {
   id: 1,
   name: 'PUMA Everyday Hussle',
   totalReview: 2,
@@ -141,18 +143,23 @@ const ProductDetailScreen = ({
   }
 }: RootStackScreenProps<'Details'>) => {
   const { colors } = useTheme()
+  const [product, setProduct] = useState(productInit)
   const insets = useSafeAreaInsets()
   const [count, setCount] = useState(1)
   const [size, setSize] = useState(SIZES[0])
-  // const [product, setProduct] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(product.ProductItems[0].ProductImages[0])
-  const [selectedItem, setSelectedItem] = useState(product.ProductItems[0])
+  const [selectedImage, setSelectedImage] = useState(productInit.ProductItems[0].ProductImages[0])
+  const [selectedItem, setSelectedItem] = useState(productInit.ProductItems[0])
   const [isFocus, setIsFocus] = useState(false)
   const [optionData, setOptionData] = useState([])
   const [option, setOption] = useState(null)
   const [optionName, setOptionName] = useState(null)
-  useEffect(() => {
-    const options = product.ProductItems.map((item) => {
+
+  const fetchProduct = async () => {
+    const response = await axios.get(LOCAL_URL + `/api/Product/` + id)
+    setProduct(response.data.data)
+    console.log('🚀 ~ fetchProduct ~ response.data:', response.data)
+
+    const options = response.data.data.ProductItems.map((item) => {
       const { ProductItemId } = item
       const { SizeName } = item.Variation.Size
       const { ColourName } = item.Colour
@@ -166,21 +173,27 @@ const ProductDetailScreen = ({
       }
     })
     setOptionData(options)
-  }, [product.ProductItems])
-  const handleImageSelect = (image) => {
-    setSelectedImage(image)
+    setSelectedImage(response.data.data.ProductItems[0].ProductImages[0])
+    setSelectedItem(response.data.data.ProductItems[0])
+    return response.data
   }
+  useEffect(() => {
+    fetchProduct()
+  }, [])
+  // const handleImageSelect = (image) => {
+  //   setSelectedImage(image)
+  // }
 
-  const handleSizeSelect = (size) => {
-    setSelectedSize(size)
-  }
+  // const handleSizeSelect = (size) => {
+  //   setSelectedSize(size)
+  // }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1, flexDirection: 'column', flexGrow: 1 }}>
         <ImageBackground
           style={{ height: 300, width: '100%', justifyContent: 'flex-end' }}
           source={{
-            uri: selectedImage.url
+            uri: selectedImage?.productImageUrl
           }}
         >
           <View
@@ -251,7 +264,7 @@ const ProductDetailScreen = ({
 
         <View style={{ padding: 16, gap: 16, flex: 1 }}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 6, gap: 6 }}>
-            {selectedItem.ProductImages.map((i) => (
+            {selectedItem?.ProductImages.map((i) => (
               <TouchableOpacity
                 key={i.ImageId}
                 onPress={() => setSelectedImage(i)}
@@ -269,7 +282,7 @@ const ProductDetailScreen = ({
               </TouchableOpacity>
             ))}
           </ScrollView>
-          <Text style={{ fontSize: 20, fontWeight: '600', color: colors.text }}>PUMA Everyday Hussle</Text>
+          <Text style={{ fontSize: 20, fontWeight: '600', color: colors.text }}>{product?.productName}</Text>
 
           <View style={{ flexDirection: 'row', gap: 2 }}>
             <Text
@@ -279,7 +292,7 @@ const ProductDetailScreen = ({
                 opacity: 0.5
               }}
             >
-              {selectedItem.Rating}
+              {5}
             </Text>
             <View style={{ flexDirection: 'row', gap: 2 }}>
               {new Array(5).fill('').map((_, i) => (
@@ -298,14 +311,14 @@ const ProductDetailScreen = ({
                 opacity: 0.5
               }}
             >
-              {'(' + product.totalReview + ' ) | đã bán ' + selectedItem.Sold}
+              {'(' + 5 + ' ) | đã bán ' + selectedItem?.productItemSold}
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>${selectedItem.OriginalPrice}</Text>
+            <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>${selectedItem?.originalPrice}</Text>
             <View style={{ width: 40, height: 20, borderRadius: 20, backgroundColor: '#888', margin: 2 }}>
               <Text style={{ color: colors.text, fontSize: 12, fontWeight: '600', textAlign: 'center' }}>
-                {(selectedItem.SalePrice / selectedItem.OriginalPrice) * 100 + ' % '}
+                {(selectedItem?.salePrice / selectedItem?.originalPrice) * 100 + ' % '}
               </Text>
             </View>
           </View>
@@ -385,8 +398,7 @@ const ProductDetailScreen = ({
             Description
           </Text>
           <Text style={{ color: colors.text, opacity: 0.75 }} numberOfLines={3}>
-            Aute magna dolore sint ipsum dolor fugiat. Ad magna ad elit labore culpa sunt sint laboris consectetur sunt.
-            Lorem excepteur occaecat reprehenderit nostrud culpa ad ex exercitation tempor.
+            {product?.productDescription}
           </Text>
 
           <View style={{ flex: 1 }} />

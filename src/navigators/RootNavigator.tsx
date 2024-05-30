@@ -8,6 +8,7 @@ import SignInScreen from '@screens/auths/SignInScreen'
 import SignUpScreen from '@screens/auths/SignUpScreen'
 import ProductDetailScreen from '@screens/products/ProductDetailScreen'
 import { getStringStorage } from 'src/functions/storageFunctions'
+import ImageSearchScreen from '@screens/searchs/ImageSearchScreen'
 
 export type RootStackParamList = {
   TabsStack: NavigatorScreenParams<TabsStackParamList>
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   ProductDetailScreen: undefined
   ProductSearchScreen: undefined
   ChatScreen: undefined
+  ImageSearch: undefined
 }
 
 const RootStack = createNativeStackNavigator<RootStackParamList>()
@@ -36,6 +38,7 @@ const RootNavigator = ({ toggleTheme }: any) => {
       <RootStack.Screen name='TabsStack'>
         {(props) => <TabNavigation {...props} toggleTheme={toggleTheme} />}
       </RootStack.Screen>
+      <RootStack.Screen name='ImageSearch' component={ImageSearchScreen} />
       <RootStack.Screen name='Details' component={ProductDetailScreen} />
       <RootStack.Screen name='SignInScreen' component={SignInScreen} />
       <RootStack.Screen name='SignUpScreen' component={SignUpScreen} />
