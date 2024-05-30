@@ -1,4 +1,13 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, ImageBackground, ScrollView } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  ImageBackground,
+  ScrollView
+} from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -59,41 +68,42 @@ const ProductDetailScreen = ({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1, flexDirection: 'column', flexGrow: 1 }}>
-        <ImageBackground
-          style={{ height: 300, width: '100%', justifyContent: 'flex-end' }}
-          source={{
-            uri: selectedImage?.productImageUrl
-          }}
-        >
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: 20,
-              gap: 8
+        {selectedImage?.productImageUrl ? (
+          <ImageBackground
+            style={{ height: 300, width: '100%', justifyContent: 'flex-end' }}
+            source={{
+              uri: selectedImage?.productImageUrl
             }}
           >
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
+            <View
               style={{
-                width: 52,
-                aspectRatio: 1,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 52,
-                borderWidth: 1,
-                backgroundColor: 'gray',
-                borderColor: 'black'
+                padding: 20,
+                gap: 8
               }}
             >
-              <MaterialCommunityIcons name='keyboard-backspace' size={24} color={'#fff'} />
-            </TouchableOpacity>
-            <View style={{ flex: 1 }} />
-            {/* <TouchableOpacity
+              <TouchableOpacity
+                onPress={() => navigation.goBack()}
+                style={{
+                  width: 52,
+                  aspectRatio: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 52,
+                  borderWidth: 1,
+                  backgroundColor: 'gray',
+                  borderColor: 'black'
+                }}
+              >
+                <MaterialCommunityIcons name='keyboard-backspace' size={24} color={'#fff'} />
+              </TouchableOpacity>
+              <View style={{ flex: 1 }} />
+              {/* <TouchableOpacity
               style={{
                 width: 52,
                 aspectRatio: 1,
@@ -119,8 +129,15 @@ const ProductDetailScreen = ({
             >
               <MaterialCommunityIcons name='cart' size={24} color={'#fff'} />
             </TouchableOpacity> */}
-          </View>
-        </ImageBackground>
+            </View>
+          </ImageBackground>
+        ) : (
+          <ActivityIndicator
+            style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
+            size='large'
+            color='#0000ff'
+          />
+        )}
 
         <View style={{ padding: 16, gap: 16, flex: 1 }}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 6, gap: 6 }}>
@@ -190,9 +207,10 @@ const ProductDetailScreen = ({
 
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-          placeholderStyle={{ color: 'black', opacity: 0.5, fontSize: 14 }}
-          selectedTextStyle={{ color: 'black', opacity: 0.5, fontSize: 14 }}
-          inputSearchStyle={styles.inputSearchStyle}
+          placeholderStyle={{ color: 'black', opacity: 1, fontSize: 14 }}
+          selectedTextStyle={{ color: colors.text, opacity: 1, fontSize: 14 }}
+          itemTextStyle={{ color: 'black', opacity: 1, fontSize: 14 }}
+          inputSearchStyle={[styles.inputSearchStyle, { color: colors.text }]}
           iconStyle={styles.iconStyle}
           data={optionData}
           search
@@ -216,7 +234,7 @@ const ProductDetailScreen = ({
           }}
         />
 
-        <View>
+        <View style={{ padding: 20 }}>
           <Text
             style={{
               fontSize: 16,
@@ -286,7 +304,6 @@ const styles = StyleSheet.create({
     alignContent: 'center'
   },
   dropdown: {
-    color: 'black',
     height: 50,
     borderColor: 'gray',
     borderWidth: 0.5,

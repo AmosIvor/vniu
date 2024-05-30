@@ -5,8 +5,10 @@ import { appColors } from '@constants'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { getAllKeysStorage, getStringStorage, setStorage } from 'src/functions/storageFunctions'
 import { DATABASE_URL } from 'react-native-dotenv'
+import { useTheme } from '@react-navigation/native'
 
 const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
+  const { colors } = useTheme()
   const [showPassword, setShowPassword] = React.useState(false)
   const [inputs, setInputs] = useState({
     Email: '',
@@ -91,8 +93,8 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <View style={{ padding: 20 }}>
-        <Text style={{ fontSize: 28, fontWeight: 'bold', color: 'black', paddingBottom: 14 }}>Sign in</Text>
-        <Text style={{ fontSize: 18, paddingBottom: 4 }}>Welcome! Don't have an account?</Text>
+        <Text style={{ fontSize: 28, fontWeight: 'bold', color: colors.text, paddingBottom: 14 }}>Sign in</Text>
+        <Text style={{ fontSize: 18, paddingBottom: 4, color: colors.text }}>Welcome! Don't have an account?</Text>
         <TouchableOpacity>
           <Text
             style={{ fontSize: 18, color: appColors.Primary, marginBottom: 12 }}

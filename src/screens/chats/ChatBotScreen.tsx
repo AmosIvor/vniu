@@ -110,12 +110,12 @@ const ChatBotScreen = () => {
         paddingHorizontal: 14
       }}
     >
-      {text === '' && (
+      {/* {text === '' && (
         <>
           <Ionicons name='camera-outline' color={appColors.primary} size={28} />
           <Ionicons name='mic-outline' color={appColors.primary} size={28} />
         </>
-      )}
+      )} */}
       {text !== '' && (
         <SendGiftedChat
           {...props}
@@ -144,7 +144,7 @@ const ChatBotScreen = () => {
             renderSystemMessage={(props) => <SystemMessage {...props} textStyle={{ color: appColors.gray }} />}
             renderSend={renderSend}
             renderBubble={renderBubble}
-            renderInputToolbar={renderInputToolbar}
+            // renderInputToolbar={renderInputToolbar}
             textInputProps={styles.composer}
             maxComposerHeight={100}
             bottomOffset={insets.bottom}
@@ -160,6 +160,7 @@ export default ChatBotScreen
 const styles = StyleSheet.create({
   composer: {
     backgroundColor: '#fff',
+    color: 'black',
     borderRadius: 18,
     borderWidth: 1,
     borderColor: appColors.text2,

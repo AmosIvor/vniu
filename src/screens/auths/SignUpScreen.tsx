@@ -15,6 +15,7 @@ import { appColors } from '@constants'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { DATABASE_URL } from 'react-native-dotenv'
 import { setStorage } from 'src/functions/storageFunctions'
+import { useTheme } from '@react-navigation/native'
 
 const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
   const [fullName, setFullName] = useState('')
@@ -23,6 +24,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [loading, setLoading] = useState(false)
+  const { colors } = useTheme()
 
   const validate = () => {
     Keyboard.dismiss()
@@ -126,32 +128,47 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
       <Text style={styles.subtitle}>Enter your data to continue!</Text>
 
       <Text style={styles.label}>Your Name</Text>
-      <TextInput style={styles.input} placeholder='Severus Snape' value={fullName} onChangeText={setFullName} />
+      <TextInput
+        style={[styles.input, { color: colors.text }]}
+        placeholder='Severus Snape'
+        placeholderTextColor={colors.text}
+        value={fullName}
+        onChangeText={setFullName}
+      />
 
       <Text style={styles.label}>Email</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: colors.text }]}
         placeholder='snape@example.com'
+        placeholderTextColor={colors.text}
         value={email}
         onChangeText={setEmail}
         keyboardType='email-address'
       />
 
       <Text style={styles.label}>Password</Text>
-      <TextInput style={styles.input} placeholder='Password' value={password} onChangeText={setPassword} />
+      <TextInput
+        style={[styles.input, { color: colors.text }]}
+        placeholder='Password'
+        placeholderTextColor={colors.text}
+        value={password}
+        onChangeText={setPassword}
+      />
 
       <Text style={styles.label}>Confirm Password</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: colors.text }]}
         placeholder='Confirm Password'
+        placeholderTextColor={colors.text}
         value={confirmPassword}
         onChangeText={setConfirmPassword}
       />
 
       <Text style={styles.label}>Phone Number</Text>
       <TextInput
-        style={styles.input}
-        placeholder='Phone Number'
+        style={[styles.input, { color: colors.text }]}
+        placeholder='0123456789'
+        placeholderTextColor={colors.text}
         value={phoneNumber}
         onChangeText={setPhoneNumber}
         keyboardType='phone-pad'

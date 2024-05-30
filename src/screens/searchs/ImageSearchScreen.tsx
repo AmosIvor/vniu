@@ -18,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
 import { IMAGES } from '@assets'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 //TTT
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload'
@@ -86,7 +87,6 @@ const ImageSearchScreen = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('🚀 ~ .then ~ data:', data)
         const productItemIds = data.nearest_images.map((result) => result[1])
         const uniqueProductItemIds = [...new Set(productItemIds)] // Loại bỏ trùng lặp
         fetchProducts(uniqueProductItemIds)
@@ -108,7 +108,6 @@ const ImageSearchScreen = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log('Fetched products:', data)
         setResults(data.data)
       })
       .catch((err) => {
@@ -149,15 +148,15 @@ const ImageSearchScreen = () => {
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
         <Image source={IMAGES.IMG_ICON_PREVIOUS} />
       </TouchableOpacity>
-      <Text style={styles.header}> IMAGE SEARCH</Text>
+      <Text style={[styles.header, { color: colors.text }]}> IMAGE SEARCH</Text>
       <View style={styles.pickImageContainer}>
-        <Text style={styles.instruction}>Please pick an image</Text>
+        <Text style={[styles.instruction, { color: colors.text }]}>Please pick an image</Text>
         <Button title='Pick Image' onPress={pickImage} />
       </View>
       {image && <Image source={{ uri: image }} style={styles.image} />}
       {loading && <ActivityIndicator size='large' color='#0000ff' />}
       {results && (
-        <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
+        <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: wp(1) }}>
           <View>
             <FlatList
               numColumns={2}
@@ -225,7 +224,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   productContainer: {
-    width: 160,
+    width: wp(48),
     padding: 8
   },
   productImage: {
