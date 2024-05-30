@@ -114,6 +114,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         </View>
         <View style={{ flexDirection: 'row', paddingHorizontal: 24, gap: 12 }}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('SearchScreen')}
             style={{
               flex: 1,
               height: 52,
@@ -190,29 +191,56 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
             <MaterialCommunityIcons name='filter' size={24} color='#333' />
           </TouchableOpacity>
         </View>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={categoryIcons}
-          keyExtractor={(item) => item.id}
-          renderItem={renderCategoryIcon}
-          contentContainerStyle={styles.categoryContainer}
-        />
+        <View>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={categoryIcons}
+            keyExtractor={(item) => item.id}
+            renderItem={renderCategoryIcon}
+            contentContainerStyle={styles.categoryContainer}
+          />
+        </View>
 
         {/* Product List */}
-        <FlatList
-          numColumns={2}
-          showsVerticalScrollIndicator
-          // data={data.pages[0]?.data}
-          data={products}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          onEndReached={loadMore}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={() => {
-            return isFetchingNextPage ? <ActivityIndicator /> : null
-          }}
-        />
+        <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
+          <View>
+            <FlatList
+              numColumns={2}
+              showsVerticalScrollIndicator
+              // data={data.pages[0]?.data}
+              data={products}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderItem}
+              onEndReached={loadMore}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={() => {
+                return isFetchingNextPage ? <ActivityIndicator /> : null
+              }}
+            />
+          </View>
+        </ScrollView>
+        {/* {isLoading ? (
+          <ActivityIndicator
+            style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
+            size='large'
+            color='#0000ff'
+          />
+        ) : (
+          <FlatList
+            numColumns={2}
+            showsVerticalScrollIndicator
+            // data={data.pages[0]?.data}
+            data={products}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderItem}
+            onEndReached={loadMore}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={() => {
+              return isFetchingNextPage ? <ActivityIndicator /> : null
+            }}
+          />
+        )} */}
         <View style={{ height: 50 }} />
       </SafeAreaView>
       <BottomSheetModal
@@ -292,7 +320,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   productContainer: {
-    width: '48%',
+    // width: '48%',
+    width: 160,
     padding: 8
   },
   productImage: {

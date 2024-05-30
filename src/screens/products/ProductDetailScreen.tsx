@@ -11,131 +11,6 @@ import axios from 'axios'
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
-const productInit = {
-  id: 1,
-  name: 'PUMA Everyday Hussle',
-  totalReview: 2,
-  description:
-    'Aute magna dolore sint ipsum dolor fugiat. Ad magna ad elit labore culpa sunt sint laboris consectetur sunt. Lorem excepteur occaecat reprehenderit nostrud culpa ad ex exercitation tempor.',
-  reviews: [
-    {
-      id: 1,
-      rating: 3,
-      comment:
-        'Aute magna dolore sint ipsum dolor fugiat. Ad magna ad elit labore culpa sunt sint laboris consectetur sunt. Lorem excepteur occaecat reprehenderit nostrud culpa ad ex exercitation tempor.',
-      user: {
-        id: 1,
-        name: 'John Doe',
-        avatar:
-          'https://randomuser.https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-      },
-      image:
-        'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-    },
-    {
-      id: 2,
-      rating: 5,
-      comment:
-        'Aute magna dolore sint ipsum dolor fugiat. Ad magna ad elit labore culpa sunt sint laboris consectetur sunt. Lorem excepteur occaecat reprehenderit nostrud culpa ad ex exercitation tempor.',
-      user: {
-        id: 1,
-        name: 'John Doe',
-        avatar:
-          'https://randomuser.me/api/portraitshttps://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-      },
-      image:
-        'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-    }
-  ],
-  ProductItems: [
-    {
-      ProductItemId: 1,
-      ProductItemName: 'PUMA Everyday',
-      Colour: {
-        ColourId: 1,
-        ColourName: 'Black'
-      },
-      Variation: {
-        Size: {
-          SizeId: 1,
-          SizeName: 'S'
-        },
-        QuantityInStock: 10
-      },
-      OriginalPrice: 25000,
-      SalePrice: 20000,
-      Sold: 3,
-      Rating: 3,
-      ProductImages: [
-        {
-          ImageId: 1,
-          url: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-        },
-        {
-          ImageId: 2,
-          url: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-        },
-        {
-          ImageId: 3,
-          url: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-        },
-        {
-          ImageId: 4,
-          url: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-        }
-      ]
-    },
-    {
-      ProductItemId: 2,
-      Colour: {
-        ColourId: 1,
-        ColourName: 'Black'
-      },
-      Variation: {
-        Size: {
-          SizeId: 1,
-          SizeName: 'XL'
-        },
-        QuantityInStock: 10
-      },
-      OriginalPrice: 25000,
-      SalePrice: 20000,
-      Sold: 3,
-      Rating: 3,
-      ProductImages: [
-        {
-          ImageId: 1,
-          url: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-        }
-      ]
-    },
-    {
-      ProductItemId: 3,
-      Colour: {
-        ColourId: 1,
-        ColourName: 'Red'
-      },
-      Variation: {
-        Size: {
-          SizeId: 1,
-          SizeName: 'XXL'
-        },
-        QuantityInStock: 10
-      },
-      OriginalPrice: 25000,
-      SalePrice: 20000,
-      Sold: 3,
-      Rating: 4,
-      ProductImages: [
-        {
-          ImageId: 1,
-          url: 'https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=2811&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-        }
-      ]
-    }
-  ]
-}
-
 const ProductDetailScreen = ({
   navigation,
   route: {
@@ -143,12 +18,12 @@ const ProductDetailScreen = ({
   }
 }: RootStackScreenProps<'Details'>) => {
   const { colors } = useTheme()
-  const [product, setProduct] = useState(productInit)
+  const [product, setProduct] = useState()
   const insets = useSafeAreaInsets()
   const [count, setCount] = useState(1)
   const [size, setSize] = useState(SIZES[0])
-  const [selectedImage, setSelectedImage] = useState(productInit.ProductItems[0].ProductImages[0])
-  const [selectedItem, setSelectedItem] = useState(productInit.ProductItems[0])
+  const [selectedImage, setSelectedImage] = useState()
+  const [selectedItem, setSelectedItem] = useState()
   const [isFocus, setIsFocus] = useState(false)
   const [optionData, setOptionData] = useState([])
   const [option, setOption] = useState(null)
@@ -157,36 +32,30 @@ const ProductDetailScreen = ({
   const fetchProduct = async () => {
     const response = await axios.get(LOCAL_URL + `/api/Product/` + id)
     setProduct(response.data.data)
-    console.log('🚀 ~ fetchProduct ~ response.data:', response.data)
 
-    const options = response.data.data.ProductItems.map((item) => {
-      const { ProductItemId } = item
-      const { SizeName } = item.Variation.Size
-      const { ColourName } = item.Colour
-      const OptionName = `${ColourName} - ${SizeName}`
+    const options = response.data.data.productItems.map((item) => {
+      const { productItemId } = item
+      const { sizeName } = item.variations[0].size
+      const { colourName } = item.colourVMs[0]
+      const optionName = `${colourName} - ${sizeName}`
 
       return {
-        ProductItemId,
-        SizeName,
-        ColourName,
-        OptionName
+        productItemId,
+        sizeName,
+        colourName,
+        optionName
       }
     })
     setOptionData(options)
-    setSelectedImage(response.data.data.ProductItems[0].ProductImages[0])
-    setSelectedItem(response.data.data.ProductItems[0])
+    setSelectedImage(response.data.data.productItems[0].productImages[0])
+    setSelectedItem(response.data.data.productItems[0])
     return response.data
   }
+
   useEffect(() => {
     fetchProduct()
   }, [])
-  // const handleImageSelect = (image) => {
-  //   setSelectedImage(image)
-  // }
 
-  // const handleSizeSelect = (size) => {
-  //   setSelectedSize(size)
-  // }
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1, flexDirection: 'column', flexGrow: 1 }}>
@@ -251,22 +120,12 @@ const ProductDetailScreen = ({
             </TouchableOpacity>
           </View>
         </ImageBackground>
-        {/* <Image
-        source={{
-          uri: 'https://images.unsplash.com/photo-1571945153237-4929e783af4a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80'
-        }}
-      />
-      <SafeAreaView edges={['top']} style={{ position: 'absolute', top: 0, left: 0, right: 0 }}>
-        <StatusBar barStyle={'dark-content'} />
-
-        
-      </SafeAreaView> */}
 
         <View style={{ padding: 16, gap: 16, flex: 1 }}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 6, gap: 6 }}>
-            {selectedItem?.ProductImages.map((i) => (
+            {selectedItem?.productImages.map((i) => (
               <TouchableOpacity
-                key={i.ImageId}
+                key={i.productImageId}
                 onPress={() => setSelectedImage(i)}
                 style={{
                   width: 100,
@@ -278,7 +137,7 @@ const ProductDetailScreen = ({
                   borderWidth: 1
                 }}
               >
-                <Image source={{ uri: i.url }} style={{ width: 100, height: 100 }} />
+                <Image source={{ uri: i.productImageUrl }} style={{ width: 100, height: 100 }} />
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -292,7 +151,7 @@ const ProductDetailScreen = ({
                 opacity: 0.5
               }}
             >
-              {5}
+              {3}
             </Text>
             <View style={{ flexDirection: 'row', gap: 2 }}>
               {new Array(5).fill('').map((_, i) => (
@@ -311,49 +170,22 @@ const ProductDetailScreen = ({
                 opacity: 0.5
               }}
             >
-              {'(' + 5 + ' ) | đã bán ' + selectedItem?.productItemSold}
+              {'(' + 3 + ' ) | đã bán ' + selectedItem?.productItemSold}
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>${selectedItem?.originalPrice}</Text>
             <View style={{ width: 40, height: 20, borderRadius: 20, backgroundColor: '#888', margin: 2 }}>
               <Text style={{ color: colors.text, fontSize: 12, fontWeight: '600', textAlign: 'center' }}>
-                {(selectedItem?.salePrice / selectedItem?.originalPrice) * 100 + ' % '}
+                {'- ' +
+                  Math.round(
+                    ((selectedItem?.originalPrice - selectedItem?.salePrice) / selectedItem?.originalPrice) * 100
+                  ) +
+                  ' %'}
               </Text>
             </View>
           </View>
-          {/* <View style={{ flex: 1 }}>
-            <TouchableOpacity
-              onPress={() => console.log('Select size')}
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: 80,
-                width: '100%',
-                gap: 6,
-                backgroundColor: colors.background,
-                padding: 6,
-                borderRadius: 5,
-                borderColor: colors.border,
-                borderWidth: 1
-              }}
-            >
-              
-              <View style={{ flex: 3, alignContent: 'flex-start', justifyContent: 'flex-start' }}>
-                <Text style={{ color: colors.text, fontSize: 14 }}>{'Colour, Size'}</Text>
-                <Text style={{ color: colors.text, fontSize: 14, fontWeight: '600' }}>
-                  {selectedItem.Colour.ColourName + ' , ' + selectedItem.Variation.Size.SizeName}
-                </Text>
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ color: colors.primary, fontSize: 14 }}>{'Chọn'}</Text>
-              </View>
-            </TouchableOpacity>
-          </View>*/}
         </View>
-
-        {/* DropDownMenuOption */}
 
         <Dropdown
           style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
@@ -364,24 +196,21 @@ const ProductDetailScreen = ({
           data={optionData}
           search
           maxHeight={300}
-          labelField='OptionName'
-          valueField='OptionName'
+          labelField='optionName'
+          valueField='optionName'
           placeholder={!isFocus ? 'Select option' : '...'}
           searchPlaceholder='Search...'
-          value={'Select option'}
+          value={optionName}
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={(item) => {
-            setOption(item.label)
-            setOptionName(item.value)
-            const t = item
-            const foundItem = product.ProductItems.find((i) => i.ProductItemId === parseInt(t.ProductItemId))
+            setOption(item.optionName)
+            setOptionName(item.optionName)
+            const foundItem = product.productItems.find((i) => i.productItemId === item.productItemId)
             if (foundItem) {
-              setSelectedImage(foundItem.ProductImages[0]) // Set the first image as the selectedImage
-              setSelectedItem(foundItem) // Set the foundItem as the selectedItem
+              setSelectedImage(foundItem.productImages[0])
+              setSelectedItem(foundItem)
             }
-            console.log(selectedItem)
-
             setIsFocus(false)
           }}
         />
