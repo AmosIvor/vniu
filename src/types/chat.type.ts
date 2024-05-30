@@ -20,3 +20,11 @@ export interface MessageRequestType {
   isFromUser: boolean
   isRead: boolean
 }
+
+export interface ChatbotResponseType {
+  chatbotId: string
+  chatbotContent: string
+  imageUrl?: string
+  isFromUser: boolean
+  messageCreateAt: string
+}
