@@ -11,7 +11,8 @@ _VNIU - AI SHOP APP_
 
 - Nguyen Thi Thanh Truc - [Email](trucntt@uit.edu.vn)
 
-**Description**: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+**Description**: In today's world, the need to enhance the shopping experience has become essential. With the rapid advancement of AI technology, it has become possible to support users effectively during their shopping journeys. VNIU is an
+advanced AI application designed to elevate the online shopping experience. VNIU integrates features such as image-based product search, allowing users to simply snap a photo of a product and find similar items. Additionally, VNIU's intelligent chatbot assists users in answering any questions quickly and accurately. VNIU promises to deliver the most convenient and efficient shopping experience.
 
 **How to use**:
 
