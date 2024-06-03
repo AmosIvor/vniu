@@ -4,8 +4,9 @@ import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
 import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import EvilIcon from 'react-native-vector-icons/EvilIcons'
 import { useTheme } from '@react-navigation/native'
+import { IMAGES } from '@assets'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 const SearchScreen = () => {
   const { colors } = useTheme()
@@ -60,13 +61,13 @@ const SearchScreen = () => {
         style={styles.productContainer}
       >
         <Image source={{ uri: productImageUrl }} style={styles.productImage} />
-        <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item.productName}</Text>
-        <Text style={{ fontSize: 14, marginTop: 4, color: colors.text }}>
+        <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: 'black' }}>{item.productName}</Text>
+        <Text style={{ fontSize: 14, marginTop: 4, color: 'black' }}>
           ${originalPrice} <Text style={styles.discount}>-{discount}%</Text>
         </Text>
         <View style={styles.ratingContainer}>
           <MaterialCommunityIcons name='star' size={16} color='#333' />
-          <Text style={{ marginLeft: 4, fontWeight: 'bold', color: colors.text }}>{rating}</Text>
+          <Text style={{ marginLeft: 4, fontWeight: 'bold', color: 'black' }}>{rating}</Text>
         </View>
       </TouchableOpacity>
     )
@@ -74,19 +75,22 @@ const SearchScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Image source={IMAGES.IMG_ICON_PREVIOUS} />
+      </TouchableOpacity>
       <View style={styles.header}>
         <View style={styles.search}>
           <TextInput
             placeholder='Search'
-            style={styles.search}
+            placeholderTextColor={'black'}
+            style={[styles.search, { color: 'black' }]}
             onChangeText={handleSearch}
             value={searchQuery}
             hitSlop={{ top: 20, bottom: 20, left: 100, right: 50 }}
           />
         </View>
-        <EvilIcon name='search' size={24} color={colors.text} style={{ opacity: 0.5 }} />
       </View>
-      <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
+      <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: wp(1) }}>
         <View>
           <FlatList
             numColumns={2}
@@ -105,6 +109,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: '#fff'
   },
+  backButton: {
+    position: 'absolute',
+    left: 30,
+    top: 30,
+    width: 30,
+    height: 30,
+    backgroundColor: '#E0E0E0',
+    padding: 8,
+    borderRadius: 4,
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start'
+  },
   productListContainer: {
     flexGrow: 1,
     flexDirection: 'row',
@@ -117,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   productContainer: {
-    width: 160,
+    width: wp(48),
     padding: 8
   },
   productImage: {
@@ -165,6 +181,7 @@ const styles = StyleSheet.create({
   header: {
     width: '90%',
     margin: 50,
+    marginTop: 80,
     height: 50,
     marginBottom: '2%',
     flexDirection: 'row',

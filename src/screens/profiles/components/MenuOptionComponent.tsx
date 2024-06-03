@@ -3,6 +3,7 @@ import { appColors, appFonts, appThemes } from '@constants'
 import { AppContext } from '@contexts'
 import { useTheme } from '@react-navigation/native'
 import { ReactNode, useContext, useMemo } from 'react'
+import { Alert } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SwitchToggle from 'react-native-switch-toggle'
 
@@ -22,6 +23,9 @@ const MenuOptionComponent = (props: Props) => {
   const onPressToggle = () => {
     setThemeTest((prevTheme) => (prevTheme === appThemes.light ? appThemes.dark : appThemes.light))
   }
+  const action = () => {
+    Alert.alert('Coming soon')
+  }
   return (
     <RowComponent
       styles={{
@@ -31,7 +35,7 @@ const MenuOptionComponent = (props: Props) => {
         justifyContent: 'space-between'
       }}
     >
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPress ? onPress : action}>
         <RowComponent>
           {/* icon */}
           {icon}

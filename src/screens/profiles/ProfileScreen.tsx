@@ -15,10 +15,10 @@ import React from 'react'
 import { Image, View } from 'react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 import { MenuOptionComponent } from './components'
-
-const ProfileScreen = () => {
+import { removeStorage } from 'src/functions/storageFunctions'
+import { RootStackScreenProps } from 'src/navigators/RootNavigator'
+const ProfileScreen = ({ navigation }: RootStackScreenProps<'TabsStack'>) => {
   const { colors } = useTheme()
-
   return (
     <ContainerComponent styles={{ backgroundColor: colors.background }}>
       <SpaceComponent height={10} />
@@ -60,7 +60,7 @@ const ProfileScreen = () => {
             </View>
           </RowComponent>
 
-          <ButtonComponent
+          {/* <ButtonComponent
             type='primary'
             text='3 orders'
             textStyles={{ fontSize: 14, color: appColors.text }}
@@ -74,7 +74,7 @@ const ProfileScreen = () => {
               },
               globalStyles.shadow
             ]}
-          />
+          /> */}
         </RowComponent>
       </SectionComponent>
 
@@ -99,7 +99,15 @@ const ProfileScreen = () => {
         <SpaceComponent height={60} />
 
         {/* logout */}
-        <MenuOptionComponent text='Logout' isLogout icon={<LogoutCurve size={24} color={appColors.Red} />} />
+        <MenuOptionComponent
+          onPress={() => {
+            removeStorage('accessToken')
+            navigation.navigate('SignInScreen')
+          }}
+          text='Logout'
+          isLogout
+          icon={<LogoutCurve size={24} color={appColors.Red} />}
+        />
       </SectionComponent>
     </ContainerComponent>
   )

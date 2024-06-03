@@ -45,11 +45,11 @@ const ContainerComponent = (props: Props) => {
               }
             ]}
           >
-            {isBack && (
+            {/* {isBack && (
               <CircleComponent size={34} onPress={() => console.log('hello')} styles={{ marginRight: 12, zIndex: 1 }}>
                 <ArrowLeft size={24} color={appColors.text} />
               </CircleComponent>
-            )}
+            )} */}
 
             {title && (
               <TextComponent

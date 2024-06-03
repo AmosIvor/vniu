@@ -12,6 +12,7 @@ import { appColors } from '@constants'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import axios from 'axios'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 const fetchProducts = async ({ pageParam = 1 }) => {
   const response = await axios.get(LOCAL_URL + `/api/Product`, {
@@ -43,14 +44,14 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
     }
   })
 
-  if (isLoading)
-    return (
-      <ActivityIndicator
-        style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
-        size='large'
-        color='#0000ff'
-      />
-    )
+  // if (isLoading)
+  //   return (
+  //     <ActivityIndicator
+  //       style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
+  //       size='large'
+  //       color='#0000ff'
+  //     />
+  //   )
   if (isError) return <Text>Error: {error.message}</Text>
 
   const loadMore = () => {
@@ -156,7 +157,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         </View>
 
         {/* FilterView */}
-        <View
+        {/* <View
           style={{
             flexDirection: 'row',
             paddingHorizontal: 24,
@@ -200,10 +201,10 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
             renderItem={renderCategoryIcon}
             contentContainerStyle={styles.categoryContainer}
           />
-        </View>
+        </View> */}
 
         {/* Product List */}
-        <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
+        {/* <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
           <View>
             <FlatList
               numColumns={2}
@@ -219,31 +220,35 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
               }}
             />
           </View>
-        </ScrollView>
-        {/* {isLoading ? (
+        </ScrollView> */}
+        {isLoading ? (
           <ActivityIndicator
             style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
             size='large'
             color='#0000ff'
           />
         ) : (
-          <FlatList
-            numColumns={2}
-            showsVerticalScrollIndicator
-            // data={data.pages[0]?.data}
-            data={products}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-            onEndReached={loadMore}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={() => {
-              return isFetchingNextPage ? <ActivityIndicator /> : null
-            }}
-          />
-        )} */}
+          <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', padding: wp(1) }}>
+            <View>
+              <FlatList
+                numColumns={2}
+                showsVerticalScrollIndicator
+                // data={data.pages[0]?.data}
+                data={products}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={renderItem}
+                onEndReached={loadMore}
+                onEndReachedThreshold={0.5}
+                ListFooterComponent={() => {
+                  return isFetchingNextPage ? <ActivityIndicator /> : null
+                }}
+              />
+            </View>
+          </ScrollView>
+        )}
         <View style={{ height: 50 }} />
       </SafeAreaView>
-      <BottomSheetModal
+      {/* <BottomSheetModal
         snapPoints={['85%']}
         index={0}
         ref={bottomSheetModalRef}
@@ -257,7 +262,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         }}
       >
         <FilterView />
-      </BottomSheetModal>
+      </BottomSheetModal> */}
     </ScrollView>
   )
 }
@@ -320,8 +325,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   productContainer: {
-    // width: '48%',
-    width: 160,
+    width: wp(48),
+    // width: 160,
     padding: 8
   },
   productImage: {

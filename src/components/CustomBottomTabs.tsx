@@ -62,9 +62,9 @@ const TabItem = ({ routeName, isActive, navigation }: { routeName: string; isAct
           name={
             routeName === 'Home'
               ? 'home'
-              : routeName === 'Cart'
-              ? 'cart'
-              : routeName === 'Assist'
+              : // : routeName === 'Cart'
+              // ? 'cart'
+              routeName === 'Assist'
               ? 'robot-happy-outline'
               : routeName === 'Chat'
               ? 'chat-processing-outline'
