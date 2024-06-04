@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { LOCAL_URL } from 'react-native-dotenv'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getStringStorage } from 'src/functions/storageFunctions'
+import { LOCAL_URL } from 'react-native-dotenv'
+import CheckBox from '@react-native-community/checkbox' // Import CheckBox
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 
 const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
   const userId = getStringStorage('id')
   const [cartItems, setCartItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState([])
 
   useEffect(() => {
     fetchCartItems()
@@ -19,7 +21,6 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
       const response = await fetch(`${LOCAL_URL}/api/CartItem/${userId}`)
       const data = await response.json()
       setCartItems(data.data)
-      console.log('🚀 ~ fetchCartItems ~ data.data:', data.data)
     } catch (error) {
       console.error('Error fetching cart items:', error)
     }
@@ -43,9 +44,29 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
     }
   }
 
+  const handleSelectItem = (cartItemId) => {
+    setSelectedItems((prevSelected) =>
+      prevSelected.includes(cartItemId) ? prevSelected.filter((id) => id !== cartItemId) : [...prevSelected, cartItemId]
+    )
+  }
+
+  const calculateTotalPrice = () => {
+    return selectedItems.reduce((total, itemId) => {
+      const item = cartItems.find((item) => item.cartItemId === itemId)
+      return total + item.productItemVM.salePrice * item.quantity
+    }, 0)
+  }
+
+  const handleOrder = () => {
+    const itemsToOrder = cartItems.filter((item) => selectedItems.includes(item.cartItemId))
+    navigation.navigate('OrderScreen', { itemsToOrder, total: calculateTotalPrice() })
+  }
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat('en-US').format(number)
+  }
   const renderCartItem = ({ item }) => {
     const product = item.productItemVM // Adjust this based on your data structure
-    const { productName, productImages } = product // Adjust these fields based on your data structure
+    const { productName, productImages, salePrice } = product // Adjust these fields based on your data structure
     const quantity = item.quantity // Correct extraction of quantity
     const variation = item.variationVM // Correct extraction of variation
 
@@ -57,25 +78,33 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
 
     return (
       <View style={styles.cartItem}>
+        <CheckBox
+          value={selectedItems.includes(item.cartItemId)}
+          onValueChange={() => handleSelectItem(item.cartItemId)}
+        />
         <Image source={{ uri: imageUrl }} style={styles.productImage} />
         <View style={styles.productDetails}>
           <Text style={styles.productName}>{productName}</Text>
-          <Text style={styles.productVariation}>Variation: {variationName}</Text>
           <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              style={styles.quantityButton}
-              onPress={() => updateQuantity(item.cartItemId, Math.max(1, quantity - 1))}
-            >
-              <MaterialCommunityIcons name='minus' size={20} color='black' />
-            </TouchableOpacity>
-            <Text style={styles.quantity}>{quantity}</Text>
-            <TouchableOpacity
-              style={styles.quantityButton}
-              onPress={() => updateQuantity(item.cartItemId, quantity + 1)}
-            >
-              <MaterialCommunityIcons name='plus' size={20} color='black' />
-            </TouchableOpacity>
+            <Text style={styles.productVariation}>Variation: {variationName}</Text>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <TouchableOpacity
+                style={styles.quantityButton}
+                onPress={() => updateQuantity(item.cartItemId, Math.max(1, quantity - 1))}
+              >
+                <MaterialCommunityIcons name='minus' size={20} color='black' />
+              </TouchableOpacity>
+              <Text style={styles.quantity}>{quantity}</Text>
+              <TouchableOpacity
+                style={styles.quantityButton}
+                onPress={() => updateQuantity(item.cartItemId, quantity + 1)}
+              >
+                <MaterialCommunityIcons name='plus' size={20} color='black' />
+              </TouchableOpacity>
+            </View>
           </View>
+          <Text style={styles.productVariation}>$ {formatNumber(salePrice)}</Text>
         </View>
       </View>
     )
@@ -89,6 +118,10 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
         renderItem={renderCartItem}
         contentContainerStyle={styles.cartList}
       />
+      <View style={styles.bottomMenu}>
+        <Text style={styles.totalPrice}>Total: ${formatNumber(calculateTotalPrice())}</Text>
+        <Button title='Order' onPress={handleOrder} />
+      </View>
     </SafeAreaView>
   )
 }
@@ -109,7 +142,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-    padding: 8
+    padding: 8,
+    alignItems: 'center'
   },
   productImage: {
     width: 80,
@@ -126,16 +160,17 @@ const styles = StyleSheet.create({
     marginBottom: 4
   },
   productVariation: {
-    fontSize: 14,
-    marginBottom: 8
+    fontSize: 12
   },
   quantityContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8
   },
   quantityButton: {
-    width: 32,
-    height: 32,
+    width: 28,
+    height: 28,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 16,
@@ -145,5 +180,17 @@ const styles = StyleSheet.create({
   quantity: {
     fontSize: 16,
     marginHorizontal: 8
+  },
+  bottomMenu: {
+    padding: 16,
+    borderTopWidth: 1,
+    borderColor: '#ddd',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  totalPrice: {
+    fontSize: 18,
+    fontWeight: 'bold'
   }
 })
