@@ -21,6 +21,7 @@ const fetchProducts = async ({ pageParam = 1 }) => {
       pageSize: 4
     }
   })
+
   return response.data
 }
 
@@ -157,7 +158,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         </View>
 
         {/* FilterView */}
-        {/* <View
+        <View
           style={{
             flexDirection: 'row',
             paddingHorizontal: 24,
@@ -201,7 +202,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
             renderItem={renderCategoryIcon}
             contentContainerStyle={styles.categoryContainer}
           />
-        </View> */}
+        </View>
 
         {/* Product List */}
         {/* <ScrollView horizontal={true} style={{ flex: 1, width: '100%', paddingLeft: '5%' }}>
@@ -248,7 +249,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         )}
         <View style={{ height: 50 }} />
       </SafeAreaView>
-      {/* <BottomSheetModal
+      <BottomSheetModal
         snapPoints={['85%']}
         index={0}
         ref={bottomSheetModalRef}
@@ -262,7 +263,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         }}
       >
         <FilterView />
-      </BottomSheetModal> */}
+      </BottomSheetModal>
     </ScrollView>
   )
 }

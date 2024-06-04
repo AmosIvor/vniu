@@ -6,17 +6,19 @@ import {
   StyleSheet,
   ActivityIndicator,
   ImageBackground,
-  ScrollView
+  ScrollView,
+  Modal,
+  TextInput,
+  Button
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '@react-navigation/native'
 import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
-import axios from 'axios'
+import { getStringStorage } from 'src/functions/storageFunctions'
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
@@ -28,37 +30,78 @@ const ProductDetailScreen = ({
 }: RootStackScreenProps<'Details'>) => {
   const { colors } = useTheme()
   const [product, setProduct] = useState()
-  const insets = useSafeAreaInsets()
-  const [count, setCount] = useState(1)
-  const [size, setSize] = useState(SIZES[0])
   const [selectedImage, setSelectedImage] = useState()
   const [selectedItem, setSelectedItem] = useState()
   const [isFocus, setIsFocus] = useState(false)
   const [optionData, setOptionData] = useState([])
   const [option, setOption] = useState(null)
   const [optionName, setOptionName] = useState(null)
-
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [quantity, setQuantity] = useState(1)
   const fetchProduct = async () => {
-    const response = await axios.get(LOCAL_URL + `/api/Product/` + id)
-    setProduct(response.data.data)
+    try {
+      const response = await fetch(`${LOCAL_URL}/api/Product/${id}`)
+      const data = await response.json()
+      setProduct(data.data)
 
-    const options = response.data.data.productItems.map((item) => {
-      const { productItemId } = item
-      const { sizeName } = item.variations[0].size
-      const { colourName } = item.colourVMs[0]
-      const optionName = `${colourName} - ${sizeName}`
+      const options = data.data.productItems.map((item) => {
+        const { productItemId } = item
+        const { sizeName } = item.variations[0].size
+        const { colourName } = item.colourVMs[0]
+        const optionName = `${colourName} - ${sizeName}`
 
-      return {
-        productItemId,
-        sizeName,
-        colourName,
-        optionName
+        return {
+          productItemId,
+          sizeName,
+          colourName,
+          optionName
+        }
+      })
+      setOptionData(options)
+      setSelectedImage(data.data.productItems[0].productImages[0])
+      setSelectedItem(data.data.productItems[0])
+    } catch (error) {
+      console.error('Error fetching product:', error)
+    }
+  }
+
+  const fetchCartId = async (userId) => {
+    try {
+      const response = await fetch(`${LOCAL_URL}/api/Cart/${userId}`)
+      const data = await response.json()
+      console.log('🚀 ~ fetchCartId ~ data:', data)
+      return data.data.cartId
+    } catch (error) {
+      console.error('Error fetching cart ID:', error)
+    }
+  }
+
+  const createCartItem = async () => {
+    try {
+      const userId = getStringStorage('id')
+      console.log('🚀 ~ createCartItem ~ userId:', userId)
+      const cartId = await fetchCartId(userId)
+      const cartItemData = {
+        quantity,
+        cartId,
+        productItemId: selectedItem.productItemId,
+        variationId: selectedItem.variations[0].variationId // Assuming the first variation is the one to be added
       }
-    })
-    setOptionData(options)
-    setSelectedImage(response.data.data.productItems[0].productImages[0])
-    setSelectedItem(response.data.data.productItems[0])
-    return response.data
+
+      const response = await fetch(`${LOCAL_URL}/api/CartItem`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartItemData)
+      })
+      const data = await response.json()
+      if (data.message === 'Create cart item successfully') {
+        setIsModalVisible(false)
+      }
+    } catch (error) {
+      console.error('Error creating cart item:', error)
+    }
   }
 
   useEffect(() => {
@@ -103,32 +146,20 @@ const ProductDetailScreen = ({
                 <MaterialCommunityIcons name='keyboard-backspace' size={24} color={'#fff'} />
               </TouchableOpacity>
               <View style={{ flex: 1 }} />
-              {/* <TouchableOpacity
-              style={{
-                width: 52,
-                aspectRatio: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 52,
-                borderWidth: 1,
-                borderColor: '#fff'
-              }}
-            >
-              <MaterialCommunityIcons name='cards-heart-outline' size={24} color={'#fff'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                width: 52,
-                aspectRatio: 1,
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 52,
-                borderWidth: 1,
-                borderColor: '#fff'
-              }}
-            >
-              <MaterialCommunityIcons name='cart' size={24} color={'#fff'} />
-            </TouchableOpacity> */}
+              <TouchableOpacity
+                style={{
+                  width: 52,
+                  aspectRatio: 1,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 52,
+                  borderWidth: 1,
+                  borderColor: '#fff'
+                }}
+                onPress={() => setIsModalVisible(true)}
+              >
+                <MaterialCommunityIcons name='cart' size={24} color={'#fff'} />
+              </TouchableOpacity>
             </View>
           </ImageBackground>
         ) : (
@@ -227,74 +258,38 @@ const ProductDetailScreen = ({
             setOptionName(item.optionName)
             const foundItem = product.productItems.find((i) => i.productItemId === item.productItemId)
             if (foundItem) {
-              setSelectedImage(foundItem.productImages[0])
               setSelectedItem(foundItem)
+              setSelectedImage(foundItem.productImages[0])
             }
-            setIsFocus(false)
           }}
         />
-
-        <View style={{ padding: 20 }}>
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '600',
-              marginBottom: 6,
-              color: colors.text
-            }}
-          >
-            Description
-          </Text>
-          <Text style={{ color: colors.text, opacity: 0.75 }} numberOfLines={3}>
-            {product?.productDescription}
-          </Text>
-
-          <View style={{ flex: 1 }} />
-          {/* <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.primary,
-                height: 64,
-                borderRadius: 64,
-                alignItems: 'center',
-                justifyContent: 'center',
-                position: 'relative',
-                flexDirection: 'row',
-                padding: 12
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: '600',
-                  color: colors.background,
-                  paddingHorizontal: 16
-                }}
-              >
-                Add to cart
-              </Text>
-
-              <View
-                style={{
-                  backgroundColor: colors.card,
-                  width: 40,
-                  aspectRatio: 1,
-                  borderRadius: 40,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <MaterialCommunityIcons name='cart' size={24} color={colors.text} />
-              </View>
-            </TouchableOpacity>
-          </View> */}
-        </View>
       </ScrollView>
+      <Modal
+        visible={isModalVisible}
+        animationType='slide'
+        transparent={true}
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 20 }}>Enter Quantity</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType='numeric'
+              value={String(quantity)}
+              onChangeText={(text) => setQuantity(Number(text))}
+            />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%', gap: 3 }}>
+              <Button title='Add to Cart' onPress={createCartItem} />
+              <Button title='Cancel' onPress={() => setIsModalVisible(false)} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
 
-export default ProductDetailScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -339,5 +334,28 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20
   }
 })
+
+export default ProductDetailScreen
