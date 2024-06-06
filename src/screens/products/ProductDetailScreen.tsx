@@ -69,7 +69,6 @@ const ProductDetailScreen = ({
     try {
       const response = await fetch(`${LOCAL_URL}/api/Cart/${userId}`)
       const data = await response.json()
-      console.log('🚀 ~ fetchCartId ~ data:', data)
       return data.data.cartId
     } catch (error) {
       console.error('Error fetching cart ID:', error)
@@ -79,7 +78,6 @@ const ProductDetailScreen = ({
   const createCartItem = async () => {
     try {
       const userId = getStringStorage('id')
-      console.log('🚀 ~ createCartItem ~ userId:', userId)
       const cartId = await fetchCartId(userId)
       const cartItemData = {
         quantity,
@@ -96,6 +94,7 @@ const ProductDetailScreen = ({
         body: JSON.stringify(cartItemData)
       })
       const data = await response.json()
+      console.log('🚀 ~ createCartItem ~ data:', data)
       if (data.message === 'Create cart item successfully') {
         setIsModalVisible(false)
       }

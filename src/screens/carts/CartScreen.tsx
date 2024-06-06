@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getStringStorage } from 'src/functions/storageFunctions'
 import { LOCAL_URL } from 'react-native-dotenv'
-import CheckBox from '@react-native-community/checkbox' // Import CheckBox
+import CheckBox from '@react-native-community/checkbox'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 
 const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {

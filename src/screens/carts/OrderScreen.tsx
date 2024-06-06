@@ -10,11 +10,14 @@ import {
   Button,
   Alert,
   Modal,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native'
 import UserInformationCard from 'src/components/Cards/UserInformationCard'
 import { getStringStorage } from 'src/functions/storageFunctions'
 import { Dropdown } from 'react-native-element-dropdown'
+import AddAddress from 'src/components/AddAddress'
+import DropDownPicker from 'react-native-dropdown-picker'
 
 const OrderScreen = ({ route, navigation }) => {
   const { itemsToOrder, total } = route.params
@@ -23,13 +26,23 @@ const OrderScreen = ({ route, navigation }) => {
   const [userName, setUserName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [address, setAddress] = useState('')
+  const [note, setNote] = useState('')
   const [shippingMethod, setShippingMethod] = useState([])
   const [selectedShippingMethod, setSelectedShippingMethod] = useState()
-  const [note, setNote] = useState('')
-  const [paymentMethod, setPaymentMethod] = useState('Credit Card')
+
+  const [paymentType, setPaymentType] = useState([
+    { label: 'COD', value: 1 },
+    { label: 'BANK_TRANSFER', value: 2 },
+    { label: 'CREDIT_CARD', value: 3 },
+    { label: 'PAYPAL', value: 4 }
+  ])
+  const [selectedPaymentType, setSelectedPaymentType] = useState()
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
+
   const userId = getStringStorage('id')
 
   const [addressData, setAddressData] = useState(null)
+  const [openAddressDropdown, setOpenAddressDropdown] = useState(false)
 
   useEffect(() => {
     // Fetch user data from API
@@ -41,42 +54,23 @@ const OrderScreen = ({ route, navigation }) => {
     try {
       const response = await fetch(DATABASE_URL + `/api/UserAddress/${userId}/addresses`)
       const data = await response.json()
-      setAddressData(data.data)
-      const defaultAddresses = data.data.filter((address) => address.isDefault)
-      console.log('🚀 ~ fetchAddressData ~ defaultAddresses:', defaultAddresses)
-      console.log('🚀 ~ fetchAddressData ~ defaultAddresses.streetNumber:', defaultAddresses.streetNumber)
-      const AddressDetails = defaultAddresses.map((address) => ({
-        streetNumber: address.streetNumber,
-        unitNumber: address.unitNumber,
-        addressLine1: address.addressLine1,
-        addressLine2: address.addressLine2,
-        city: address.city,
-        district: address.district
+      // setAddressData(data.data)
+      const dataAddress = data.data.map((item) => ({
+        label: `${item.streetNumber}, ${item.unitNumber}, ${item.addressLine1}, ${item.addressLine2}, ${item.city}, ${item.district}`,
+        isDefault: item.isDefault,
+        value: `${item.streetNumber}, ${item.unitNumber}, ${item.addressLine1}, ${item.addressLine2}, ${item.city}, ${item.district}`,
+        id: item.addressId,
+        fullAddress: `${item.streetNumber}, ${item.unitNumber}, ${item.addressLine1}, ${item.addressLine2}, ${item.city}, ${item.district}`,
+        userName: item.user.userName,
+        phoneNumber: item.user.phoneNumber
       }))
+      console.log('🚀 ~ dataAddress ~ dataAddress:', dataAddress)
+      setAddressData(dataAddress)
 
-      const addressParts = []
-      AddressDetails.forEach((address) => {
-        if (address.streetNumber) addressParts.push(address.streetNumber)
-        if (address.unitNumber) addressParts.push(address.unitNumber)
-        if (address.addressLine1) addressParts.push(address.addressLine1)
-        if (address.addressLine2) addressParts.push(address.addressLine2)
-        if (address.city) addressParts.push(address.city)
-        if (address.district) addressParts.push(address.district)
-      })
-
-      const addressString = addressParts.join(', ')
-      const userDetails = defaultAddresses.map((address) => ({
-        userName: address.user.userName,
-        phoneNumber: address.user.phoneNumber
-      }))
-
-      // Assuming userDetails has only one element for the sake of this example
-      if (userDetails.length > 0) {
-        setAddress(addressString)
-        setUserName(userDetails[0].userName) // Access the userName from the first element of userDetails
-        setPhoneNumber(userDetails[0].phoneNumber) // Access the phoneNumber from the first element of userDetails
-      }
-      setAddress(addressString)
+      const defaultAddresses = dataAddress.find((address) => address.isDefault)
+      setAddress(defaultAddresses.fullAddress)
+      setUserName(defaultAddresses.userName) // Access the userName from the first element of userDetails
+      setPhoneNumber(defaultAddresses.phoneNumber) // Access the phoneNumber from the first element of userDetails
     } catch (error) {
       console.error('Error fetching user data:', error)
     }
@@ -106,16 +100,28 @@ const OrderScreen = ({ route, navigation }) => {
   const handleShippingMethodSelect = (method) => {
     setSelectedShippingMethod(method)
   }
+  const handlePaymentTypeSelect = (method) => {
+    setSelectedPaymentType(method)
+  }
+  const handleSave = () => {
+    // Handle saving logic here
+    console.log('User Name:', userName)
+    console.log('Phone Number:', phoneNumber)
+    console.log('Selected Address:', address)
+    handleCloseEditModal()
+  }
+
   const handleCompleteOrder = () => {
     if (userName && phoneNumber && address) {
       const orderData = {
         userName,
         phoneNumber,
         address,
-        shippingMethod,
+        selectedShippingMethod,
         note,
-        paymentMethod,
+        selectedPaymentType,
         itemsToOrder,
+        userId,
         total
       }
       console.log('Order Data:', orderData)
@@ -131,13 +137,42 @@ const OrderScreen = ({ route, navigation }) => {
     <View style={styles.container}>
       <Modal animationType='slide' transparent={true} visible={showEditModal} onRequestClose={handleCloseEditModal}>
         <View style={styles.modalContainer}>
-          <TouchableOpacity onPress={handleCloseEditModal} style={styles.closeButton}>
-            <Text>Close</Text>
-          </TouchableOpacity>
           <View style={styles.modalContent}>
-            {/* Content for editing user information */}
+            <TouchableOpacity onPress={handleCloseEditModal} style={styles.closeButton}>
+              <Text>X</Text>
+            </TouchableOpacity>
             <Text>Edit User Information</Text>
-            {/* Add tabs for editing name, phone number, address, etc. */}
+            <TextInput style={styles.input} placeholder='User Name' value={userName} onChangeText={setUserName} />
+            <TextInput
+              style={styles.input}
+              placeholder='Phone Number'
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              keyboardType='phone-pad'
+            />
+            <Text>Select Address</Text>
+            <DropDownPicker
+              open={openAddressDropdown}
+              value={address}
+              items={addressData}
+              setOpen={setOpenAddressDropdown}
+              setValue={setAddress}
+              setItems={setAddressData}
+              placeholder='Select an address'
+              loading={false} // You can set this to true if you are fetching data
+              ActivityIndicatorComponent={() => <ActivityIndicator size='small' color='#0000ff' />}
+            />
+            <View style={{ gap: 5 }}>
+              <Button
+                title='Thêm địa chỉ'
+                onPress={() => {
+                  setIsModalOpen(true)
+                }}
+              />
+
+              {isModalOpen && <AddAddress isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />}
+              <Button title='Save' onPress={handleSave} />
+            </View>
           </View>
         </View>
       </Modal>
@@ -180,15 +215,15 @@ const OrderScreen = ({ route, navigation }) => {
             <TextInput style={styles.input} placeholder='Note' value={note} onChangeText={setNote} />
             <View style={styles.dropdownContainer}>
               <Text>Payment Method:</Text>
-              <TouchableOpacity onPress={() => setPaymentMethod('Credit Card')}>
-                <Text style={paymentMethod === 'Credit Card' ? styles.selected : styles.unselected}>Credit Card</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setPaymentMethod('PayPal')}>
-                <Text style={paymentMethod === 'PayPal' ? styles.selected : styles.unselected}>PayPal</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setPaymentMethod('Cash')}>
-                <Text style={paymentMethod === 'Cash' ? styles.selected : styles.unselected}>Cash</Text>
-              </TouchableOpacity>
+              <Dropdown
+                style={styles.dropdown}
+                placeholder='Select Payment Tyle'
+                data={paymentType}
+                value={selectedPaymentType}
+                labelField='label'
+                valueField='value'
+                onChange={(method) => handlePaymentTypeSelect(method)}
+              />
             </View>
           </View>
         }
@@ -220,6 +255,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   input: {
+    width: '100%',
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
@@ -303,13 +339,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 8,
-    elevation: 5
-  },
   closeButton: {
-    alignSelf: 'flex-end'
+    position: 'absolute',
+    top: 10,
+    right: 10
+  },
+  modalContent: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center'
+  },
+
+  selectedAddress: {
+    backgroundColor: 'lightblue'
   }
 })
