@@ -1,3 +1,4 @@
 import chatApi from './chat.api'
+import paymentApi from './payment.api'
 
-export { chatApi }
+export { chatApi, paymentApi }

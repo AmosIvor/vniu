@@ -12,6 +12,7 @@ import ImageSearchScreen from '@screens/searchs/ImageSearchScreen'
 import SearchScreen from '@screens/searchs/SearchScreen'
 import OrderScreen from '@screens/carts/OrderScreen'
 import OrderHistoryScreen from '@screens/carts/OrderHistoryScreen'
+import DonePaymentScreen from '@screens/carts/DonePaymentScreen'
 
 export type RootStackParamList = {
   TabsStack: NavigatorScreenParams<TabsStackParamList>
@@ -29,6 +30,7 @@ export type RootStackParamList = {
   SearchScreen: undefined
   OrderScreen: undefined
   OrderHistory: undefined
+  DonePaymentScreen: undefined
 }
 
 const RootStack = createNativeStackNavigator<RootStackParamList>()
@@ -53,6 +55,7 @@ const RootNavigator = ({ toggleTheme }: any) => {
       <RootStack.Screen name='ChatScreen' component={ChatScreen} />
       <RootStack.Screen name='OrderScreen' component={OrderScreen} />
       <RootStack.Screen name='OrderHistory' component={OrderHistoryScreen} />
+      <RootStack.Screen name='DonePaymentScreen' component={DonePaymentScreen} />
     </RootStack.Navigator>
   )
 }

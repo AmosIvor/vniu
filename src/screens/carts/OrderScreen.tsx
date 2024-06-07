@@ -19,6 +19,9 @@ import { Dropdown } from 'react-native-element-dropdown'
 import AddAddress from 'src/components/AddAddress'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { useTheme } from '@react-navigation/native'
+import ModalWebView from 'src/components/modals/ModalWebView'
+import { paymentApi } from '@apis'
+import { useMutation } from '@tanstack/react-query'
 
 const OrderScreen = ({ route, navigation }) => {
   const { colors } = useTheme()
@@ -45,6 +48,12 @@ const OrderScreen = ({ route, navigation }) => {
 
   const [addressData, setAddressData] = useState(null)
   const [openAddressDropdown, setOpenAddressDropdown] = useState(false)
+  const [isShowModalWebView, setIsShowModalWebView] = useState(false)
+  const [paymentUrl, setPaymentUrl] = useState<string | null>(null)
+
+  const createPaymentMutation = useMutation({
+    mutationFn: paymentApi.createPaymentUrl
+  })
 
   useEffect(() => {
     // Fetch user data from API
@@ -66,7 +75,6 @@ const OrderScreen = ({ route, navigation }) => {
         userName: item.user.userName,
         phoneNumber: item.user.phoneNumber
       }))
-      console.log('🚀 ~ dataAddress ~ dataAddress:', dataAddress)
       setAddressData(dataAddress)
 
       const defaultAddresses = dataAddress.find((address) => address.isDefault)
@@ -126,17 +134,130 @@ const OrderScreen = ({ route, navigation }) => {
         userId,
         total
       }
+
       console.log('Order Data:', orderData)
+      processOrder(orderData)
       // Here you would typically send the orderData to your backend for processing
       // After successful processing, you might navigate to a success screen or perform other actions
-      Alert.alert('Order completed successfully!')
+      // Alert.alert('Order completed successfully!')
+      // handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
     }
   }
+  async function createOrder(orderData) {
+    const orderPayload = {
+      OrderTotal: orderData.total,
+      OrderNote: orderData.note,
+      OrderStatusId: 1,
+      ShippingMethodId: orderData.selectedShippingMethod.shippingMethodId,
+      Address: orderData.address,
+      Username: orderData.userName,
+      NumberPhone: orderData.phoneNumber,
+      UserId: orderData.userId
+    }
 
+    try {
+      const orderResponse = await fetch(`${DATABASE_URL}/api/Order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderPayload)
+      })
+
+      if (!orderResponse.ok) {
+        throw new Error(`Order creation failed: ${orderResponse.statusText}`)
+      }
+
+      const orderResult = await orderResponse.json()
+      return orderResult.data.orderId // Assuming the response contains an orderId field
+    } catch (error) {
+      console.error('Error creating order:', error)
+      throw error
+    }
+  }
+  async function createOrderLines(orderId, orderData) {
+    console.log('🚀 ~ createOrderLines ~ orderData:', orderData)
+    const orderLinePromises = orderData.itemsToOrder.map((item) => {
+      console.log('🚀 ~ orderLinePromises ~ item:', item)
+
+      const orderLinePayload = {
+        Quantity: item.quantity,
+        Price: item.productItemVM.salePrice, // Assuming price is in productItemVM
+        OrderId: orderId,
+        ProductItemId: item.productItemId,
+        VariationId: item.variationVM.variationId
+      }
+
+      return fetch(`${DATABASE_URL}/api/OrderLine`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(orderLinePayload)
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`OrderLine creation failed: ${response.statusText}`)
+        }
+        return response.json()
+      })
+    })
+
+    return Promise.all(orderLinePromises)
+  }
+  async function deleteCartItems(orderData) {
+    const deletePromises = orderData.itemsToOrder.map((item) => {
+      return fetch(`${DATABASE_URL}/api/CartItem/${userId}/${item.productItemId}`, {
+        method: 'DELETE'
+      }).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Deleting CartItem failed: ${response.statusText}`)
+        }
+      })
+    })
+
+    return Promise.all(deletePromises)
+  }
+  async function processOrder(orderData) {
+    try {
+      const orderId = await createOrder(orderData)
+      await createOrderLines(orderId, orderData)
+      await deleteCartItems(orderData)
+      console.log('Order processed successfully')
+    } catch (error) {
+      console.error('Error processing order:', error)
+    }
+  }
+  const handlePayment = () => {
+    createPaymentMutation.mutate(
+      {
+        orderTotal: total + selectedShippingMethod?.shippingMethodPrice,
+        orderDescription: note,
+        userId: userId,
+        isVnPay: selectedPaymentType?.value === 2,
+        orderId: 7
+      },
+      {
+        onSuccess: async (data) => {
+          const url = data.data.data
+          setPaymentUrl(url)
+          setIsShowModalWebView(true)
+        },
+        onError: (error) => {
+          console.log(error)
+        }
+      }
+    )
+  }
   return (
     <View style={styles.container}>
+      <ModalWebView
+        webViewUrl={paymentUrl}
+        isVisible={isShowModalWebView}
+        setIsVisible={setIsShowModalWebView}
+        setWebViewUrl={setPaymentUrl}
+      />
       <Modal animationType='slide' transparent={true} visible={showEditModal} onRequestClose={handleCloseEditModal}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
