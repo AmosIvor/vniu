@@ -91,7 +91,13 @@ const ProfileScreen = ({ navigation }: RootStackScreenProps<'TabsStack'>) => {
         <MenuOptionComponent text='Password' icon={<Lock size={24} color={colors.text} />} />
 
         {/* order */}
-        <MenuOptionComponent text='My Order' icon={<Bag2 size={24} color={colors.text} />} />
+        <MenuOptionComponent
+          onPress={() => {
+            navigation.navigate('OrderHistory')
+          }}
+          text='My Order'
+          icon={<Bag2 size={24} color={colors.text} />}
+        />
 
         {/* settings */}
         <MenuOptionComponent text='Setting' icon={<Setting2 size={24} color={colors.text} />} />

@@ -58,7 +58,6 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
     }
 
     setLoading(true)
-
     try {
       const response = await fetch(`${DATABASE_URL}/api/Auth/login`, {
         method: 'POST',
@@ -89,7 +88,6 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
       setLoading(false)
     }
   }
-
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
       <View style={{ padding: 20 }}>

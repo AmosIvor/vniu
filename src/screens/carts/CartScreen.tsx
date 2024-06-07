@@ -6,8 +6,10 @@ import { getStringStorage } from 'src/functions/storageFunctions'
 import { LOCAL_URL } from 'react-native-dotenv'
 import CheckBox from '@react-native-community/checkbox'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
+import { useTheme } from '@react-navigation/native'
 
 const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
+  const { colors } = useTheme()
   const userId = getStringStorage('id')
   const [cartItems, setCartItems] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
@@ -20,6 +22,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
     try {
       const response = await fetch(`${LOCAL_URL}/api/CartItem/${userId}`)
       const data = await response.json()
+      console.log('🚀 ~ fetchCartItems ~ data:', data)
       setCartItems(data.data)
     } catch (error) {
       console.error('Error fetching cart items:', error)
@@ -79,14 +82,15 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
     return (
       <View style={styles.cartItem}>
         <CheckBox
+          style={{ backgroundColor: colors.border, borderWidth: 2 }}
           value={selectedItems.includes(item.cartItemId)}
           onValueChange={() => handleSelectItem(item.cartItemId)}
         />
         <Image source={{ uri: imageUrl }} style={styles.productImage} />
         <View style={styles.productDetails}>
-          <Text style={styles.productName}>{productName}</Text>
+          <Text style={[styles.productName, { color: colors.text }]}>{productName}</Text>
           <View style={styles.quantityContainer}>
-            <Text style={styles.productVariation}>Variation: {variationName}</Text>
+            <Text style={[styles.productVariation, { color: colors.text }]}>Variation: {variationName}</Text>
 
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TouchableOpacity
@@ -95,7 +99,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
               >
                 <MaterialCommunityIcons name='minus' size={20} color='black' />
               </TouchableOpacity>
-              <Text style={styles.quantity}>{quantity}</Text>
+              <Text style={[styles.quantity, { color: colors.text }]}>{quantity}</Text>
               <TouchableOpacity
                 style={styles.quantityButton}
                 onPress={() => updateQuantity(item.cartItemId, quantity + 1)}
@@ -104,7 +108,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
               </TouchableOpacity>
             </View>
           </View>
-          <Text style={styles.productVariation}>$ {formatNumber(salePrice)}</Text>
+          <Text style={[styles.productVariation, { color: colors.text }]}>$ {formatNumber(salePrice)}</Text>
         </View>
       </View>
     )
@@ -119,7 +123,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
         contentContainerStyle={styles.cartList}
       />
       <View style={styles.bottomMenu}>
-        <Text style={styles.totalPrice}>Total: ${formatNumber(calculateTotalPrice())}</Text>
+        <Text style={[styles.totalPrice, { color: colors.text }]}>Total: ${formatNumber(calculateTotalPrice())}</Text>
         <Button title='Order' onPress={handleOrder} />
       </View>
     </SafeAreaView>

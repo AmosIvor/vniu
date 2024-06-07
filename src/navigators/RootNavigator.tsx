@@ -11,6 +11,7 @@ import { getStringStorage } from 'src/functions/storageFunctions'
 import ImageSearchScreen from '@screens/searchs/ImageSearchScreen'
 import SearchScreen from '@screens/searchs/SearchScreen'
 import OrderScreen from '@screens/carts/OrderScreen'
+import OrderHistoryScreen from '@screens/carts/OrderHistoryScreen'
 
 export type RootStackParamList = {
   TabsStack: NavigatorScreenParams<TabsStackParamList>
@@ -27,6 +28,7 @@ export type RootStackParamList = {
   ImageSearch: undefined
   SearchScreen: undefined
   OrderScreen: undefined
+  OrderHistory: undefined
 }
 
 const RootStack = createNativeStackNavigator<RootStackParamList>()
@@ -50,6 +52,7 @@ const RootNavigator = ({ toggleTheme }: any) => {
       <RootStack.Screen name='ProductSearchScreen' component={ProductSearchScreen} />
       <RootStack.Screen name='ChatScreen' component={ChatScreen} />
       <RootStack.Screen name='OrderScreen' component={OrderScreen} />
+      <RootStack.Screen name='OrderHistory' component={OrderHistoryScreen} />
     </RootStack.Navigator>
   )
 }

@@ -153,7 +153,8 @@ const ProductDetailScreen = ({
                   justifyContent: 'center',
                   borderRadius: 52,
                   borderWidth: 1,
-                  borderColor: '#fff'
+                  borderColor: '#fff',
+                  backgroundColor: 'gray'
                 }}
                 onPress={() => setIsModalVisible(true)}
               >
@@ -348,6 +349,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   input: {
+    color: 'black',
     width: '100%',
     padding: 10,
     borderColor: 'gray',

@@ -17,7 +17,9 @@ import { DATABASE_URL } from 'react-native-dotenv'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import db from 'src/assets/datas/db.json'
+import { useTheme } from '@react-navigation/native'
 const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
+  const { colors } = useTheme()
   const userId = getStringStorage('id')
   const [selectedProvince, setSelectedProvince] = useState(null)
   const [selectedDistrict, setSelectedDistrict] = useState(null)
@@ -127,10 +129,10 @@ const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
           <ActivityIndicator size='large' color='#0000ff' />
         ) : (
           <View style={styles.modalContent}>
-            <Text style={styles.title}>Add Address</Text>
+            <Text style={[styles.title, { color: colors.text }]}>Add Address</Text>
             <View style={{ flexDirection: 'row' }}>
               <View style={styles.selectContainer}>
-                <Text>City, Province</Text>
+                <Text style={{ color: colors.text }}>City, Province</Text>
                 <DropDownPicker
                   open={openProvince}
                   value={selectedProvince}
@@ -145,7 +147,7 @@ const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
               </View>
 
               <View style={styles.selectContainer}>
-                <Text>District</Text>
+                <Text style={{ color: colors.text }}>District</Text>
                 <DropDownPicker
                   open={openDistrict}
                   value={selectedDistrict}
@@ -161,30 +163,39 @@ const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
             </View>
 
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
               placeholder='Street Number'
+              placeholderTextColor={colors.text}
               value={streetNumber}
               onChangeText={setStreetNumber}
             />
-            <TextInput style={styles.input} placeholder='Unit Number' value={unitNumber} onChangeText={setUnitNumber} />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
+              placeholder='Unit Number'
+              placeholderTextColor={colors.text}
+              value={unitNumber}
+              onChangeText={setUnitNumber}
+            />
+            <TextInput
+              style={[styles.input, { color: colors.text }]}
               placeholder='Address Line 1'
+              placeholderTextColor={colors.text}
               value={addressLine1}
               onChangeText={setAddressLine1}
             />
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
               placeholder='Address Line 2'
+              placeholderTextColor={colors.text}
               value={addressLine2}
               onChangeText={setAddressLine2}
             />
             <View style={styles.buttonContainer}>
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Confirm</Text>
+                <Text style={[styles.buttonText, { color: colors.text }]}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={() => setIsModalOpen(false)}>
-                <Text style={styles.buttonText}>Cancel</Text>
+                <Text style={[styles.buttonText, { color: colors.text }]}>Cancel</Text>
               </TouchableOpacity>
             </View>
           </View>

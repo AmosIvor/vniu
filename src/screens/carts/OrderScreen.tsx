@@ -18,8 +18,10 @@ import { getStringStorage } from 'src/functions/storageFunctions'
 import { Dropdown } from 'react-native-element-dropdown'
 import AddAddress from 'src/components/AddAddress'
 import DropDownPicker from 'react-native-dropdown-picker'
+import { useTheme } from '@react-navigation/native'
 
 const OrderScreen = ({ route, navigation }) => {
+  const { colors } = useTheme()
   const { itemsToOrder, total } = route.params
   const [showEditModal, setShowEditModal] = useState(false)
 
@@ -139,18 +141,25 @@ const OrderScreen = ({ route, navigation }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <TouchableOpacity onPress={handleCloseEditModal} style={styles.closeButton}>
-              <Text>X</Text>
+              <Text style={{ color: colors.text }}>X</Text>
             </TouchableOpacity>
-            <Text>Edit User Information</Text>
-            <TextInput style={styles.input} placeholder='User Name' value={userName} onChangeText={setUserName} />
+            <Text style={{ color: colors.text }}>Edit User Information</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, { color: colors.text }]}
+              placeholder='User Name'
+              placeholderTextColor={colors.text}
+              value={userName}
+              onChangeText={setUserName}
+            />
+            <TextInput
+              style={[styles.input, { color: colors.text }]}
               placeholder='Phone Number'
+              placeholderTextColor={colors.text}
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               keyboardType='phone-pad'
             />
-            <Text>Select Address</Text>
+            <Text style={{ color: colors.text }}>Select Address</Text>
             <DropDownPicker
               open={openAddressDropdown}
               value={address}
@@ -159,6 +168,7 @@ const OrderScreen = ({ route, navigation }) => {
               setValue={setAddress}
               setItems={setAddressData}
               placeholder='Select an address'
+              placeholderStyle={{ color: colors.text }}
               loading={false} // You can set this to true if you are fetching data
               ActivityIndicatorComponent={() => <ActivityIndicator size='small' color='#0000ff' />}
             />
@@ -184,9 +194,9 @@ const OrderScreen = ({ route, navigation }) => {
             <Image source={{ uri: item.productItemVM.productImages[0]?.productImageUrl }} style={styles.productImage} />
 
             <View style={styles.orderItem}>
-              <Text>{item.productItemVM.productName}</Text>
-              <Text>Quantity: {item.quantity}</Text>
-              <Text>Price: ${item.productItemVM.salePrice}</Text>
+              <Text style={{ color: colors.text }}>{item.productItemVM.productName}</Text>
+              <Text style={{ color: colors.text }}>Quantity: {item.quantity}</Text>
+              <Text style={{ color: colors.text }}>Price: ${item.productItemVM.salePrice}</Text>
             </View>
           </View>
         )}
@@ -201,10 +211,13 @@ const OrderScreen = ({ route, navigation }) => {
               />
             )}
             <View style={styles.dropdownContainer}>
-              <Text>{'Shipping Method: $' + selectedShippingMethod?.shippingMethodPrice || 2}</Text>
+              <Text style={{ color: colors.text }}>
+                {'Shipping Method: $' + selectedShippingMethod?.shippingMethodPrice || 2}
+              </Text>
               <Dropdown
                 style={styles.dropdown}
                 placeholder='Select Shipping Method'
+                placeholderStyle={{ color: colors.text }}
                 data={shippingMethod}
                 value={selectedShippingMethod}
                 labelField='shippingMethodName'
@@ -212,12 +225,19 @@ const OrderScreen = ({ route, navigation }) => {
                 onChange={(method) => handleShippingMethodSelect(method)}
               />
             </View>
-            <TextInput style={styles.input} placeholder='Note' value={note} onChangeText={setNote} />
+            <TextInput
+              style={[styles.input, { color: colors.text }]}
+              placeholder='Note'
+              placeholderTextColor={colors.text}
+              value={note}
+              onChangeText={setNote}
+            />
             <View style={styles.dropdownContainer}>
-              <Text>Payment Method:</Text>
+              <Text style={{ color: colors.text }}>Payment Method:</Text>
               <Dropdown
                 style={styles.dropdown}
                 placeholder='Select Payment Tyle'
+                placeholderStyle={{ color: colors.text }}
                 data={paymentType}
                 value={selectedPaymentType}
                 labelField='label'
@@ -229,9 +249,9 @@ const OrderScreen = ({ route, navigation }) => {
         }
       />
       <View style={styles.bottomMenu}>
-        <Text style={styles.totalPrice}>Total: ${total.toFixed(2)}</Text>
+        <Text style={[styles.totalPrice, { color: colors.text }]}>Total: ${total.toFixed(2)}</Text>
         <TouchableOpacity style={styles.completeOrderButton} onPress={handleCompleteOrder}>
-          <Text style={styles.completeOrderButtonText}>Complete Order</Text>
+          <Text style={[styles.completeOrderButtonText, { color: colors.text }]}>Complete Order</Text>
         </TouchableOpacity>
       </View>
     </View>
