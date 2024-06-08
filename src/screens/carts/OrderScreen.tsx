@@ -137,7 +137,7 @@ const OrderScreen = ({ route, navigation }) => {
 
       console.log('Order Data:', orderData)
       processOrder(orderData)
-      handlePayment()
+      // handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
     }
@@ -162,12 +162,14 @@ const OrderScreen = ({ route, navigation }) => {
         },
         body: JSON.stringify(orderPayload)
       })
+      console.log('🚀 ~ createOrder ~ orderResponse:', orderResponse)
 
-      if (!orderResponse.ok) {
-        throw new Error(`Order creation failed: ${orderResponse.statusText}`)
-      }
+      // if (!orderResponse.ok) {
+      //   throw new Error(`Order creation failed: ${orderResponse.statusText}`)
+      // }
 
       const orderResult = await orderResponse.json()
+      console.log('🚀 ~ createOrder ~ orderResult:', orderResult)
       return orderResult.data.orderId // Assuming the response contains an orderId field
     } catch (error) {
       console.error('Error creating order:', error)
@@ -194,9 +196,10 @@ const OrderScreen = ({ route, navigation }) => {
         },
         body: JSON.stringify(orderLinePayload)
       }).then((response) => {
-        if (!response.ok) {
-          throw new Error(`OrderLine creation failed: ${response.statusText}`)
-        }
+        console.log('🚀 ~ orderLinePromises ~ response:', response)
+        // if (!response.ok) {
+        //   throw new Error(`OrderLine creation failed: ${response.statusText}`)
+        // }
         return response.json()
       })
     })
@@ -208,9 +211,10 @@ const OrderScreen = ({ route, navigation }) => {
       return fetch(`${DATABASE_URL}/api/CartItem/${userId}/${item.productItemId}`, {
         method: 'DELETE'
       }).then((response) => {
-        if (!response.ok) {
-          throw new Error(`Deleting CartItem failed: ${response.statusText}`)
-        }
+        console.log('🚀 ~ deletePromises ~ response:', response)
+        // if (!response.ok) {
+        //   throw new Error(`Deleting CartItem failed: ${response.statusText}`)
+        // }
       })
     })
 

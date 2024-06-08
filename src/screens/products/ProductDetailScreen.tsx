@@ -74,7 +74,9 @@ const ProductDetailScreen = ({
       console.error('Error fetching cart ID:', error)
     }
   }
-
+  useEffect(() => {
+    fetchProduct()
+  }, [])
   const createCartItem = async () => {
     try {
       const userId = getStringStorage('id')
@@ -85,6 +87,7 @@ const ProductDetailScreen = ({
         productItemId: selectedItem.productItemId,
         variationId: selectedItem.variations[0].variationId // Assuming the first variation is the one to be added
       }
+      console.log('🚀 ~ createCartItem ~ cartItemData:', cartItemData)
 
       const response = await fetch(`${LOCAL_URL}/api/CartItem`, {
         method: 'POST',
@@ -102,10 +105,6 @@ const ProductDetailScreen = ({
       console.error('Error creating cart item:', error)
     }
   }
-
-  useEffect(() => {
-    fetchProduct()
-  }, [])
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

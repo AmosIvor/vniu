@@ -22,7 +22,6 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
     try {
       const response = await fetch(`${LOCAL_URL}/api/CartItem/${userId}`)
       const data = await response.json()
-      console.log('🚀 ~ fetchCartItems ~ data:', data)
       setCartItems(data.data)
     } catch (error) {
       console.error('Error fetching cart items:', error)
