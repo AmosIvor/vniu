@@ -50,7 +50,7 @@ const OrderScreen = ({ route, navigation }) => {
   const [openAddressDropdown, setOpenAddressDropdown] = useState(false)
   const [isShowModalWebView, setIsShowModalWebView] = useState(false)
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null)
-
+  const [orderId, setOrderId] = useState(0)
   const createPaymentMutation = useMutation({
     mutationFn: paymentApi.createPaymentUrl
   })
@@ -137,10 +137,7 @@ const OrderScreen = ({ route, navigation }) => {
 
       console.log('Order Data:', orderData)
       processOrder(orderData)
-      // Here you would typically send the orderData to your backend for processing
-      // After successful processing, you might navigate to a success screen or perform other actions
-      // Alert.alert('Order completed successfully!')
-      // handlePayment()
+      handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
     }
@@ -158,7 +155,7 @@ const OrderScreen = ({ route, navigation }) => {
     }
 
     try {
-      const orderResponse = await fetch(`${DATABASE_URL}/api/Order`, {
+      const orderResponse = await fetch(`${DATABASE_URL}/api/Order/${selectedPaymentType?.value}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -222,6 +219,7 @@ const OrderScreen = ({ route, navigation }) => {
   async function processOrder(orderData) {
     try {
       const orderId = await createOrder(orderData)
+      setOrderId(orderId)
       await createOrderLines(orderId, orderData)
       await deleteCartItems(orderData)
       console.log('Order processed successfully')
@@ -235,8 +233,7 @@ const OrderScreen = ({ route, navigation }) => {
         orderTotal: total + selectedShippingMethod?.shippingMethodPrice,
         orderDescription: note,
         userId: userId,
-        isVnPay: selectedPaymentType?.value === 2,
-        orderId: 7
+        isVnPay: selectedPaymentType?.value === 2
       },
       {
         onSuccess: async (data) => {
@@ -257,6 +254,7 @@ const OrderScreen = ({ route, navigation }) => {
         isVisible={isShowModalWebView}
         setIsVisible={setIsShowModalWebView}
         setWebViewUrl={setPaymentUrl}
+        orderId={orderId}
       />
       <Modal animationType='slide' transparent={true} visible={showEditModal} onRequestClose={handleCloseEditModal}>
         <View style={styles.modalContainer}>

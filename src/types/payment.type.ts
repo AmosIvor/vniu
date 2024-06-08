@@ -2,7 +2,6 @@ export interface PaymentRequest {
   orderTotal: number
   orderDescription: string
   userId: string
-  orderId: number
   isVnPay: boolean
 }
 

@@ -6,8 +6,8 @@ const paymentApi = {
   createPaymentUrl(body: PaymentRequest) {
     return http.post<SuccessResponse<string>>(`api/User/online-payment/url`, body)
   },
-  getPaymentResponse(url: string) {
-    return http.get<SuccessResponse<PaymentResponse>>(`${url}`)
+  getPaymentResponse(orderId: number, url: string) {
+    return http.get<SuccessResponse<PaymentResponse>>(`api/User/${orderId}/${url}`)
   }
 }
 
