@@ -1,33 +1,49 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getStringStorage } from 'src/functions/storageFunctions'
 import { LOCAL_URL } from 'react-native-dotenv'
-import CheckBox from '@react-native-community/checkbox'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { useTheme } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
+const userId = getStringStorage('id')
 
+const fetchOrders = async ({ queryKey }) => {
+  const [, userId] = queryKey
+  try {
+    const response = await fetch(`${LOCAL_URL}/api/Order/orders/${userId}`)
+    const data = await response.json()
+    if (!response.ok) {
+      throw new Error(data.message || 'Error fetching orders')
+    }
+    return data.data
+  } catch (error) {
+    throw new Error(`Error fetching orders: ${error.message}`)
+  }
+}
 const OrderHistoryScreen = ({ navigation }: RootStackScreenProps<'OrderHistory'>) => {
   const { colors } = useTheme()
-  const userId = getStringStorage('id')
-  const [orders, setOrders] = useState([])
   const [selectedOrder, setSelectedOrder] = useState(null)
 
-  useEffect(() => {
-    fetchOrders()
-  }, [])
+  const {
+    isLoading,
+    error,
+    data: orders
+  } = useQuery({
+    queryKey: ['orders', userId],
+    queryFn: fetchOrders
+  })
 
-  const fetchOrders = async () => {
-    try {
-      const response = await fetch(`${LOCAL_URL}/api/Order/orders/${userId}`)
-      const data = await response.json()
-      setOrders(data.data)
-    } catch (error) {
-      console.error('Error fetching orders:', error)
-    }
-  }
-
+  if (isLoading)
+    return (
+      <ActivityIndicator
+        color={'blue'}
+        size={10}
+        style={{ flex: 1, alignContent: 'center', justifyContent: 'center' }}
+      />
+    )
+  if (error) return <Text>Error: {error.message}</Text>
   const handleSelectOrder = (order) => {
     setSelectedOrder(order)
   }

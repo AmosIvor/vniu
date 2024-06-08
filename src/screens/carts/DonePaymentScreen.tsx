@@ -10,7 +10,7 @@ const DonePaymentScreen = ({ navigation }: RootStackScreenProps<'DonePaymentScre
         <TickSquare size={60} color={appColors.active} />
         <SpaceComponent height={30} />
         <TextComponent text='Payment Successfully' font={appFonts.regular} size={24} color={appColors.text} />
-        <TouchableOpacity onPress={() => navigation.navigate('TabsStack')}>
+        <TouchableOpacity onPress={() => navigation.navigate('TabsStack', { screen: 'Home' })}>
           <TextComponent text='Back to Home' font={appFonts.regular} size={16} color={appColors.primary} />
         </TouchableOpacity>
       </SectionComponent>

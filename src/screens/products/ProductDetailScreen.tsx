@@ -19,6 +19,7 @@ import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
 import { getStringStorage } from 'src/functions/storageFunctions'
+import { useQueryClient } from '@tanstack/react-query'
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
 
@@ -28,6 +29,7 @@ const ProductDetailScreen = ({
     params: { id }
   }
 }: RootStackScreenProps<'Details'>) => {
+  const userId = getStringStorage('id')
   const { colors } = useTheme()
   const [product, setProduct] = useState()
   const [selectedImage, setSelectedImage] = useState()
@@ -38,6 +40,8 @@ const ProductDetailScreen = ({
   const [optionName, setOptionName] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [quantity, setQuantity] = useState(1)
+  const queryClient = useQueryClient()
+
   const fetchProduct = async () => {
     try {
       const response = await fetch(`${LOCAL_URL}/api/Product/${id}`)
@@ -79,7 +83,6 @@ const ProductDetailScreen = ({
   }, [])
   const createCartItem = async () => {
     try {
-      const userId = getStringStorage('id')
       const cartId = await fetchCartId(userId)
       const cartItemData = {
         quantity,
@@ -99,6 +102,7 @@ const ProductDetailScreen = ({
       const data = await response.json()
       console.log('🚀 ~ createCartItem ~ data:', data)
       if (data.message === 'Create cart item successfully') {
+        queryClient.invalidateQueries('cartItems', userId)
         setIsModalVisible(false)
       }
     } catch (error) {

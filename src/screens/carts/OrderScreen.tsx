@@ -21,7 +21,7 @@ import DropDownPicker from 'react-native-dropdown-picker'
 import { useTheme } from '@react-navigation/native'
 import ModalWebView from 'src/components/modals/ModalWebView'
 import { paymentApi } from '@apis'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 const OrderScreen = ({ route, navigation }) => {
   const { colors } = useTheme()
@@ -54,6 +54,7 @@ const OrderScreen = ({ route, navigation }) => {
   const createPaymentMutation = useMutation({
     mutationFn: paymentApi.createPaymentUrl
   })
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     // Fetch user data from API
@@ -137,7 +138,7 @@ const OrderScreen = ({ route, navigation }) => {
 
       console.log('Order Data:', orderData)
       processOrder(orderData)
-      // handlePayment()
+      handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
     }
@@ -226,7 +227,10 @@ const OrderScreen = ({ route, navigation }) => {
       setOrderId(orderId)
       await createOrderLines(orderId, orderData)
       await deleteCartItems(orderData)
+
       console.log('Order processed successfully')
+      queryClient.invalidateQueries('cartItems', userId)
+      queryClient.invalidateQueries('orders', userId)
     } catch (error) {
       console.error('Error processing order:', error)
     }

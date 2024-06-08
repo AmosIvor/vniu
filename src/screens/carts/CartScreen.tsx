@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button } from 'react-native'
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getStringStorage } from 'src/functions/storageFunctions'
@@ -7,28 +7,27 @@ import { LOCAL_URL } from 'react-native-dotenv'
 import CheckBox from '@react-native-community/checkbox'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 import { useTheme } from '@react-navigation/native'
+import { useMutation, useQuery } from '@tanstack/react-query'
+const userId = getStringStorage('id')
 
+const fetchCartItems = async ({ queryKey }) => {
+  const [, userId] = queryKey
+  try {
+    const response = await fetch(`${LOCAL_URL}/api/CartItem/${userId}`)
+    const data = await response.json()
+    if (!response.ok) {
+      throw new Error(data.message || 'Error fetching cart items')
+    }
+    return data.data
+  } catch (error) {
+    throw new Error(`Error fetching cart items: ${error.message}`)
+  }
+}
 const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
   const { colors } = useTheme()
-  const userId = getStringStorage('id')
-  const [cartItems, setCartItems] = useState([])
   const [selectedItems, setSelectedItems] = useState([])
 
-  useEffect(() => {
-    fetchCartItems()
-  }, [])
-
-  const fetchCartItems = async () => {
-    try {
-      const response = await fetch(`${LOCAL_URL}/api/CartItem/${userId}`)
-      const data = await response.json()
-      setCartItems(data.data)
-    } catch (error) {
-      console.error('Error fetching cart items:', error)
-    }
-  }
-
-  const updateQuantity = async (cartItemId, newQuantity) => {
+  const updateQuantity = async (cartItemId: any, newQuantity: any) => {
     try {
       await fetch(`${LOCAL_URL}/api/CartItem/${cartItemId}`, {
         method: 'PATCH',
@@ -38,33 +37,56 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
         body: JSON.stringify({ quantity: newQuantity })
       })
       // Update local state to reflect changes
-      setCartItems((prevItems) =>
-        prevItems.map((item) => (item.cartItemId === cartItemId ? { ...item, quantity: newQuantity } : item))
-      )
+      refetch() // This will refetch the cart items to reflect the updated quantity
     } catch (error) {
       console.error('Error updating quantity:', error)
     }
   }
+  const {
+    isLoading,
+    error,
+    data: cartItems,
+    refetch
+  } = useQuery({
+    queryKey: ['cartItems', userId],
+    queryFn: fetchCartItems
+  })
 
-  const handleSelectItem = (cartItemId) => {
+  const { mutate: updateQuantityMutation } = useMutation<void, Error, { cartItemId: any; newQuantity: any }>(
+    updateQuantity
+  )
+
+  const handleSelectItem = (cartItemId: any) => {
     setSelectedItems((prevSelected) =>
       prevSelected.includes(cartItemId) ? prevSelected.filter((id) => id !== cartItemId) : [...prevSelected, cartItemId]
     )
   }
 
   const calculateTotalPrice = () => {
+    if (!cartItems) return 0
     return selectedItems.reduce((total, itemId) => {
-      const item = cartItems.find((item) => item.cartItemId === itemId)
+      const item = cartItems.find((item: { cartItemId: any }) => {
+        return item.cartItemId === itemId
+      })
+
       return total + item.productItemVM.salePrice * item.quantity
     }, 0)
   }
 
   const handleOrder = () => {
-    const itemsToOrder = cartItems.filter((item) => selectedItems.includes(item.cartItemId))
+    const itemsToOrder = cartItems.filter((item: { cartItemId: any }) => selectedItems.includes(item.cartItemId))
     navigation.navigate('OrderScreen', { itemsToOrder, total: calculateTotalPrice() })
   }
-  const formatNumber = (number) => {
+
+  const formatNumber = (number: number | bigint) => {
     return new Intl.NumberFormat('en-US').format(number)
+  }
+
+  if (isLoading)
+    return <ActivityIndicator color={'blue'} style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }} />
+  if (error) {
+    console.log('🚀 ~ CartScreen ~ error:', error)
+    return <Text>Error: {error.message}</Text>
   }
   const renderCartItem = ({ item }) => {
     const product = item.productItemVM // Adjust this based on your data structure
@@ -94,14 +116,14 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TouchableOpacity
                 style={styles.quantityButton}
-                onPress={() => updateQuantity(item.cartItemId, Math.max(1, quantity - 1))}
+                onPress={() => updateQuantityMutation(item.cartItemId, Math.max(1, quantity - 1))}
               >
                 <MaterialCommunityIcons name='minus' size={20} color='black' />
               </TouchableOpacity>
               <Text style={[styles.quantity, { color: colors.text }]}>{quantity}</Text>
               <TouchableOpacity
                 style={styles.quantityButton}
-                onPress={() => updateQuantity(item.cartItemId, quantity + 1)}
+                onPress={() => updateQuantityMutation(item.cartItemId, quantity + 1)}
               >
                 <MaterialCommunityIcons name='plus' size={20} color='black' />
               </TouchableOpacity>
