@@ -34,7 +34,7 @@ const OrderScreen = ({ route, navigation }) => {
   const [note, setNote] = useState('')
   const [shippingMethod, setShippingMethod] = useState([])
   const [selectedShippingMethod, setSelectedShippingMethod] = useState()
-
+  const [isLoading, setIsLoading] = useState(false)
   const [paymentType, setPaymentType] = useState([
     { label: 'COD', value: 1 },
     { label: 'BANK_TRANSFER', value: 2 },
@@ -124,6 +124,7 @@ const OrderScreen = ({ route, navigation }) => {
 
   const handleCompleteOrder = () => {
     if (userName && phoneNumber && address) {
+      setIsLoading(true)
       const orderData = {
         userName,
         phoneNumber,
@@ -138,6 +139,7 @@ const OrderScreen = ({ route, navigation }) => {
 
       console.log('Order Data:', orderData)
       processOrder(orderData)
+      setIsLoading(false)
       handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
@@ -255,6 +257,14 @@ const OrderScreen = ({ route, navigation }) => {
       }
     )
   }
+  if (isLoading)
+    return (
+      <ActivityIndicator
+        color={'blue'}
+        size={20}
+        style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}
+      />
+    )
   return (
     <View style={styles.container}>
       <ModalWebView

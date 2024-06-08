@@ -103,7 +103,9 @@ const ProductDetailScreen = ({
       console.log('🚀 ~ createCartItem ~ data:', data)
       if (data.message === 'Create cart item successfully') {
         queryClient.invalidateQueries('cartItems', userId)
+
         setIsModalVisible(false)
+        navigation.navigate('TabsStack', { screen: 'Cart' })
       }
     } catch (error) {
       console.error('Error creating cart item:', error)

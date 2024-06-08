@@ -26,7 +26,6 @@ const fetchCartItems = async ({ queryKey }) => {
 const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
   const { colors } = useTheme()
   const [selectedItems, setSelectedItems] = useState([])
-
   const updateQuantity = async (cartItemId: any, newQuantity: any) => {
     try {
       await fetch(`${LOCAL_URL}/api/CartItem/${cartItemId}`, {
@@ -68,7 +67,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
       const item = cartItems.find((item: { cartItemId: any }) => {
         return item.cartItemId === itemId
       })
-
+      if (!item) return total
       return total + item.productItemVM.salePrice * item.quantity
     }, 0)
   }
