@@ -19,12 +19,13 @@ import {
 } from 'react-native-gifted-chat'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { getStringStorage } from 'src/functions/storageFunctions'
 import { globalStyles } from 'src/styles/globalStyles'
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState<IMessage[]>([])
   const [text, setText] = useState('')
-  const userId = 'CS0001'
+  const userId = getStringStorage('id')
 
   const [connection, setConnection] = useState<null | HubConnection>(null)
 
