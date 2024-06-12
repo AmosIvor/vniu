@@ -23,8 +23,8 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 //TTT
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload'
 const CLOUDINARY_UPLOAD_PRESET = 'ma9g4xzz'
-// const FASTAPI_URL = 'https://vniuimagesearch.azurewebsites.net/search/'
-const FASTAPI_URL = 'http://10.0.2.2:8000/search/'
+const FASTAPI_URL = 'https://vniuimagesearch.azurewebsites.net/search/'
+// const FASTAPI_URL = 'http://10.0.2.2:8000/search/'
 const ImageSearchScreen = () => {
   const { colors } = useTheme()
   const navigation = useNavigation()

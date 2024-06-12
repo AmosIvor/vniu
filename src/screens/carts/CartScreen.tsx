@@ -144,7 +144,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
       />
       <View style={styles.bottomMenu}>
         <Text style={[styles.totalPrice, { color: colors.text }]}>Total: ${formatNumber(calculateTotalPrice())}</Text>
-        <Button title='Order' onPress={handleOrder} />
+        <Button disabled={!selectedItems || calculateTotalPrice() === 0} title='Order' onPress={handleOrder} />
       </View>
     </SafeAreaView>
   )

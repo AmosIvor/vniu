@@ -42,6 +42,7 @@ const ChatBotScreen = () => {
             _id: chatbotResponseData.chatbotId,
             text: chatbotResponseData.chatbotContent,
             createdAt: new Date(chatbotResponseData.messageCreateAt),
+            image: chatbotResponseData.imageUrl ? chatbotResponseData.imageUrl : undefined,
             user: {
               _id: chatbotResponseData.isFromUser == true ? 1 : 0,
               name: chatbotResponseData.isFromUser ? 'You' : 'Admin'

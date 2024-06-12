@@ -81,6 +81,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
   const renderItem = ({ item }: { item: any }) => {
     const productItem = item.productItems[0]
     const productImageUrl = productItem?.productImage?.productImageUrl
+    const salePrice = productItem?.salePrice
     const originalPrice = productItem?.originalPrice
     const discount = 5
     const rating = 5
@@ -97,7 +98,10 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
         <Image source={{ uri: productImageUrl }} style={styles.productImage} />
         <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item.productName}</Text>
         <Text style={{ fontSize: 14, marginTop: 4, color: colors.text }}>
-          ${originalPrice} <Text style={styles.discount}>-{discount}%</Text>
+          ${originalPrice}{' '}
+          <Text style={styles.discount}>
+            {'- ' + Math.round(((originalPrice - salePrice) / originalPrice) * 100) + ' %'}
+          </Text>
         </Text>
         <View style={styles.ratingContainer}>
           <MaterialCommunityIcons name='star' size={16} color='#333' />

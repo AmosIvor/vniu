@@ -46,6 +46,9 @@ const ModalWebView = (props: Props) => {
       ) {
         clearWebViewState()
       } else {
+        setWebViewUrl(null)
+        setIsVisible(false)
+        navigation.navigate('TabsStack', { screen: 'Home' })
         console.log('error')
       }
     }

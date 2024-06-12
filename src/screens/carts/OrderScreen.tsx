@@ -140,14 +140,14 @@ const OrderScreen = ({ route, navigation }) => {
       console.log('Order Data:', orderData)
       processOrder(orderData)
       setIsLoading(false)
-      // handlePayment()
+      handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
     }
   }
   async function createOrder(orderData) {
     const orderPayload = {
-      OrderTotal: orderData.total,
+      OrderTotal: orderData.total + selectedShippingMethod?.shippingMethodPrice,
       OrderNote: orderData.note,
       OrderStatusId: 1,
       ShippingMethodId: orderData.selectedShippingMethod.shippingMethodId,
@@ -349,7 +349,7 @@ const OrderScreen = ({ route, navigation }) => {
             )}
             <View style={styles.dropdownContainer}>
               <Text style={{ color: colors.text }}>
-                {'Shipping Method: $' + selectedShippingMethod?.shippingMethodPrice || 2}
+                Shipping Method: $ {selectedShippingMethod ? selectedShippingMethod?.shippingMethodPrice : 2}
               </Text>
               <Dropdown
                 style={styles.dropdown}
@@ -387,7 +387,14 @@ const OrderScreen = ({ route, navigation }) => {
       />
       <View style={styles.bottomMenu}>
         <Text style={[styles.totalPrice, { color: colors.text }]}>Total: ${total.toFixed(2)}</Text>
-        <TouchableOpacity style={styles.completeOrderButton} onPress={handleCompleteOrder}>
+        <TouchableOpacity
+          disabled={!selectedShippingMethod || !selectedPaymentType}
+          style={[
+            styles.completeOrderButton,
+            { backgroundColor: !selectedShippingMethod || !selectedPaymentType ? 'gray' : '#007bff' }
+          ]}
+          onPress={handleCompleteOrder}
+        >
           <Text style={[styles.completeOrderButtonText, { color: colors.text }]}>Complete Order</Text>
         </TouchableOpacity>
       </View>

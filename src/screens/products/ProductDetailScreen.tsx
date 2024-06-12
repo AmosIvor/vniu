@@ -228,7 +228,7 @@ const ProductDetailScreen = ({
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
-            <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>${selectedItem?.originalPrice}</Text>
+            <Text style={{ color: colors.text, fontSize: 18, fontWeight: '600' }}>${selectedItem?.salePrice}</Text>
             <View style={{ width: 40, height: 20, borderRadius: 20, backgroundColor: '#888', margin: 2 }}>
               <Text style={{ color: colors.text, fontSize: 12, fontWeight: '600', textAlign: 'center' }}>
                 {'- ' +
