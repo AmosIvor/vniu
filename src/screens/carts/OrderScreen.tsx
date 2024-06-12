@@ -140,7 +140,7 @@ const OrderScreen = ({ route, navigation }) => {
       console.log('Order Data:', orderData)
       processOrder(orderData)
       setIsLoading(false)
-      handlePayment()
+      // handlePayment()
     } else {
       Alert.alert('Please fill out all required fields.')
     }
