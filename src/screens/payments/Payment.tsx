@@ -6,7 +6,7 @@ import { Text, View } from 'react-native'
 const Payment = () => {
   const { data, error } = useQuery({
     queryKey: ['chatroom', 87],
-    queryFn: () => chatApi.getChatRoomByUser('CS0001')
+    queryFn: () => chatApi.getChatRoomByUser('CS0003')
   })
 
   const product = useMemo(() => {

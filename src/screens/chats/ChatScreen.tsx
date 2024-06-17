@@ -24,7 +24,7 @@ import { globalStyles } from 'src/styles/globalStyles'
 const ChatScreen = () => {
   const [messages, setMessages] = useState<IMessage[]>([])
   const [text, setText] = useState('')
-  const userId = 'CS0001'
+  const userId = 'CS0003'
 
   const [connection, setConnection] = useState<null | HubConnection>(null)
 
