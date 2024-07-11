@@ -3,9 +3,12 @@ import React, { useState } from 'react'
 import { ICONS } from '@assets'
 import { StyleSheet } from 'react-native'
 import { appInfors, appColors } from '@constants'
+import { useTheme } from '@react-navigation/native'
+
 const CustomInput = (props: any) => {
   const [isSecureEntry, setIsSecureEntry] = useState(true)
   const [isEmailInput, setIsEmailInput] = useState(false)
+  const { colors } = useTheme()
 
   const handleEmailFocus = () => {
     setIsEmailInput(true)
@@ -31,7 +34,8 @@ const CustomInput = (props: any) => {
             style={{
               flex: 1,
               borderColor: 'gray',
-              padding: 8
+              padding: 8,
+              color: colors.text
             }}
             onFocus={props.onFocus}
             onChangeText={props.onChangeText}
@@ -67,7 +71,8 @@ const CustomInput = (props: any) => {
             style={{
               flex: 1,
               borderColor: 'gray',
-              padding: 8
+              padding: 8,
+              color: colors.text
             }}
             secureTextEntry={false}
             keyboardType='email-address'

@@ -11,6 +11,7 @@ import AssistScreen from '@screens/assists/AssistScreen'
 import ProfileScreen from '@screens/profiles/ProfileScreen'
 import CartScreen from '@screens/carts/CartScreen'
 import HomeScreen from '@screens/homes/HomeScreen'
+import ChatBotScreen from '@screens/chats/ChatBotScreen'
 
 export type TabsStackParamList = {
   Home: undefined
@@ -55,8 +56,9 @@ const TabsNavigator = ({ toggleTheme }: any) => {
       />
       <TabsStack.Screen
         name='Assist'
-        component={AssistScreen}
+        component={ChatBotScreen}
         options={{
+          headerShown: false,
           tabBarIcon(props) {
             return <MaterialCommunityIcons name='robot-happy-outline' {...props} />
           }
@@ -66,6 +68,7 @@ const TabsNavigator = ({ toggleTheme }: any) => {
         name='Chat'
         component={ChatScreen}
         options={{
+          headerShown: false,
           tabBarIcon(props) {
             return <MaterialCommunityIcons name='chat-processing-outline' {...props} />
           }
@@ -74,14 +77,14 @@ const TabsNavigator = ({ toggleTheme }: any) => {
 
       <TabsStack.Screen
         name='Profile'
+        component={ProfileScreen}
         options={{
+          headerShown: false,
           tabBarIcon(props) {
             return <MaterialCommunityIcons name='account' {...props} />
           }
         }}
-      >
-        {(props) => <ProfileScreen {...props} toggleTheme={toggleTheme} />}
-      </TabsStack.Screen>
+      />
     </TabsStack.Navigator>
   )
 }

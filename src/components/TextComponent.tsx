@@ -1,4 +1,4 @@
-import { View, Text, StyleProp, TextStyle } from 'react-native'
+import { StyleProp, Text, TextStyle } from 'react-native'
 import { appColors } from 'src/constants/appColors'
 import { appFonts } from 'src/constants/appFonts'
 import { globalStyles } from 'src/styles/globalStyles'
