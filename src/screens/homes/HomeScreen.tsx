@@ -21,6 +21,8 @@ const fetchProducts = async ({ pageParam = 1 }) => {
       pageSize: 4
     }
   })
+  console.log('🚀 ~ fetchProducts ~ response.data:', response.data)
+
   return response.data
 }
 

@@ -7,14 +7,14 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useTheme } from '@react-navigation/native'
 import { IMAGES } from '@assets'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }: RootStackScreenProps<'SearchScreen'>) => {
   const { colors } = useTheme()
 
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [products, setProducts] = useState([])
-  const navigation = useNavigation()
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,6 +24,8 @@ const SearchScreen = () => {
           //     Authorization: `Bearer ${accessToken}`
           //   }
         })
+        console.log('🚀 ~ fetchProducts ~ response:', response)
+
         setProducts(response.data.data)
       } catch (error) {
         console.log('Error fetching products:', error)

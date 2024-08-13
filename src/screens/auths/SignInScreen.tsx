@@ -70,8 +70,10 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
           password: inputs.Password
         })
       })
+      console.log('🚀 ~ handleSubmitForm ~ response:', response)
 
       const data = await response.json()
+      console.log('🚀 ~ handleSubmitForm ~ data:', data)
 
       if (data.message === 'Login Successfully') {
         setStorage('accessToken', data.data.accessToken)

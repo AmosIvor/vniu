@@ -1,4 +1,4 @@
-package com.vniu
+package com.uit.vniu
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

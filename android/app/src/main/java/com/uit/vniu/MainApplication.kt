@@ -1,4 +1,4 @@
-package com.vniu
+package com.uit.vniu
 
 import android.app.Application
 import com.facebook.react.PackageList

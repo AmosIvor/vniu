@@ -19,15 +19,15 @@ import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
 import { IMAGES } from '@assets'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 
 //TTT
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload'
 const CLOUDINARY_UPLOAD_PRESET = 'ma9g4xzz'
 const FASTAPI_URL = 'https://vniuimagesearch.azurewebsites.net/search/'
 
-const ImageSearchScreen = () => {
+const ImageSearchScreen = ({ navigation }: RootStackScreenProps<'ImageSearch'>) => {
   const { colors } = useTheme()
-  const navigation = useNavigation()
   const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState(null)
@@ -85,7 +85,10 @@ const ImageSearchScreen = () => {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
       }
     })
-      .then((res) => res.json())
+      .then((res) => {
+        console.log('🚀 ~ searchImage ~ res:', res)
+        return res.json()
+      })
       .then((data) => {
         const productItemIds = data.nearest_images.map((result) => result[1])
         const uniqueProductItemIds = [...new Set(productItemIds)] // Loại bỏ trùng lặp

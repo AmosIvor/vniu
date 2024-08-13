@@ -64,7 +64,7 @@ const TabsNavigator = ({ toggleTheme }: any) => {
           }
         }}
       />
-      <TabsStack.Screen
+      {/* <TabsStack.Screen
         name='Chat'
         component={ChatScreen}
         options={{
@@ -73,7 +73,7 @@ const TabsNavigator = ({ toggleTheme }: any) => {
             return <MaterialCommunityIcons name='chat-processing-outline' {...props} />
           }
         }}
-      />
+      /> */}
 
       <TabsStack.Screen
         name='Profile'
