@@ -1,5 +1,5 @@
 import { TextComponent } from '@components'
-import { View, Text, Modal, ActivityIndicator } from 'react-native'
+import { View, Modal, ActivityIndicator } from 'react-native'
 import { appColors } from 'src/constants/appColors'
 
 interface Props {

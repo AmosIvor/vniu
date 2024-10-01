@@ -7,6 +7,14 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "pod": "cd ios && pod install && cd ..",
+    "clean:node": "rm -rf node_modules && yarn cache clean && yarn install",
+    "clean:ios": " cd ios && rm -rf ~/Library/Caches/CocoaPods && rm -rf Pods && rm -rf ~/Library/Developer/Xcode/DerivedData/* && yarn ios:Pod:Reset",
+    "ios:Pod:Reset": "cd ios && pod deintegrate && pod setup && pod install",
+    "clean:android": "cd android && ./gradlew clean && cd ..",
+    "clean:all": "yarn clean:node && yarn clean:ios && yarn clean:android && yarn start ",
+    "open-apk": "open ./android/app/build/outputs/apk/",
+    "open-aab": "open .android/app/build/outputs/bundle/release/",
     "test": "jest"
   },
   "dependencies": {
