@@ -7,10 +7,20 @@ module.exports = {
     //     moduleName: '@env',
     //   },
     // ],
+    // [
+    //   'module:react-native-dotenv',
+    //   {
+    //     moduleName: 'react-native-dotenv'
+    //   }
+    // ],
     [
       'module:react-native-dotenv',
       {
-        moduleName: 'react-native-dotenv'
+        moduleName: '@env',
+        path: '.env',
+        safe: false,
+        allowUndefined: true,
+        verbose: false
       }
     ],
     'nativewind/babel',
@@ -33,6 +43,7 @@ module.exports = {
           '@styles': './src/styles/',
           '@theme': './src/theme',
           '@appTypes': './src/types/',
+          '@configs': './src/configs',
           '@utils': './src/utils/index'
         }
       }

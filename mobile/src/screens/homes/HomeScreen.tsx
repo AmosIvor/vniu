@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import { ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native'
 import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
@@ -15,7 +15,7 @@ import axios from 'axios'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 const fetchProducts = async ({ pageParam = 1 }) => {
-  const response = await axios.get(LOCAL_URL + `/api/Product`, {
+  const response = await axios.get(ENV.API_URL + `/api/Product`, {
     params: {
       page: pageParam,
       pageSize: 4

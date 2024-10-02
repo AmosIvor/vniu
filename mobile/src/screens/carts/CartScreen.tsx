@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button, Acti
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getStringStorage } from 'src/functions/storageFunctions'
-import { LOCAL_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import CheckBox from '@react-native-community/checkbox'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 import { useTheme } from '@react-navigation/native'
@@ -13,7 +13,7 @@ const userId = getStringStorage('id')
 const fetchCartItems = async ({ queryKey }) => {
   const [, userId] = queryKey
   try {
-    const response = await fetch(`${LOCAL_URL}/api/CartItem/${userId}`)
+    const response = await fetch(`${ENV.API_URL}/api/CartItem/${userId}`)
     const data = await response.json()
     if (!response.ok) {
       throw new Error(data.message || 'Error fetching cart items')
@@ -28,7 +28,7 @@ const CartScreen = ({ navigation }: TabsStackScreenProps<'Cart'>) => {
   const [selectedItems, setSelectedItems] = useState([])
   const updateQuantity = async (cartItemId: any, newQuantity: any) => {
     try {
-      await fetch(`${LOCAL_URL}/api/CartItem/${cartItemId}`, {
+      await fetch(`${ENV.API_URL}/api/CartItem/${cartItemId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

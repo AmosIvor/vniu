@@ -13,7 +13,7 @@ import {
 } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker'
 import axios from 'axios'
-import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
@@ -98,8 +98,8 @@ const ImageSearchScreen = () => {
       })
   }
 
-  const fetchProducts = (productItemIds) => {
-    fetch(LOCAL_URL + '/api/Product/get-products-by-ids', {
+  const fetchProducts = (productItemIds: unknown[]) => {
+    fetch(ENV.API_URL + '/api/Product/get-products-by-ids', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

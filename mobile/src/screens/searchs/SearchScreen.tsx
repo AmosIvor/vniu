@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, TextInput, FlatList, Image, TouchableOpacity, ScrollView, StyleSheet, Text } from 'react-native'
 import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
-import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from '@react-navigation/native'
 import { IMAGES } from '@assets'
@@ -19,7 +19,7 @@ const SearchScreen = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`${LOCAL_URL}/api/Product/get-all`, {
+        const response = await axios.get(`${ENV.API_URL}/api/Product/get-all`, {
           //   headers: {
           //     Authorization: `Bearer ${accessToken}`
           //   }

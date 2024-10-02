@@ -3,6 +3,8 @@
   "compilerOptions": {
     // "typeRoots": ["./src/types"],
     // ... other configs, if any
+    "jsx": "react",
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@apis": ["src/apis/index"],
@@ -16,6 +18,7 @@
       "@screens/*": ["src/screens/*"],
       "@theme/*": ["src/theme/*"],
       "@appTypes/*": ["src/types/*"],
+      "@configs/*": ["src/configs/*"],
       "@utils": ["src/utils/index"]
     }
   }

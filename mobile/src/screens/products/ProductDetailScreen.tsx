@@ -15,7 +15,7 @@ import React, { useEffect, useState } from 'react'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '@react-navigation/native'
-import { DATABASE_URL, LOCAL_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
 import { getStringStorage } from 'src/functions/storageFunctions'
@@ -44,7 +44,7 @@ const ProductDetailScreen = ({
 
   const fetchProduct = async () => {
     try {
-      const response = await fetch(`${LOCAL_URL}/api/Product/${id}`)
+      const response = await fetch(`${ENV.API_URL}/api/Product/${id}`)
       const data = await response.json()
       setProduct(data.data)
 
@@ -71,7 +71,7 @@ const ProductDetailScreen = ({
 
   const fetchCartId = async (userId) => {
     try {
-      const response = await fetch(`${LOCAL_URL}/api/Cart/${userId}`)
+      const response = await fetch(`${ENV.API_URL}/api/Cart/${userId}`)
       const data = await response.json()
       return data.data.cartId
     } catch (error) {
@@ -92,7 +92,7 @@ const ProductDetailScreen = ({
       }
       console.log('🚀 ~ createCartItem ~ cartItemData:', cartItemData)
 
-      const response = await fetch(`${LOCAL_URL}/api/CartItem`, {
+      const response = await fetch(`${ENV.API_URL}/api/CartItem`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

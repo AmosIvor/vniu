@@ -1,4 +1,4 @@
-import { DATABASE_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import React, { useEffect, useState } from 'react'
 import {
   View,
@@ -64,7 +64,7 @@ const OrderScreen = ({ route, navigation }) => {
 
   const fetchAddressData = async (userId) => {
     try {
-      const response = await fetch(DATABASE_URL + `/api/UserAddress/${userId}/addresses`)
+      const response = await fetch(ENV.API_URL + `/api/UserAddress/${userId}/addresses`)
       const data = await response.json()
       // setAddressData(data.data)
       const dataAddress = data.data.map((item) => ({
@@ -90,7 +90,7 @@ const OrderScreen = ({ route, navigation }) => {
 
   const fetchShippingData = async () => {
     try {
-      const response = await fetch(DATABASE_URL + `/api/ShippingMethod/get-all`)
+      const response = await fetch(ENV.API_URL + `/api/ShippingMethod/get-all`)
       const data = await response.json()
       setShippingMethod(data.data)
     } catch (error) {
@@ -158,7 +158,7 @@ const OrderScreen = ({ route, navigation }) => {
     }
 
     try {
-      const orderResponse = await fetch(`${DATABASE_URL}/api/Order/${selectedPaymentType?.value}`, {
+      const orderResponse = await fetch(`${ENV.API_URL}/api/Order/${selectedPaymentType?.value}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -192,7 +192,7 @@ const OrderScreen = ({ route, navigation }) => {
         VariationId: item.variationVM.variationId
       }
 
-      return fetch(`${DATABASE_URL}/api/OrderLine`, {
+      return fetch(`${ENV.API_URL}/api/OrderLine`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -211,7 +211,7 @@ const OrderScreen = ({ route, navigation }) => {
   }
   async function deleteCartItems(orderData) {
     const deletePromises = orderData.itemsToOrder.map((item) => {
-      return fetch(`${DATABASE_URL}/api/CartItem/${userId}/${item.productItemId}`, {
+      return fetch(`${ENV.API_URL}/api/CartItem/${userId}/${item.productItemId}`, {
         method: 'DELETE'
       }).then((response) => {
         console.log('🚀 ~ deletePromises ~ response:', response)

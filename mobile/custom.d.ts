@@ -6,5 +6,5 @@ declare module '*.svg' {
 declare module '*.png'
 
 declare module '@env' {
-  export const DATABASE_URL: string
+  export const API_URL: string
 }

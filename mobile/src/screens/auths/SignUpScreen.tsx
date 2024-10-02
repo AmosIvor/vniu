@@ -13,7 +13,7 @@ import {
 import { IMAGES } from '@assets'
 import { appColors } from '@constants'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
-import { DATABASE_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import { setStorage } from 'src/functions/storageFunctions'
 import { useTheme } from '@react-navigation/native'
 
@@ -85,7 +85,7 @@ const SignUpScreen = ({ navigation }: RootStackScreenProps<'SignUpScreen'>) => {
     setLoading(true)
 
     try {
-      const response = await fetch(`${DATABASE_URL}/api/Auth/register`, {
+      const response = await fetch(`${ENV.API_URL}/api/Auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

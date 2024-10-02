@@ -13,7 +13,7 @@ import {
 import { getRequest, postRequest } from 'src/utils/fetch' // Adjust the import based on your project structure
 import { useQueryClient } from '@tanstack/react-query' // If you use react-query
 import { getStringStorage } from 'src/functions/storageFunctions'
-import { DATABASE_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import db from 'src/assets/datas/db.json'
@@ -91,7 +91,7 @@ const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
     console.log('🚀 ~ handleSubmit ~ formData:', formData)
 
     try {
-      const response = await fetch(DATABASE_URL + '/api/Address/' + userId, {
+      const response = await fetch(ENV.API_URL + '/api/Address/' + userId, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

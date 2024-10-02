@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Button, Acti
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { getStringStorage } from 'src/functions/storageFunctions'
-import { LOCAL_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { useTheme } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -12,7 +12,7 @@ const userId = getStringStorage('id')
 const fetchOrders = async ({ queryKey }) => {
   const [, userId] = queryKey
   try {
-    const response = await fetch(`${LOCAL_URL}/api/Order/orders/${userId}`)
+    const response = await fetch(`${ENV.API_URL}/api/Order/orders/${userId}`)
     const data = await response.json()
     if (!response.ok) {
       throw new Error(data.message || 'Error fetching orders')

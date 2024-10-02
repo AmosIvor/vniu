@@ -4,7 +4,7 @@ import { CustomInput } from '@components'
 import { appColors } from '@constants'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { getAllKeysStorage, getStringStorage, setStorage } from 'src/functions/storageFunctions'
-import { DATABASE_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 import { useTheme } from '@react-navigation/native'
 
 const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
@@ -59,7 +59,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
 
     setLoading(true)
     try {
-      const response = await fetch(`${DATABASE_URL}/api/Auth/login`, {
+      const response = await fetch(`${ENV.API_URL}/api/Auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

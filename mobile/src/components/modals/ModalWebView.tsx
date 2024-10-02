@@ -6,7 +6,7 @@ import queryString from 'query-string'
 import { useState } from 'react'
 import { ActivityIndicator, Modal, View } from 'react-native'
 import WebView, { WebViewNavigation } from 'react-native-webview'
-import { DATABASE_URL } from 'react-native-dotenv'
+import { ENV } from '@configs/env'
 interface Props {
   webViewUrl: string | null
   setWebViewUrl: React.Dispatch<React.SetStateAction<string | null>>
@@ -15,7 +15,7 @@ interface Props {
   orderId: number
 }
 
-const baseUrl = DATABASE_URL + '/api/User/'
+const baseUrl = ENV.API_URL + '/api/User/'
 
 const ModalWebView = (props: Props) => {
   const { webViewUrl, isVisible, setIsVisible, setWebViewUrl, orderId } = props
