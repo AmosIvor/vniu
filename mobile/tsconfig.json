@@ -1,0 +1,25 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    // "typeRoots": ["./src/types"],
+    // ... other configs, if any
+    "jsx": "react",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@apis": ["src/apis/index"],
+      "@assets": ["src/assets/index"],
+      "@components": ["src/components/index"],
+      "@constants": ["src/constants/index"],
+      "@contexts": ["src/contexts/index"],
+      "@hooks": ["src/hooks/index"],
+      "@modals": ["src/modals/index"],
+      "@navigators": ["src/navigators/index"],
+      "@screens/*": ["src/screens/*"],
+      "@theme/*": ["src/theme/*"],
+      "@appTypes/*": ["src/types/*"],
+      "@configs/*": ["src/configs/*"],
+      "@utils": ["src/utils/index"]
+    }
+  }
+}
