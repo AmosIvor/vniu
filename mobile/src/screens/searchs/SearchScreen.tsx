@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 30,
-    top: 30,
+    top: 50,
     width: 30,
     height: 30,
     backgroundColor: '#E0E0E0',

@@ -64,6 +64,9 @@ const nextConfig = {
             }
         ],
     },
+    env: {
+        BACKEND_URL: 'http://localhost:5050',
+    }
 }
 
 module.exports = nextConfig

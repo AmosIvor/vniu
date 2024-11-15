@@ -33,7 +33,15 @@ const ProductDetailScreen = ({
   const { colors } = useTheme()
   const [product, setProduct] = useState()
   const [selectedImage, setSelectedImage] = useState()
-  const [selectedItem, setSelectedItem] = useState()
+  const [selectedItem, setSelectedItem] = useState({
+    productItemId: null,
+    salePrice: 0,
+    originalPrice: 0,
+    productItemSold: 0,
+    productImages: [],
+    variations: [{ size: { sizeName: null } }],
+    colourVMs: [{ colourName: null }]
+  })
   const [isFocus, setIsFocus] = useState(false)
   const [optionData, setOptionData] = useState([])
   const [option, setOption] = useState(null)
@@ -224,7 +232,7 @@ const ProductDetailScreen = ({
                 opacity: 0.5
               }}
             >
-              {'(' + 3 + ' ) | đã bán ' + selectedItem?.productItemSold}
+              {'(' + 3 + ' ) | sold ' + (selectedItem?.productItemSold || 0)}
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>

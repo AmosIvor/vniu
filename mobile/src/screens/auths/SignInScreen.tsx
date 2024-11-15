@@ -59,7 +59,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
 
     setLoading(true)
     try {
-      const response = await fetch(`${ENV.API_URL}/api/Auth/login`, {
+      const response = await fetch(`http://10.0.2.2:5000/api/Auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -69,6 +69,8 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
           password: inputs.Password
         })
       })
+
+      console.log('🚀 ~ handleSubmitForm ~ response:', response)
 
       const data = await response.json()
 

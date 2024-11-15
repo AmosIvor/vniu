@@ -15,12 +15,13 @@ import axios from 'axios'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 const fetchProducts = async ({ pageParam = 1 }) => {
-  const response = await axios.get(ENV.API_URL + `/api/Product`, {
+  const response = await axios.get(`http://10.0.2.2:5000/api/Product`, {
     params: {
       page: pageParam,
       pageSize: 4
     }
   })
+  console.log('🚀 ~ fetchProducts ~ response:', response)
 
   return response.data
 }
@@ -44,6 +45,8 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
       return undefined
     }
   })
+  console.log('🚀 ~ HomeScreen ~ data:', data)
+  console.log('🚀 ~ HomeScreen ~ data:', data)
 
   // if (isLoading)
   //   return (
@@ -53,7 +56,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
   //       color='#0000ff'
   //     />
   //   )
-  if (isError) return <Text>Error: {error.message}</Text>
+  // if (isError) return <Text>Error: {error.message}</Text>
 
   const loadMore = () => {
     if (hasNextPage) {
@@ -232,7 +235,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
             size='large'
             color='#0000ff'
           />
-        ) : (
+        ) : isError ? null : (
           <ScrollView scrollEnabled={false} horizontal={true} style={{ flex: 1, width: '100%', padding: wp(1) }}>
             <View>
               <FlatList

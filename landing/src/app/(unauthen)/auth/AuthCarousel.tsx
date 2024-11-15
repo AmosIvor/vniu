@@ -43,6 +43,7 @@ function AuthCarousel() {
             layout="fill"
             objectFit="cover"
             priority
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1024px"
             quality={100}
           />
           <div className="absolute inset-0 bg-black opacity-10" />
@@ -63,6 +64,7 @@ function AuthCarousel() {
             alt="Auth background"
             layout="fill"
             objectFit="cover"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 1024px"
             priority
             quality={100}
           />

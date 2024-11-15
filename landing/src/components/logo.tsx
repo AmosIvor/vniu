@@ -7,17 +7,15 @@ function Logo() {
     <Link className="w-[200px]" href={'/'}>
       <div className="items-center w-full flex flex-row gap-2">
         <Image
-          alt="A&Z"
+          alt="VNIU"
           src={
-            'https://utfs.io/f/ef06a82d-3a60-4934-a92b-5de2eda046cc-oxx5jb.jpg'
+            'https://utfs.io/f/wqOFJk3mOtDKWwSPKWxB2ObxaGdVBPfM7uRX40mweIjF3gzA'
           }
           width={40}
           height={40}
         />
 
-        <div className="text-lg w-full font-bold tracking-tight">
-          Elite Motion
-        </div>
+        <div className="text-lg w-full font-bold tracking-tight">VNIU</div>
       </div>
     </Link>
   );

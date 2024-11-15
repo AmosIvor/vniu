@@ -21,7 +21,7 @@ export const useWishList = () => {
   // Chỉ hoạt động với khách hàng có đăng nhập
   const { data: userWishList } = useQuery({
     queryKey: ['useWishList'],
-    queryFn: () => fetchUserWishList(session?.user.id),
+    queryFn: () => fetchUserWishList(session?.user?.id),
     enabled: !!session,
     staleTime: 1000 * 60 * 60 * 24, // 1 day
   });

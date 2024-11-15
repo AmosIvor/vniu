@@ -56,7 +56,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
       //     </style>
       //   </head>
       // <body>
-      //   <div class="title">Elite Motion</div>
+      //   <div class="title">VNIU</div>
       //   <div> <b>Your OTP code is: ${otp}</b></div>
       // </body>
       //      `, // HTML body
