@@ -5,17 +5,17 @@ import { useTheme } from '@react-navigation/native'
 import { StyleSheet, View, Text, FlatList, Image, SafeAreaView } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import EvilIcon from 'react-native-vector-icons/EvilIcons'
-import { ICONS, IMAGES } from '@assets'
+import { ICONS } from '@assets/icons'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import { FilterView } from '@components'
-import { appColors } from '@constants'
+import FilterView from '@components/FilterView'
+import { appColors } from '@constants/appColors'
 import { TabsStackScreenProps } from 'src/navigators/TabsNavigator'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 const fetchProducts = async ({ pageParam = 1 }) => {
-  const response = await axios.get(`http://10.0.2.2:5000/api/Product`, {
+  const response = await axios.get(`${ENV.API_URL}/api/Product`, {
     params: {
       page: pageParam,
       pageSize: 4

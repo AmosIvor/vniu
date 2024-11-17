@@ -4,7 +4,7 @@ import { appColors } from 'src/constants/appColors'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import { TagComponent } from '@components'
+import  TagComponent  from '@components/TagComponent'
 
 interface Props {
   isFill?: boolean

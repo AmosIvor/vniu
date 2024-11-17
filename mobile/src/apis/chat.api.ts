@@ -1,8 +1,6 @@
 import { ChatRoomResponseType, ChatbotResponseType, MessageRequestType, MessageResponseType } from '@appTypes/chat.type'
 import { SuccessResponse } from '@appTypes/utils.type'
-import { apis } from '@constants'
-
-import { http } from '@utils'
+import http from 'src/utils/http'
 
 const chatApi = {
   getChatRoomByUser(userId: string) {

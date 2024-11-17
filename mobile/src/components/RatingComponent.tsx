@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Rating } from '@kolking/react-native-rating'
 import { useCallback, useEffect, useState } from 'react'
 import { View, Text } from 'react-native'

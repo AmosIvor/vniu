@@ -1,5 +1,6 @@
+import React from 'react'
 import { chatApi } from '@apis'
-import { appColors } from '@constants'
+import { appColors } from '@constants/appColors'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { Text, View } from 'react-native'

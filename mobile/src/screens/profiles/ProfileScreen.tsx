@@ -1,22 +1,20 @@
-import { IMAGES } from '@assets'
-import {
-  ButtonComponent,
-  CircleComponent,
-  ContainerComponent,
-  RowComponent,
-  SectionComponent,
-  SpaceComponent,
-  TextComponent
-} from '@components'
-import { appColors, appFonts } from '@constants'
+import { IMAGES } from '@assets/images'
+
+import { appColors } from '@constants/appColors'
+import { appFonts } from '@constants/appFonts'
 import { useTheme } from '@react-navigation/native'
 import { Bag2, InfoCircle, Lock, LogoutCurve, Moon, Setting2, Verify } from 'iconsax-react-native'
 import React from 'react'
-import { Image, View } from 'react-native'
+import { Image, TextComponent, View } from 'react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 import { MenuOptionComponent } from './components'
 import { removeStorage } from 'src/functions/storageFunctions'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
+import ContainerComponent from '@components/ContainerComponent'
+import SpaceComponent from '@components/SpaceComponent'
+import SectionComponent from '@components/SectionComponent'
+import RowComponent from '@components/RowComponent'
+import CircleComponent from '@components/CircleComponent'
 const ProfileScreen = ({ navigation }: RootStackScreenProps<'TabsStack'>) => {
   const { colors } = useTheme()
   return (

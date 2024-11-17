@@ -17,7 +17,7 @@ import { ENV } from '@configs/env'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
-import { IMAGES } from '@assets'
+import { IMAGES } from '@assets/images'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import FastImage from 'react-native-fast-image'
 

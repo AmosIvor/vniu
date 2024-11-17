@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView, Keyboard, Alert, ActivityIndicator } from 'react-native'
-import { CustomInput } from '@components'
-import { appColors } from '@constants'
+import { appColors } from '@constants/appColors'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { getAllKeysStorage, getStringStorage, setStorage } from 'src/functions/storageFunctions'
 import { ENV } from '@configs/env'
 import { useTheme } from '@react-navigation/native'
+import  CustomInput  from '@components/Input/CustomInput'
 
 const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
   const { colors } = useTheme()

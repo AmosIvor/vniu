@@ -1,9 +1,11 @@
 import { View, TextInput, Image, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
-import { ICONS } from '@assets'
+import { ICONS } from '@assets/icons'
 import { StyleSheet } from 'react-native'
-import { appInfors, appColors } from '@constants'
+import { appInfors } from '@constants/appInfors'
+
 import { useTheme } from '@react-navigation/native'
+import { appColors } from '@constants/appColors'
 
 const CustomInput = (props: any) => {
   const [isSecureEntry, setIsSecureEntry] = useState(true)

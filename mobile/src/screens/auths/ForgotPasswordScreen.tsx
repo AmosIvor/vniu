@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, TextInput, Image, TouchableOpacity, Button } from 'react-native'
-import { IMAGES } from '@assets'
+import { IMAGES } from '@assets/images'
 const ForgotPasswordScreen = () => {
   return (
     <View

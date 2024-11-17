@@ -10,7 +10,6 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native'
-import { getRequest, postRequest } from 'src/utils/fetch' // Adjust the import based on your project structure
 import { useQueryClient } from '@tanstack/react-query' // If you use react-query
 import { getStringStorage } from 'src/functions/storageFunctions'
 import { ENV } from '@configs/env'

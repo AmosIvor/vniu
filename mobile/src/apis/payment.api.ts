@@ -1,7 +1,6 @@
 import { PaymentRequest, PaymentResponse } from '@appTypes/payment.type'
 import { SuccessResponse } from '@appTypes/utils.type'
-import { http } from '@utils'
-
+import http from 'src/utils/http'
 const paymentApi = {
   createPaymentUrl(body: PaymentRequest) {
     return http.post<SuccessResponse<string>>(`api/User/online-payment/url`, body)

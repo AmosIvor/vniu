@@ -2,7 +2,13 @@ import { useTheme } from '@react-navigation/native'
 import React from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
-const UserInformationCard = ({ userName, phoneNumber, defaultAddress, onChangeAddress }) => {
+interface UserInformationCardProps {
+  userName: string
+  phoneNumber: string
+  defaultAddress: string
+  onChangeAddress: () => void
+}
+const UserInformationCard = ({ userName, phoneNumber, defaultAddress, onChangeAddress }: UserInformationCardProps) => {
   const { colors } = useTheme()
   return (
     <View style={styles.card}>

@@ -1,4 +1,5 @@
-import { appThemes } from '@constants'
+import React from 'react'
+import { appThemes } from '@constants/appTheme'
 import { createContext, useState } from 'react'
 
 interface AppContextInterface {

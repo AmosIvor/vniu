@@ -1,3 +1,4 @@
+import React from 'react'
 import { StyleProp, Text, TextStyle } from 'react-native'
 import { appColors } from 'src/constants/appColors'
 import { appFonts } from 'src/constants/appFonts'

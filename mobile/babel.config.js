@@ -32,9 +32,9 @@ module.exports = {
         root: ['.'],
         alias: {
           '@apis': './src/apis/index',
-          '@assets': './src/assets/index',
-          '@components': './src/components/index',
-          '@constants': './src/constants/index',
+          '@assets': './src/assets',
+          '@components': './src/components',
+          '@constants': './src/constants',
           '@contexts': './src/contexts/index',
           '@hooks': './src/hooks/index',
           '@modals': './src/modals/index',
@@ -44,7 +44,11 @@ module.exports = {
           '@theme': './src/theme',
           '@appTypes': './src/types/',
           '@configs': './src/configs',
-          '@utils': './src/utils/index'
+          '@stores': './src/stores',
+          '@utils': './src/utils',
+          '@hooks': './src/hooks',
+          '@configs': './src/configs',
+          '@services': './src/services',
         }
       }
     ]
