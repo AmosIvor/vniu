@@ -5,7 +5,7 @@ import { appFonts } from '@constants/appFonts'
 import { useTheme } from '@react-navigation/native'
 import { Bag2, InfoCircle, Lock, LogoutCurve, Moon, Setting2, Verify } from 'iconsax-react-native'
 import React from 'react'
-import { Image, TextComponent, View } from 'react-native'
+import { Image, View } from 'react-native'
 import { globalStyles } from 'src/styles/globalStyles'
 import { MenuOptionComponent } from './components'
 import { removeStorage } from 'src/functions/storageFunctions'
@@ -15,7 +15,10 @@ import SpaceComponent from '@components/SpaceComponent'
 import SectionComponent from '@components/SectionComponent'
 import RowComponent from '@components/RowComponent'
 import CircleComponent from '@components/CircleComponent'
-const ProfileScreen = ({ navigation }: RootStackScreenProps<'TabsStack'>) => {
+import TextComponent from '@components/TextComponent'
+import { useAppNavigation } from '@hooks/app/useAppNavigation'
+const ProfileScreen = () => {
+  const navigation = useAppNavigation()
   const { colors } = useTheme()
   return (
     <ContainerComponent styles={{ backgroundColor: colors.background }}>
@@ -106,7 +109,7 @@ const ProfileScreen = ({ navigation }: RootStackScreenProps<'TabsStack'>) => {
         <MenuOptionComponent
           onPress={() => {
             removeStorage('accessToken')
-            navigation.navigate('SignInScreen')
+            navigation.navigate('LogInScreen')
           }}
           text='Logout'
           isLogout

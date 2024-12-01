@@ -1,6 +1,6 @@
 import React from 'react';
-import Test from './Test';
 import AddProductDialog from '../(withHDFT)/(home)/AddProductDialog';
+import Products from './Products';
 
 export default function Page({
   searchParams,
@@ -15,13 +15,13 @@ export default function Page({
   // const q = searchParams ? searchParams?.q : null;
   return (
     <div className="w-full h-full">
-      <Test
-        q={searchParams?.q}
-        sort={searchParams?.sort}
-        gender={searchParams?.gender}
-        categories={searchParams?.categories}
-        subcategories={searchParams?.subcategories}
-        price_range={searchParams?.price_range}
+      <Products
+      // q={searchParams?.q}
+      // sort={searchParams?.sort}
+      // gender={searchParams?.gender}
+      // categories={searchParams?.categories}
+      // subcategories={searchParams?.subcategories}
+      // price_range={searchParams?.price_range}
       />
       <AddProductDialog />
     </div>

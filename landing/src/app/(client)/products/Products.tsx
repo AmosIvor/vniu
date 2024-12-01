@@ -42,24 +42,24 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
 import { Spinner } from '@nextui-org/react';
 import { AiOutlineFilter } from 'react-icons/ai';
-interface TestProps {
-  q: string | null;
-  sort: string | null;
-  gender: string | null;
-  categories: string | null;
-  subcategories: string | null;
-  price_range: string | null;
+interface ProductsProps {
+  // q: string | null;
+  // sort: string | null;
+  // gender: string | null;
+  // categories: string | null;
+  // subcategories: string | null;
+  // price_range: string | null;
 }
 
-export default function Test({
-  q,
-  sort,
-  gender,
-  categories,
-  subcategories,
-  price_range,
+export default function Products({
+  // q,
+  // sort,
+  // gender,
+  // categories,
+  // subcategories,
+  // price_range = '',
   ...props
-}: TestProps) {
+}: ProductsProps) {
   const { fetchProduct } = useProduct();
   const {
     data,
@@ -69,16 +69,17 @@ export default function Test({
     isFetching,
     isFetchingNextPage,
   } = useInfiniteQuery(
-    ['products', q, sort, gender, categories, subcategories, price_range],
-    ({ pageParam = 0 }) =>
+    ['products'],
+    ({ pageParam = 1 }) =>
       fetchProduct({
         page: pageParam,
-        q,
-        sort,
-        gender,
-        categories,
-        subcategories,
-        price_range,
+        pageSize: 4,
+        // q,
+        // sort,
+        // gender,
+        // categories,
+        // subcategories,
+        // price_range,
       }),
     {
       staleTime: 1000 * 60 * 1,
@@ -108,238 +109,238 @@ export default function Test({
   const [accessoryNavItems, SetAccessoryNavItems] = useState([]);
   const [sportNavItems, setSportNavItems] = useState([]);
   //Query Shoes Categories
-  useEffect(() => {
-    const getShoesNavItems = async () => {
-      const res = await fetch('/api/lib/subcategory?productTypeId=1');
-      const data = await res.json();
-      console.log(res);
-      console.log(data);
-      if (data) {
-        setShoesNavItems(data);
-      }
-    };
-    getShoesNavItems();
-  }, []);
+  // useEffect(() => {
+  //   const getShoesNavItems = async () => {
+  //     const res = await fetch('/api/lib/subcategory?productTypeId=1');
+  //     const data = await res.json();
+  //     console.log(res);
+  //     console.log(data);
+  //     if (data) {
+  //       setShoesNavItems(data);
+  //     }
+  //   };
+  //   getShoesNavItems();
+  // }, []);
 
   //Query Clothes Categories
-  useEffect(() => {
-    const getClothNavItems = async () => {
-      const res = await fetch('/api/lib/subcategory?productTypeId=2');
-      const data = await res.json();
-      console.log(res);
-      console.log(data);
-      if (data) {
-        SetClothNavItems(data);
-      }
-    };
-    getClothNavItems();
-  }, []);
+  // useEffect(() => {
+  //   const getClothNavItems = async () => {
+  //     const res = await fetch('/api/lib/subcategory?productTypeId=2');
+  //     const data = await res.json();
+  //     console.log(res);
+  //     console.log(data);
+  //     if (data) {
+  //       SetClothNavItems(data);
+  //     }
+  //   };
+  //   getClothNavItems();
+  // }, []);
 
   //Query Accessory Categories
-  useEffect(() => {
-    const getAccessoryNavItems = async () => {
-      const res = await fetch('/api/lib/subcategory?productTypeId=3');
-      const data = await res.json();
-      console.log(res);
-      console.log(data);
-      if (data) {
-        SetAccessoryNavItems(data);
-      }
-    };
-    getAccessoryNavItems();
-  }, []);
+  // useEffect(() => {
+  //   const getAccessoryNavItems = async () => {
+  //     const res = await fetch('/api/lib/subcategory?productTypeId=3');
+  //     const data = await res.json();
+  //     console.log(res);
+  //     console.log(data);
+  //     if (data) {
+  //       SetAccessoryNavItems(data);
+  //     }
+  //   };
+  //   getAccessoryNavItems();
+  // }, []);
   //Query Gender
-  useEffect(() => {
-    const getGenderNavItems = async () => {
-      const res = await fetch('/api/lib/gender');
-      const data = await res.json();
-      console.log(res);
-      console.log(data);
-      if (data) {
-        setGenderNavItems(data);
-      }
-    };
-    getGenderNavItems();
-  }, []);
+  // useEffect(() => {
+  //   const getGenderNavItems = async () => {
+  //     const res = await fetch('/api/lib/gender');
+  //     const data = await res.json();
+  //     console.log(res);
+  //     console.log(data);
+  //     if (data) {
+  //       setGenderNavItems(data);
+  //     }
+  //   };
+  //   getGenderNavItems();
+  // }, []);
 
   //Query Sport
-  useEffect(() => {
-    const getSportNavItems = async () => {
-      const res = await fetch('/api/lib/sports');
-      const data = await res.json();
-      console.log(res);
-      console.log(data);
-      if (data) {
-        setSportNavItems(data);
-      }
-    };
-    getSportNavItems();
-  }, []);
+  // useEffect(() => {
+  //   const getSportNavItems = async () => {
+  //     const res = await fetch('/api/lib/sports');
+  //     const data = await res.json();
+  //     console.log(res);
+  //     console.log(data);
+  //     if (data) {
+  //       setSportNavItems(data);
+  //     }
+  //   };
+  //   getSportNavItems();
+  // }, []);
 
   // Create query string
-  const createQueryString = React.useCallback(
-    (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+  // const createQueryString = React.useCallback(
+  //   (params: Record<string, string | number | null>) => {
+  //     const newSearchParams = new URLSearchParams(searchParams?.toString());
 
-      for (const [key, value] of Object.entries(params)) {
-        if (value === null) {
-          newSearchParams.delete(key);
-        } else {
-          newSearchParams.set(key, String(value));
-        }
-      }
+  //     for (const [key, value] of Object.entries(params)) {
+  //       if (value === null) {
+  //         newSearchParams.delete(key);
+  //       } else {
+  //         newSearchParams.set(key, String(value));
+  //       }
+  //     }
 
-      return newSearchParams.toString();
-    },
-    [searchParams]
-  );
+  //     return newSearchParams.toString();
+  //   },
+  //   [searchParams]
+  // );
 
   // Price filter
-  const [priceRange, setPriceRange] = React.useState<[number, number]>([
-    0, 5000000,
-  ]);
-  const debouncedPrice = useDebounce(priceRange, 500);
+  // const [priceRange, setPriceRange] = React.useState<[number, number]>([
+  //   0, 5000000,
+  // ]);
+  // const debouncedPrice = useDebounce(priceRange, 500);
 
-  React.useEffect(() => {
-    const [min, max] = debouncedPrice;
-    startTransition(() => {
-      router.push(
-        `${pathname}?${createQueryString({
-          price_range: `${min}-${max}`,
-        })}`,
-        {
-          scroll: false,
-        }
-      );
-    });
-    refetchData();
-  }, [debouncedPrice]);
+  // React.useEffect(() => {
+  //   const [min, max] = debouncedPrice;
+  //   startTransition(() => {
+  //     router.push(
+  //       `${pathname}?${createQueryString({
+  //         price_range: `${min}-${max}`,
+  //       })}`,
+  //       {
+  //         scroll: false,
+  //       }
+  //     );
+  //   });
+  //   refetchData();
+  // }, [debouncedPrice]);
 
   // Gender filter
   const [selectedGenders, setSelectedGenders] = React.useState([]);
 
-  React.useEffect(() => {
-    startTransition(() => {
-      router.push(
-        `${pathname}?${createQueryString({
-          gender: selectedGenders?.length
-            ? // Join categories with a dot to make search params prettier
-              selectedGenders.map((c) => c).join('.')
-            : null,
-        })}`,
-        {
-          scroll: false,
-        }
-      );
-    });
-    refetchData();
-  }, [selectedGenders]);
-  const toggleGender = (gender) => {
-    setSelectedGenders((prev) =>
-      prev.includes(gender)
-        ? prev.filter((c) => c !== gender)
-        : [...prev, gender]
-    );
-  };
+  // React.useEffect(() => {
+  //   startTransition(() => {
+  //     router.push(
+  //       `${pathname}?${createQueryString({
+  //         gender: selectedGenders?.length
+  //           ? // Join categories with a dot to make search params prettier
+  //             selectedGenders.map((c) => c).join('.')
+  //           : null,
+  //       })}`,
+  //       {
+  //         scroll: false,
+  //       }
+  //     );
+  //   });
+  //   refetchData();
+  // }, [selectedGenders]);
+  // const toggleGender = (gender) => {
+  //   setSelectedGenders((prev) =>
+  //     prev.includes(gender)
+  //       ? prev.filter((c) => c !== gender)
+  //       : [...prev, gender]
+  //   );
+  // };
 
   // Category filter
   const [selectedCategories, setSelectedCategories] = React.useState([]);
 
-  React.useEffect(() => {
-    startTransition(() => {
-      router.push(
-        `${pathname}?${createQueryString({
-          categories: selectedCategories?.length
-            ? // Join categories with a dot to make search params prettier
-              selectedCategories.map((c) => c).join('.')
-            : null,
-        })}`,
-        {
-          scroll: false,
-        }
-      );
-    });
-    refetchData();
-  }, [selectedCategories]);
-  const toggleCategory = (category) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
+  // React.useEffect(() => {
+  //   startTransition(() => {
+  //     router.push(
+  //       `${pathname}?${createQueryString({
+  //         categories: selectedCategories?.length
+  //           ? // Join categories with a dot to make search params prettier
+  //             selectedCategories.map((c) => c).join('.')
+  //           : null,
+  //       })}`,
+  //       {
+  //         scroll: false,
+  //       }
+  //     );
+  //   });
+  //   refetchData();
+  // }, [selectedCategories]);
+  // const toggleCategory = (category) => {
+  //   setSelectedCategories((prev) =>
+  //     prev.includes(category)
+  //       ? prev.filter((c) => c !== category)
+  //       : [...prev, category]
+  //   );
+  // };
 
   // subCategory filter
   const [selectedSubCategories, setSelectedSubCategories] = React.useState([]);
 
-  React.useEffect(() => {
-    startTransition(() => {
-      router.push(
-        `${pathname}?${createQueryString({
-          subcategories: selectedSubCategories?.length
-            ? // Join categories with a dot to make search params prettier
-              selectedSubCategories.map((c) => c).join('.')
-            : null,
-        })}`,
-        {
-          scroll: false,
-        }
-      );
-    });
-    refetchData();
-  }, [selectedSubCategories]);
-  const toggleSubCategory = (subcategory) => {
-    setSelectedSubCategories((prev) =>
-      prev.includes(subcategory)
-        ? prev.filter((c) => c !== subcategory)
-        : [...prev, subcategory]
-    );
-  };
+  // React.useEffect(() => {
+  //   startTransition(() => {
+  //     router.push(
+  //       `${pathname}?${createQueryString({
+  //         subcategories: selectedSubCategories?.length
+  //           ? // Join categories with a dot to make search params prettier
+  //             selectedSubCategories.map((c) => c).join('.')
+  //           : null,
+  //       })}`,
+  //       {
+  //         scroll: false,
+  //       }
+  //     );
+  //   });
+  //   refetchData();
+  // }, [selectedSubCategories]);
+  // const toggleSubCategory = (subcategory) => {
+  //   setSelectedSubCategories((prev) =>
+  //     prev.includes(subcategory)
+  //       ? prev.filter((c) => c !== subcategory)
+  //       : [...prev, subcategory]
+  //   );
+  // };
 
   // Search bar
 
-  const [searchQuery, setSearchQuery] = useState<string | null>(q ? q : '');
-  const debouncedSearch = useDebounce(searchQuery, 500);
+  // const [searchQuery, setSearchQuery] = useState<string | null>(q ? q : '');
+  // const debouncedSearch = useDebounce(searchQuery, 500);
 
-  React.useEffect(() => {
-    const encodedSearchQuery = encodeURI(debouncedSearch);
-    startTransition(() => {
-      router.push(
-        `${pathname}?${createQueryString({
-          q: encodedSearchQuery ? encodedSearchQuery : null,
-        })}`,
-        {
-          scroll: false,
-        }
-      );
-    });
-    refetchData();
-  }, [debouncedSearch]);
+  // React.useEffect(() => {
+  //   const encodedSearchQuery = encodeURI(debouncedSearch);
+  //   startTransition(() => {
+  //     router.push(
+  //       `${pathname}?${createQueryString({
+  //         q: encodedSearchQuery ? encodedSearchQuery : null,
+  //       })}`,
+  //       {
+  //         scroll: false,
+  //       }
+  //     );
+  //   });
+  //   refetchData();
+  // }, [debouncedSearch]);
 
-  React.useEffect(() => {
-    if (gender) {
-      const genders = gender.split('.').map((g) => parseInt(g, 10));
-      setSelectedGenders(genders);
-    }
-  }, [gender]);
+  // React.useEffect(() => {
+  //   if (gender) {
+  //     const genders = gender.split('.').map((g) => parseInt(g, 10));
+  //     setSelectedGenders(genders);
+  //   }
+  // }, [gender]);
 
-  // Category filter initialization from query parameter
-  React.useEffect(() => {
-    if (categories) {
-      const categoryIds = categories.split('.').map((c) => parseInt(c, 10));
-      setSelectedCategories(categoryIds);
-    }
-  }, [categories]);
+  // // Category filter initialization from query parameter
+  // React.useEffect(() => {
+  //   if (categories) {
+  //     const categoryIds = categories.split('.').map((c) => parseInt(c, 10));
+  //     setSelectedCategories(categoryIds);
+  //   }
+  // }, [categories]);
 
-  // SubCategory filter initialization from query parameter
-  React.useEffect(() => {
-    if (subcategories) {
-      const subCategoryIds = subcategories
-        .split('.')
-        .map((s) => parseInt(s, 10));
-      setSelectedSubCategories(subCategoryIds);
-    }
-  }, [subcategories]);
+  // // SubCategory filter initialization from query parameter
+  // React.useEffect(() => {
+  //   if (subcategories) {
+  //     const subCategoryIds = subcategories
+  //       .split('.')
+  //       .map((s) => parseInt(s, 10));
+  //     setSelectedSubCategories(subCategoryIds);
+  //   }
+  // }, [subcategories]);
   return (
     <section className="flex flex-col space-y-6" {...props}>
       <div className="flex space-x-2 items-end px-4">
@@ -366,7 +367,7 @@ export default function Test({
               </div>
             </Button>
           </SheetTrigger>
-          <SheetContent className="flex flex-col">
+          {/* <SheetContent className="flex flex-col">
             <SheetHeader className="px-1">
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
@@ -621,7 +622,7 @@ export default function Test({
                 </Button>
               </SheetFooter>
             </div>
-          </SheetContent>
+          </SheetContent> */}
         </Sheet>
       </div>
       {!isPending && !data?.pages?.[0]?.totalItems ? (

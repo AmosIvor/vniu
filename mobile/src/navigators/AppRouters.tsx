@@ -2,7 +2,7 @@ import React from 'react'
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack'
 import ChatScreen from '@screens/chats/ChatScreen'
 import ProductSearchScreen from '@screens/products/ProductSearchScreen'
-import { RootStackParamList } from 'src/types/screen.type'
+import { RootStackParamList } from 'src/navigators/screen.type'
 import TabsNavigator from './TabsNavigator'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 export const AppRouters = () => {

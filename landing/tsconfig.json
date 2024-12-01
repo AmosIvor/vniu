@@ -23,6 +23,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/components/*"],
+      "@helper/*": ["./src/helper/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@actions/*": ["./src/actions/*"],
       "@services/*": ["./src/services/*"],
@@ -38,6 +39,6 @@
     ".next/types/**/*.ts",
     "src/components/header/Header.jsx",
     "src/app/page.jsx"
-  ],
+, "src/app/api/product/routests"  ],
   "exclude": ["node_modules"]
 }

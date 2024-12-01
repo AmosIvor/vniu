@@ -1,7 +1,7 @@
 import { getRequest } from '@/lib/fetch';
 import { type z } from 'zod';
-import prisma from '@/lib/prisma';
 import type { getProductsSchema } from '@/lib/validations/product';
+import axios from 'axios';
 
 export const useProduct = () => {
   const onGetProductDetail = async (slug) => {
@@ -57,45 +57,68 @@ export const useProduct = () => {
     };
   };
 
-  const fetchProduct = async ({
-    page,
-    q,
-    sort,
-    gender,
-    categories,
-    subcategories,
-    price_range,
-  } = {}) => {
+  const fetchProduct = async (
+    {
+      page,
+      pageSize,
+      //   q,
+      //   sort,
+      //   gender,
+      //   categories,
+      //   subcategories,
+      //   price_range,
+    } = {
+      page: 1,
+      pageSize: 4,
+    }
+  ) => {
     const params = {
       page,
-      q,
-      sort,
-      gender,
-      categories,
-      subcategories,
-      price_range,
+      //   q,
+      //   sort,
+      //   gender,
+      //   categories,
+      //   subcategories,
+      //   price_range,
     };
 
     // Construct the base endpoint
-    let endpoint = 'api/product/search?limit=8';
+    const endpoint = '/api/Product';
 
     // Add parameters to the endpoint
-    for (const [key, value] of Object.entries(params)) {
-      if (value !== null && value !== undefined) {
-        endpoint += `&${key}=${value}`;
-      }
-    }
+    // for (const [key, value] of Object.entries(params)) {
+    //   if (value !== null && value !== undefined) {
+    //     endpoint += `&${key}=${value}`;
+    //   }
+    // }
 
     // Make the API request
-    const products = await getRequest({ endPoint: endpoint });
-
+    // const products = await getRequest({ endPoint: endpoint });
+    // const products = async () => {
+    const response = await axios.get('http://localhost:5000' + endpoint, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'false',
+        'Access-Control-Allow-Methods':
+          'POST, PUT, PATCH, GET, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': '*',
+      },
+      params: {
+        page,
+        pageSize,
+      },
+    });
+    console.log('🚀 ~ products ~ response:', response);
+    //   return response.data;
+    // };
+    // const products = await axios.get(process.env.BACKEND_URL + endpoint);
+    // console.log('🚀 ~ useProduct ~ products:', products);
     // Handle the response and return the necessary data
-    console.log(products);
     return {
-      data: products.data,
-      totalPages: Math.round(products.totalPages),
-      totalItems: products.totalItems,
-      page: products.page,
+      text: 'products',
+      // totalPages: Math.round(products.totalPages),
+      // totalItems: products.totalItems,
+      // page: products.page,"
     };
   };
 

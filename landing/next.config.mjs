@@ -23,7 +23,7 @@ const nextConfig = {
         ]
     },
     env: {
-        BACKEND_URL: 'http://localhost:5050',
+        BACKEND_URL: 'http://localhost:5000',
     }
 };
 

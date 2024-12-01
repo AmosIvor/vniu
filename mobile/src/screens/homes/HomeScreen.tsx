@@ -45,8 +45,7 @@ const HomeScreen = ({ navigation }: TabsStackScreenProps<'Home'>) => {
       return undefined
     }
   })
-  console.log('🚀 ~ HomeScreen ~ data:', data)
-  console.log('🚀 ~ HomeScreen ~ data:', data)
+
 
   // if (isLoading)
   //   return (

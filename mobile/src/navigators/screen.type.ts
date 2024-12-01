@@ -1,4 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { TabsStackParamList } from './TabsNavigator'
+import { NavigatorScreenParams } from '@react-navigation/native'
 
 export type RootStackParamList = {
   ForgotPasswordScreen: undefined
@@ -8,8 +10,9 @@ export type RootStackParamList = {
   ProductDetailScreen: undefined
   ProductSearchScreen: undefined
   ChatScreen: undefined
-
-  TabNavigation: undefined
+  TabsStack: NavigatorScreenParams<TabsStackParamList>
+  TabNavigation: NavigatorScreenParams<TabsStackParamList>
+  OrderHistory: undefined
 }
 
 export type HomeScreenProp = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>
