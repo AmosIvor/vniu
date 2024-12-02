@@ -9,7 +9,6 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const ProductUserMayLike = ({ data }) => {
-  const random = Math.floor(Math.random() * 1000000);
   const router = useRouter();
   return (
     <div>

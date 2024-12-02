@@ -9,19 +9,42 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { currencyFormat, parseJSON } from '@/lib/utils';
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import Image from 'next/image';
 import { useCart } from '@/hooks/useCart';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
-
-function ProductDetailRight({ data }) {
-  const [selectedSize, setSizeSelected] = useState(null);
+type TOption = {
+  productItemId: string;
+  sizeName: string;
+  colourName: string;
+  optionName: string;
+};
+function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
+  const [optionData, setOptionData] = useState<TOption[]>([]);
+  const [optionName, setOptionName] = useState<string>('');
   const [showError, setShowError] = useState(false);
   const { cart } = useCart();
   const { onSelectProduct, onToggleDialog } = useSelectedProduct();
+  useEffect(() => {
+    const options = data.productItems.map((item) => {
+      const { productItemId } = item;
+      const { sizeName } = item.variations[0].size;
+      const { colourName } = item.colourVMs[0];
+      const optionName = `${colourName} - ${sizeName}`;
 
+      return {
+        productItemId,
+        sizeName,
+        colourName,
+        optionName,
+      };
+    });
+    setOptionData(options);
+    setOptionName(options[0].optionName);
+  }, [data]);
+  if (!optionData) return <div>Loading...</div>;
   console.log(cart);
   return (
     <div className="flex-[1] py-3">
@@ -64,56 +87,90 @@ function ProductDetailRight({ data }) {
 
         {/* Size start */}
         <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-          {/* {parseJSON(data.sizes)?.map((size, index) => (
+          {/* {optionData?.map((option, index) => (
             <div
               onClick={
-                size.number > 0
-                  ? () => {
-                      setSizeSelected(size.size);
-                      setShowError(false);
-                    }
-                  : () => {}
+                // option. > 0 ?
+                () => {
+                  setOptionName(option.optionName);
+                  const foundItem = data?.productItems?.find(
+                    (i: { productItemId: any }) =>
+                      i.productItemId === item?.productItemId
+                  );
+                  if (foundItem) {
+                    setSelectedItem(foundItem);
+                  }
+                  setShowError(false);
+                }
+                // : () => {}
               }
               key={index}
-              className={`border-2 rounded-md text-center py-2.5 font-medium
-    hover:bg-slate-300 
-      cursor-pointer ${
-        size.number > 0
-          ? 'hover:border-black cursor-pointer'
-          : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
-      } ${selectedSize === size.size ? 'border-black' : ''} `}
+              className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
+                // size.number > 0 ?
+                'hover:border-black cursor-pointer'
+                // : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
+              } ${optionName === option.optionName ? 'border-black' : ''} `}
             >
-              {size.size}
+              {option.optionName}
             </div>
           ))} */}
+          {optionData?.map((option, index) => (
+            <div
+              onClick={() => {
+                console.log('🚀 ~ ProductDetailRight ~ option:', option);
+
+                setOptionName(option.optionName);
+                const foundItem = data?.productItems?.find(
+                  (i: { productItemId: any }) =>
+                    i.productItemId === option?.productItemId
+                );
+                console.log('🚀 ~ ProductDetailRight ~ foundItem:', foundItem);
+
+                if (foundItem) {
+                  setSelectedItem(foundItem);
+                }
+                setShowError(false);
+              }}
+              key={index}
+              className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${'hover:border-black cursor-pointer'} ${
+                optionName === option.optionName ? 'border-black' : ''
+              } `}
+            >
+              {option.optionName}
+            </div>
+          ))}
         </div>
         {/* Size end */}
 
         {/* Show error */}
         {showError && (
-          <div className="text-red-600 mt-1">
-            Vui lòng chọn kích cỡ sản phẩm
-          </div>
+          <div className="text-red-600 mt-1">Vui lòng chọn loai</div>
         )}
         {/* Show error */}
       </div>
       <div className="flex flex-col gap-2 w-full items-center justify-center">
         {/* Product size */}
-        {!selectedSize ? (
+        {!optionName ? (
           <Sheet>
-            <SheetTrigger className="w-full mx-0 flex items-center justify-center  ">
-              <Button
-                className="w-full py-4 rounded-full bg-black text-white text-lg
+            <div>
+              <SheetTrigger
+                asChild
+                as="div"
+                className="w-full mx-0 flex items-center justify-center  "
+              >
+                <Button
+                  className="w-full py-4 rounded-full bg-black text-white text-lg
                   font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
                   "
-                onClick={() => {
-                  onSelectProduct({ data: data });
-                  onToggleDialog();
-                }}
-              >
-                Thêm vào giỏ hàng
-              </Button>
-            </SheetTrigger>
+                  onClick={() => {
+                    onSelectProduct({ data: data });
+                    onToggleDialog();
+                  }}
+                >
+                  Thêm vào giỏ hàng
+                </Button>
+              </SheetTrigger>
+            </div>
             <SheetContent side={'topRight'} className="w-[400px]">
               <SheetHeader>
                 <div className="flex flex-row gap-3 items-center">
@@ -154,7 +211,7 @@ function ProductDetailRight({ data }) {
                       className="text-black text-sm
         font-normal"
                     >
-                      {selectedSize}
+                      {optionName}
                     </span>
 
                     <span
@@ -179,10 +236,9 @@ function ProductDetailRight({ data }) {
           <div className="w-full flex ">
             <Button
               className="w-full py-4  rounded-full bg-black text-white text-lg
-        font-medium transition-transform active:scale-95 mb-3 hover:opacity-75
-        "
+        font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
               onClick={() => {
-                if (!selectedSize) {
+                if (!optionName) {
                   setShowError(true);
                   document.getElementById('sizesGrid')?.scrollIntoView({
                     block: 'center',

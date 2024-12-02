@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "checkJs": false,
@@ -21,16 +25,33 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/components/*"],
-      "@helper/*": ["./src/helper/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@actions/*": ["./src/actions/*"],
-      "@services/*": ["./src/services/*"],
-      "@endpoints/*": ["./src/endpoints/*"],
-      "@types/*": ["./src/types/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@helper/*": [
+        "./src/helper/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@actions/*": [
+        "./src/actions/*"
+      ],
+      "@services/*": [
+        "./src/services/*"
+      ],
+      "@endpoints/*": [
+        "./src/endpoints/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",
@@ -38,7 +59,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/header/Header.jsx",
-    "src/app/page.jsx"
-, "src/app/api/product/routests"  ],
-  "exclude": ["node_modules"]
+    "src/app/page.jsx",
+    "src/app/api/product/routests"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

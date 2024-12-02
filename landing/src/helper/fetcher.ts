@@ -1,7 +1,5 @@
-import { STORAGE_KEY } from '@/enums/localStorage'
-import { setLoading } from '@/store/common-store'
-import axios from 'axios'
-import { toast } from '@/components/ui/toast'
+import { STORAGE_KEY } from '@/enums/localStorage';
+import axios from 'axios';
 
 const createAxiosInstance = (baseURL: string, includeCredentials = false) => {
   const instance = axios.create({
@@ -10,72 +8,51 @@ const createAxiosInstance = (baseURL: string, includeCredentials = false) => {
     },
     baseURL,
     withCredentials: includeCredentials,
-  })
+  });
 
   instance.interceptors.request.use(
     (request) => {
-      const { isDisableLoading } = request
-      const accessToken = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN)
-
-      setLoading(!isDisableLoading)
+      const { isDisableLoading } = request;
+      const accessToken = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
 
       if (accessToken) {
         if (request.headers) {
-          request.headers.Authorization = `Bearer ${accessToken}`
+          request.headers.Authorization = `Bearer ${accessToken}`;
         }
       }
 
-      return request
+      return request;
     },
-    (error) => Promise.reject(error),
-  )
+    (error) => Promise.reject(error)
+  );
   instance.interceptors.response.use(
     (response) => {
-      const { isDisableLoading, isDisableToast } = response.config
-      if (!isDisableLoading) {
-        setLoading(false)
-      }
-      if (!isDisableToast && typeof window !== 'undefined') {
-        toast.success(response.data?.message || 'Successfully')
-      }
-
-      return response.data ?? response
+      return response.data ?? response;
     },
     (error) => {
-      const { response } = error
-      setLoading(false)
-      if (typeof window !== 'undefined') {
-        toast.error(response?.data?.message || 'Something went wrong')
-      }
+      return Promise.reject(error);
+    }
+  );
 
-      // if (response?.status === 401) {
-      //    storage.clearAllStorage()
-      //   window.location.href = '/login'
-      // }
-      // if (response?.status === 403) {
-      //   window.location.href = '/not-found'
-      // }
-
-      return Promise.reject(error)
-    },
-  )
-
-  return instance
-}
+  return instance;
+};
 
 // Axios instances
-export const ClientAxios = createAxiosInstance(`${process.env.NEXT_PUBLIC_API_DOMAIN}`, true)
+export const ClientAxios = createAxiosInstance(
+  `${process.env.DATABASE_URL}`,
+  true
+);
 export const ServerAxios = createAxiosInstance(
-  `${process.env.SERVER_NEXT_PUBLIC_API_DOMAIN || process.env.NEXT_PUBLIC_API_DOMAIN}`,
-)
+  `${process.env.SERVER_DATABASE_URL || process.env.DATABASE_URL}`
+);
 
 // Fetcher function
 export const fetcher = async (reqUrl: string, { headers = {}, ...options }) => {
-  return fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}${reqUrl}`, {
+  return fetch(`${process.env.DATABASE_URL}${reqUrl}`, {
     headers: {
       'Content-Type': 'application/json',
       ...headers,
     },
     ...options,
-  })
-}
+  });
+};

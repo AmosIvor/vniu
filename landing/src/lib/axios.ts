@@ -12,13 +12,13 @@ const config = {
 const axiosClient = axios.create(config);
 axiosClient.interceptors.request.use(
   function (config) {
-    console.log('request', `${config.url}`, config.data, config.params);
+    // console.log('request', `${config.url}`, config.data, config.params);
     // const curl = toCurl(config);
     // console.log('cURL:', curl);
     return config;
   },
   function (error) {
-    console.error('Request errors', error);
+    // console.error('Request errors', error);
 
     return Promise.reject(error);
   }
@@ -26,11 +26,11 @@ axiosClient.interceptors.request.use(
 
 axiosClient.interceptors.response.use(
   function (response) {
-    console.log('🚀 ~ response:', response);
+    // console.log('🚀 ~ response:', response);
     return response;
   },
   function (error) {
-    console.log('🚀 ~ error:', error);
+    // console.log('🚀 ~ error:', error);
     // if (serverErrorStatuses.includes(error.response.status)) {
     //   // showToast('error', 'Connection Error. Please Try Again');
     // }

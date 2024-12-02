@@ -6,13 +6,9 @@ import { BiArrowBack } from 'react-icons/bi';
 import { parseJSON } from '@/lib/utils';
 
 function ProductDetailLeft({ data }) {
-  if (!data || !data.images) {
-    return <div>Loading...</div>; // or some fallback UI
-  }
-  console.log('🚀 ~ ProductDetailLeft ~ data:', data);
   return (
     <div className=" text-white text-[20px] w-full max-w-[1360px] sticky top-[50px]">
-      {/* <Carousel
+      <Carousel
         renderArrowNext={(onClickHandler) => (
           <div
             onClick={onClickHandler}
@@ -39,12 +35,12 @@ function ProductDetailLeft({ data }) {
         thumbWidth={60}
         className="productCarousel"
       >
-        {parseJSON(data?.images)?.map((item, index) => (
+        {data.productImages.map((item, index) => (
           <div key={`${item.productId}-${index}`}>
-            <img src={item.url} alt="product" />
+            <img src={item.productImageUrl} alt="product" />
           </div>
         ))}
-      </Carousel> */}
+      </Carousel>
     </div>
   );
 }
