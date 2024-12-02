@@ -61,7 +61,12 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'i.dummyjson.com',
                 port: '',
-            }
+            },
+            {
+                protocol: 'https',
+                hostname: 'res.cloudinary.com',
+                port: '',
+            },
         ],
     },
     env: {

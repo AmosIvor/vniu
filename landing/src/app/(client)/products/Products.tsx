@@ -73,7 +73,7 @@ export default function Products({
     ({ pageParam = 1 }) =>
       fetchProduct({
         page: pageParam,
-        pageSize: 4,
+        pageSize: 8,
         // q,
         // sort,
         // gender,
@@ -92,6 +92,7 @@ export default function Products({
       },
     }
   ); // Add this line for debugging
+  console.log('🚀 ~ data:', data);
 
   //Add Filter
   const router = useRouter();
@@ -641,6 +642,7 @@ export default function Products({
         <div className="overflow-hidden">
           {data?.pages?.[0]?.totalItems ? (
             <InfiniteScroll
+              loader={<Spinner size="lg" />}
               dataLength={(data?.pages?.length + 1) * 8} //This is important field to render the next data
               next={() => {
                 fetchNextPage();

@@ -6,10 +6,10 @@ import { useChain } from './chain-provider';
 
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
   const { selectedChain } = useChain();
-  console.log(
-    '🚀 ~ file: web3-provider.tsx:23 ~ Web3Provider ~ selectedChain',
-    selectedChain
-  );
+  // console.log(
+  //   '🚀 ~ file: web3-provider.tsx:23 ~ Web3Provider ~ selectedChain',
+  //   selectedChain
+  // );
   return (
     <ThirdwebProvider
       activeChain={selectedChain}

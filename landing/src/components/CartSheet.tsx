@@ -28,11 +28,13 @@ export function CartSheet() {
   const { cart } = useCart();
   const [itemCount, setItemCount] = useState(0);
   const [cartTotal, setCartTotal] = useState(0);
-  console.log(
-    '🚀 ~ file: CartSheet.tsx:31 ~ CartSheet ~ cartTotal:',
-    cartTotal
-  );
-  const [checkedItems, setCheckedItems] = useState({});
+  // console.log(
+  //   '🚀 ~ file: CartSheet.tsx:31 ~ CartSheet ~ cartTotal:',
+  //   cartTotal
+  // );
+  const [checkedItems, setCheckedItems] = useState<
+    Record<string, { data: { price: number }; quantity: number }>
+  >({});
   // const queryClient = useQueryClient();
 
   useEffect(() => {

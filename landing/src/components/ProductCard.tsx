@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 // import React, { useEffect } from 'react';
-import { currencyFormat, parseJSON } from '@/lib/utils';
+import { currencyFormat } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 // import DialogCustom from './ui/dialogCustom';
 // import { Label } from './ui/label';
@@ -21,6 +21,7 @@ import { useWishList } from '@/hooks/useWishList';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 
 export default function ProductCard({ product }) {
+  console.log('🚀 ~ ProductCard ~ product:', product);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = useState<boolean>(false);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
@@ -38,7 +39,9 @@ export default function ProductCard({ product }) {
   }, []);
 
   useEffect(() => {
-    const found = cart?.listItem.find((item) => item.data.id === product?.id);
+    const found = cart?.listItem.find(
+      (item) => item.data.productId === product?.productId
+    );
     if (found) {
       setIsAddToCart(true);
     }
@@ -49,7 +52,7 @@ export default function ProductCard({ product }) {
     if (!wishList) return;
 
     const isProductInWishList = wishList.some(
-      (wishListProduct) => wishListProduct.id === product.id
+      (wishListProduct) => wishListProduct.productId === product.productId
     );
     setIsLiked(isProductInWishList);
   }, [wishList]);
@@ -60,13 +63,13 @@ export default function ProductCard({ product }) {
         <Link
           className="
     "
-          href={`/product/${product?.id}`}
+          href={`/product/${product?.productId}`}
         >
           <Image
             objectFit="cover"
             width={900}
             height={900}
-            src={parseJSON(product?.thumbnail)?.url}
+            src={product.productItems[0].productImages[0].productImageUrl}
             className="transform duration-200 
     hover:scale-105"
             priority
@@ -120,7 +123,7 @@ export default function ProductCard({ product }) {
           <AiOutlineShoppingCart className="text-slate-600 w-5 h-5 " />
         </div>
       </div>
-      <Link className="" href={`/product/${product?.id}`}>
+      <Link className="" href={`/product/${product?.productId}`}>
         <div className="text-start p-4 text-black/[0.9]">
           <h2 className="text-lg font-medium">{product?.name}</h2>
           <div className="flex flex-wrap items-center text-black/[0.5]">

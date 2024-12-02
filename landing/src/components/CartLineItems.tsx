@@ -31,9 +31,11 @@ interface CartLineItemsProps extends React.HTMLAttributes<HTMLDivElement> {
   isScrollable?: boolean;
   isEditable?: boolean;
   variant?: 'default' | 'minimal';
-  checkedItems: { [key: string]: boolean };
+  checkedItems: Record<string, { data: { price: number }; quantity: number }>;
   setCheckedItems: React.Dispatch<
-    React.SetStateAction<{ [key: string]: boolean }>
+    React.SetStateAction<
+      Record<string, { data: { price: number }; quantity: number }>
+    >
   >;
   enableCheck?: boolean;
 }

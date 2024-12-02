@@ -27,11 +27,13 @@ function ProductDetailRight({ data }) {
     <div className="flex-[1] py-3">
       {/* Product Title */}
       <div className="text-[34px] font-semibold mb-2 leading-tight">
-        {data.name}
+        {data.productName}
       </div>
 
       {/* Product Subtitle */}
-      <div className="text-lg font-semibold mb-5">{data.subtitle}</div>
+      <div className="text-lg font-semibold mb-5">
+        {data.productDescription}
+      </div>
 
       {/* Product Price */}
       <div className="text-lg font-semibold ">{currencyFormat(data.price)}</div>
@@ -62,7 +64,7 @@ function ProductDetailRight({ data }) {
 
         {/* Size start */}
         <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-          {parseJSON(data.sizes)?.map((size, index) => (
+          {/* {parseJSON(data.sizes)?.map((size, index) => (
             <div
               onClick={
                 size.number > 0
@@ -83,7 +85,7 @@ function ProductDetailRight({ data }) {
             >
               {size.size}
             </div>
-          ))}
+          ))} */}
         </div>
         {/* Size end */}
 
