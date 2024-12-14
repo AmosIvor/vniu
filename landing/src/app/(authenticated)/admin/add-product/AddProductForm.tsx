@@ -10,7 +10,7 @@ import { type FileWithPath } from 'react-dropzone';
 
 import { generateReactHelpers } from '@uploadthing/react/hooks';
 import { Zoom } from '@/components/ui/zoom-image';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { Textarea } from '@/components/ui/text-area';
 type FileWithPreview = FileWithPath & {
   preview: string;

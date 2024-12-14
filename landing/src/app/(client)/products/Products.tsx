@@ -111,6 +111,8 @@ export default function Products({
   interface ColourNavItem {
     id: string;
     name: string;
+    code?: string;
+    hexCode?: string;
   }
 
   const [colourNavItems, setColourNavItems] = useState<ColourNavItem[]>([]);
@@ -121,7 +123,9 @@ export default function Products({
         endPoint:
           '/api/v1/categories/get-by-parent/filter-and-sort?ParentCategoryId=245ff55d-c9f6-45d4-8338-e8584a499412&PageIndex=1&PageSize=100',
       });
-      if (data) {
+      console.log('🚀 ~ getClothNavItems ~ res:', res);
+
+      if (res) {
         SetClothNavItems(res.value.categories);
       }
     };
@@ -174,7 +178,7 @@ export default function Products({
   useEffect(() => {
     const getColourNavItems = async () => {
       const res = await getRequest({
-        endPoint: '/api/v1/colours/filter-and-sort?PageIndex=1&PageSize=100',
+        endPoint: '/api/v1/colours?PageIndex=1&PageSize=100',
       });
       console.log('🚀 ~ getColourNavItems ~ res:', res);
 
@@ -184,8 +188,7 @@ export default function Products({
     };
     getColourNavItems();
   }, []);
-  console.log('🚀 ~ getColourNavItems ~ getColourNavItems:', colourNavItems);
-
+  console.log('🚀 ~ colourNavItems:', colourNavItems);
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
@@ -534,17 +537,25 @@ export default function Products({
                         <div className="flex flex-col">
                           {colourNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <Checkbox
+                              <div
                                 key={index}
-                                // Set the checked value based on whether the category is in selectedCategories
-                                isSelected={selectedCategories.includes(
-                                  subItem.id
-                                )}
-                                // Pass a callback function that toggles the category on change
-                                onChange={() => toggleCategory(subItem.id)}
+                                style={{
+                                  backgroundColor: subItem.hexCode,
+                                  padding: '10px',
+                                  borderRadius: '5px',
+                                }}
                               >
-                                {subItem.name}
-                              </Checkbox>
+                                <Checkbox
+                                  // Set the checked value based on whether the category is in selectedCategories
+                                  isSelected={selectedCategories.includes(
+                                    subItem.id
+                                  )}
+                                  // Pass a callback function that toggles the category on change
+                                  onChange={() => toggleCategory(subItem.id)}
+                                >
+                                  {subItem.name}
+                                </Checkbox>
+                              </div>
                             ) : null
                           )}
                         </div>

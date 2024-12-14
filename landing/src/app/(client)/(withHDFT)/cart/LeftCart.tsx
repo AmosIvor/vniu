@@ -29,7 +29,7 @@ function LeftCart({ checkedItems, setCheckedItems }) {
   }, [cartLineItems]);
 
   return (
-    <div>
+    (<div>
       {/* <h2 className="text-lg font-semibold">Your Items ({itemCount})</h2> */}
       <div className="w-full">
         <span className="text-lg font-semibold">
@@ -40,7 +40,7 @@ function LeftCart({ checkedItems, setCheckedItems }) {
         ) : null}
       </div>
       {isLoading ? (
-        <Skeleton className="h-50 w-50 rounded-full" /> // Hiển thị skeleton khi đang tải
+        (<Skeleton className="h-50 w-50 rounded-full" />) // Hiển thị skeleton khi đang tải
       ) : (
         <CartLineItems
           items={cartLineItems}
@@ -48,7 +48,7 @@ function LeftCart({ checkedItems, setCheckedItems }) {
           setCheckedItems={setCheckedItems}
         />
       )}
-    </div>
+    </div>)
   );
 }
 

@@ -12,7 +12,7 @@ import { currencyFormat, parseJSON } from '@/lib/utils';
 import React, { use, useEffect, useState } from 'react';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useCart } from '@/hooks/useCart';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 type TOption = {

@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -131,7 +131,7 @@ const AddProductDialog = () => {
               />
             )}
             {isLoading ? (
-              <Skeleton className="w-20 h-10" /> // Sử dụng component Skeleton từ thư viện react-loading-skeleton
+              (<Skeleton className="w-20 h-10" />) // Sử dụng component Skeleton từ thư viện react-loading-skeleton
             ) : (
               <span className="text-[10px] sm:text-sm text-gray-700">
                 {selectedProduct?.name}

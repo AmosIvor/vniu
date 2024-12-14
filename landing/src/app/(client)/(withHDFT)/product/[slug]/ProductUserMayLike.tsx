@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/components/Loader';
 import { parseJSON } from '@/lib/utils';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import 'swiper/css';

@@ -1,6 +1,6 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import React from 'react';
 import { Balancer } from 'react-wrap-balancer';
 import 'swiper/css';

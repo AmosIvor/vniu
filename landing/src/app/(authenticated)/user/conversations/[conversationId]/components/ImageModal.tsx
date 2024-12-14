@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from '@components/modals/Modal';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 interface ImageModalProps {
   isOpen?: boolean;

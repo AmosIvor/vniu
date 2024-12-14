@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import type { CartLineItem } from '@/types';
 import { Slot } from '@radix-ui/react-slot';
 import { cn, currencyFormat, parseJSON } from '@/lib/utils';
@@ -139,7 +139,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
   }, [item.quantity]);
 
   return (
-    <div className="flex py-5 gap-3 md:gap-5 border-b ">
+    (<div className="flex py-5 gap-3 md:gap-5 border-b ">
       <div
         className={`shrink-0 aspect-square w-[120px] ${
           productSizeQuantity && quantity > productSizeQuantity[0]?.quantity
@@ -148,7 +148,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
         }`}
       >
         {isLoading ? (
-          <Skeleton className="h-full w-full rounded-lg" /> // Sử dụng Skeleton khi isLoading là true
+          (<Skeleton className="h-full w-full rounded-lg" />) // Sử dụng Skeleton khi isLoading là true
         ) : (
           <div className="flex flex-row space-x-2 items-center justify-center">
             {enableCheck ?? (
@@ -176,7 +176,6 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
           </div>
         )}
       </div>
-
       <div className="w-full flex flex-col">
         {isLoading ? (
           <Skeleton className="h-full w-full rounded-t-lg" />
@@ -292,7 +291,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
           </div>
         ) : null}
       </div>
-    </div>
+    </div>)
   );
 };
 

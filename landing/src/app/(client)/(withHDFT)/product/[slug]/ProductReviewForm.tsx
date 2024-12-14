@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Input, Spinner, Textarea } from '@nextui-org/react';
 import React, { useState } from 'react';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { parseJSON } from '@/lib/utils';
 import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 import { Controller, useForm } from 'react-hook-form';

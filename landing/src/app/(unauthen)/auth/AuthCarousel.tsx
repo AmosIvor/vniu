@@ -2,7 +2,7 @@
 import React from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 function AuthCarousel() {
   return (
     <div className="relative hidden h-screen w-1/2 flex-col bg-muted text-white dark:border-r lg:flex">
