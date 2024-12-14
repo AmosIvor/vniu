@@ -1,39 +1,34 @@
 import axios from 'axios';
 
 const config = {
-  baseURL: `http://localhost:5000`,
+  baseURL: `https://localhost:7257/`,
   headers: {
     // Accept: 'application/json',
     'Content-Type': 'application/json',
-    // 'Access-Control-Allow-Origin': '*',
   },
 };
 
 const axiosClient = axios.create(config);
 axiosClient.interceptors.request.use(
-  function (config) {
-    // console.log('request', `${config.url}`, config.data, config.params);
-    // const curl = toCurl(config);
-    // console.log('cURL:', curl);
-    return config;
-  },
-  function (error) {
-    // console.error('Request errors', error);
+  (request) => {
+    const accessToken = localStorage.getItem('accessToken');
 
-    return Promise.reject(error);
-  }
+    if (accessToken) {
+      if (request.headers) {
+        request.headers.Authorization = `Bearer ${accessToken}`;
+      }
+    }
+
+    return request;
+  },
+  (error) => Promise.reject(error)
 );
-
 axiosClient.interceptors.response.use(
-  function (response) {
-    // console.log('🚀 ~ response:', response);
-    return response;
+  (response) => {
+    console.log('🚀 ~ response:', response);
+    return response.data ?? response;
   },
-  function (error) {
-    // console.log('🚀 ~ error:', error);
-    // if (serverErrorStatuses.includes(error.response.status)) {
-    //   // showToast('error', 'Connection Error. Please Try Again');
-    // }
+  (error) => {
     return Promise.reject(error);
   }
 );

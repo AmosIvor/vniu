@@ -1,5 +1,5 @@
 import { useParams } from 'next/navigation';
-import { getRequest } from '@/lib/fetch';
+import { getRequest, postRequest } from '@/lib/fetch';
 
 export const useProduct = () => {
   const onGetProductDetail = async (slug) => {
@@ -57,30 +57,34 @@ export const useProduct = () => {
   // };
 
   const fetchProduct = async ({
-    page = 1,
-    pageSize = 4,
-  }: //   q,
-  //   sort,
-  //   gender,
-  //   categories,
-  //   subcategories,
-  //   price_range,
-  {
-    page: number;
-    pageSize: number;
+    PageIndex = 1,
+    PageSize = 4,
+    //   q,
+    //   sort,
+    //   gender,
+    //   categoryIds,
+    //   subcategories,
+    //   price_range,
+    SearchTerm,
+    categoryIds,
+  }: {
+    PageIndex: number;
+    PageSize: number;
+    SearchTerm: string | null;
+    categoryIds: string | null;
   }) => {
     const params = {
-      page,
-      //   q,
+      PageIndex,
+      // PageSize,
+      SearchTerm,
       //   sort,
       //   gender,
-      //   categories,
       //   subcategories,
       //   price_range,
     };
 
     // Construct the base endpoint
-    let endpoint = '/api/Product?';
+    let endpoint = '/api/v1/products/filter-and-sort?PageSize=8';
 
     // Add parameters to the endpoint
     for (const [key, value] of Object.entries(params)) {
@@ -88,15 +92,26 @@ export const useProduct = () => {
         endpoint += `&${key}=${value}`;
       }
     }
+    console.log('🚀 ~ useProduct ~ endpoint:', endpoint);
 
-    const products = await getRequest({ endPoint: endpoint });
-
-    console.log('🚀 ~ products ~ response:', products.data);
+    const products = await postRequest({
+      endPoint: endpoint,
+      formData: {
+        CategoryIds: [],
+        ratingValue: 0,
+        minPrice: 0,
+        maxPrice: 500,
+        colourIds: [],
+        sizeOptionIds: [],
+      },
+      isFormData: false,
+    });
+    console.log('🚀 ~ useProduct ~ products:', products);
     return {
-      data: products.data.data,
-      totalPages: Math.round(products.data.totalCount / pageSize),
-      totalItems: products.data.totalCount,
-      page: products.data.page,
+      data: products.value.items,
+      totalPages: Math.round(products.value.totalCount / PageSize),
+      totalItems: products.value.totalCount,
+      page: PageIndex,
     };
   };
 

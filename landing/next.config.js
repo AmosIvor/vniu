@@ -69,6 +69,10 @@ const nextConfig = {
             },
         ],
     },
+    webpack: config => {
+        config.externals.push('pino-pretty', 'lokijs', 'encoding')
+        return config
+    },
     env: {
         BACKEND_URL: 'http://localhost:5000',
     }

@@ -21,7 +21,6 @@ import { useWishList } from '@/hooks/useWishList';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 
 export default function ProductCard({ product }) {
-  console.log('🚀 ~ ProductCard ~ product:', product);
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = useState<boolean>(false);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
@@ -40,7 +39,7 @@ export default function ProductCard({ product }) {
 
   useEffect(() => {
     const found = cart?.listItem.find(
-      (item) => item.data.productId === product?.productId
+      (item) => item.data.productId === product?.id
     );
     if (found) {
       setIsAddToCart(true);
@@ -51,8 +50,8 @@ export default function ProductCard({ product }) {
   useEffect(() => {
     if (!wishList) return;
 
-    const isProductInWishList = wishList.some(
-      (wishListProduct) => wishListProduct.productId === product.productId
+    const isProductInWishList = wishList.data.some(
+      (wishListProduct) => wishListProduct.productId === product.id
     );
     setIsLiked(isProductInWishList);
   }, [wishList]);
@@ -60,16 +59,12 @@ export default function ProductCard({ product }) {
   return (
     <div>
       <div className="relative">
-        <Link
-          className="
-    "
-          href={`/product/${product?.productId}`}
-        >
+        <Link href={`/product/${product?.id}`}>
           <Image
             objectFit="cover"
             width={900}
             height={900}
-            src={product.productItems[0].productImages[0].productImageUrl}
+            src={product.productImages[0].imageUrl}
             className="transform duration-200 
     hover:scale-105"
             priority
@@ -123,16 +118,16 @@ export default function ProductCard({ product }) {
           <AiOutlineShoppingCart className="text-slate-600 w-5 h-5 " />
         </div>
       </div>
-      <Link className="" href={`/product/${product?.productId}`}>
+      <Link className="" href={`/product/${product?.id}`}>
         <div className="text-start p-4 text-black/[0.9]">
           <h2 className="text-lg font-medium">{product?.name}</h2>
           <div className="flex flex-wrap items-center text-black/[0.5]">
             <p className="mr-2 text-sm font-semibold ">
-              {currencyFormat(product?.price)}
+              {currencyFormat(product?.salePriceMin)}
             </p>
             {1 && (
               <p className="text-sm font-medium line-through ">
-                {currencyFormat(product?.price * 1.3)}
+                {currencyFormat(product?.salePriceMax * 1.3)}
               </p>
             )}
           </div>

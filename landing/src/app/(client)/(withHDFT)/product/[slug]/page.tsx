@@ -8,8 +8,12 @@ import ProductDetailLeft from './ProductDetailLeft';
 import { useProduct } from '@/hooks/useProduct';
 import React from 'react';
 
-function Page({ params }) {
-  const unwrappedParams = React.use(params);
+interface Params {
+  slug: string;
+}
+
+function Page({ params }: { params: Params }) {
+  const unwrappedParams = params;
 
   const { onGetProductDetail } = useProduct();
   const [data, setData] = useState(null);
@@ -29,8 +33,8 @@ function Page({ params }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const productSlug = unwrappedParams.slug;
-        const productData = await onGetProductDetail('2'); // or use slug if needed
+        const productSlug = unwrappedParams.slug;
+        const productData = await onGetProductDetail(productSlug); // or use slug if needed
         if (!productData) {
           setError('No product data available.');
         } else {

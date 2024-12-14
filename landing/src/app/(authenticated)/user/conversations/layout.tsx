@@ -4,7 +4,6 @@ import { getSession } from '@/lib/auth';
 
 export default async function layout({ children }) {
   const session = await getSession();
-  // console.log('🚀 ~ file: layout.tsx:7 ~ layout ~ session:', session);
 
   return (
     <div className="h-full w-full flex flex-col lg:flex-row overflow-hidden">

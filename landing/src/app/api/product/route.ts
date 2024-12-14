@@ -15,7 +15,6 @@ export async function GET() {
       pageSize: 4,
     },
   });
-  console.log('🚀 ~ GET ~ response:', response);
 
   return new Response(
     JSON.stringify({

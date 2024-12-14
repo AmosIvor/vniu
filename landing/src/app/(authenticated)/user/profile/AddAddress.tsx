@@ -81,7 +81,6 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
 
     getWard();
   }, [selectedDistrict]);
-  console.log(wards);
   const isProvinceValid = selectedProvince.size > 0;
   const isDistrictValid = selectedDistrict.size > 0;
   const isWardValid = selectedWard.size > 0;

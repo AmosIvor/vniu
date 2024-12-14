@@ -252,7 +252,10 @@ const NavigationMenuDemo = ({ session }) => {
                   <Link href={'/user/conversations'}>Chat</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => signOut({ callbackUrl: '/auth/login' })}
+                  onClick={() => {
+                    localStorage.removeItem('accessToken');
+                    signOut({ callbackUrl: '/auth/login' });
+                  }}
                   className="border-solid border-t-2 mt-2  gap-2"
                 >
                   <div className="">{AuthSvg.signIn()}</div>

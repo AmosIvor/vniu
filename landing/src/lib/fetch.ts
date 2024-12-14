@@ -14,11 +14,13 @@ export const postRequest = async ({ endPoint, formData, isFormData }) => {
     isFormData && {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Access-Control-Allow-Origin': '*',
       },
     }
   );
   return res;
 };
+
 export const putRequest = async ({ endPoint, formData, isFormData }) => {
   const res = await axiosClient.put(
     endPoint,
@@ -26,6 +28,7 @@ export const putRequest = async ({ endPoint, formData, isFormData }) => {
     isFormData && {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Access-Control-Allow-Origin': '*',
       },
     }
   );

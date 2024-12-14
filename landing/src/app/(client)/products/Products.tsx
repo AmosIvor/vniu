@@ -42,20 +42,21 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@nextui-org/react';
 import { Spinner } from '@nextui-org/react';
 import { AiOutlineFilter } from 'react-icons/ai';
+import { getRequest } from '@/lib/fetch';
 interface ProductsProps {
-  // q: string | null;
+  SearchTerm: string | null;
   // sort: string | null;
   // gender: string | null;
-  // categories: string | null;
+  categoryIds: string | null;
   // subcategories: string | null;
   // price_range: string | null;
 }
 
 export default function Products({
-  // q,
+  SearchTerm,
   // sort,
   // gender,
-  // categories,
+  categoryIds,
   // subcategories,
   // price_range = '',
   ...props
@@ -72,12 +73,12 @@ export default function Products({
     ['products'],
     ({ pageParam = 1 }) =>
       fetchProduct({
-        page: pageParam,
-        pageSize: 8,
-        // q,
+        PageIndex: pageParam,
+        PageSize: 8,
+        SearchTerm,
         // sort,
         // gender,
-        // categories,
+        categoryIds,
         // subcategories,
         // price_range,
       }),
@@ -92,7 +93,6 @@ export default function Products({
       },
     }
   ); // Add this line for debugging
-  console.log('🚀 ~ data:', data);
 
   //Add Filter
   const router = useRouter();
@@ -108,7 +108,27 @@ export default function Products({
   const [shoesNavItems, setShoesNavItems] = useState([]);
   const [clothNavItems, SetClothNavItems] = useState([]);
   const [accessoryNavItems, SetAccessoryNavItems] = useState([]);
-  const [sportNavItems, setSportNavItems] = useState([]);
+  interface ColourNavItem {
+    id: string;
+    name: string;
+  }
+
+  const [colourNavItems, setColourNavItems] = useState<ColourNavItem[]>([]);
+  // Query Clothes Categories
+  useEffect(() => {
+    const getClothNavItems = async () => {
+      const res = await getRequest({
+        endPoint:
+          '/api/v1/categories/get-by-parent/filter-and-sort?ParentCategoryId=245ff55d-c9f6-45d4-8338-e8584a499412&PageIndex=1&PageSize=100',
+      });
+      if (data) {
+        SetClothNavItems(res.value.categories);
+      }
+    };
+    getClothNavItems();
+  }, []);
+  console.log('🚀 ~ clothNavItems:', clothNavItems);
+
   //Query Shoes Categories
   // useEffect(() => {
   //   const getShoesNavItems = async () => {
@@ -121,20 +141,6 @@ export default function Products({
   //     }
   //   };
   //   getShoesNavItems();
-  // }, []);
-
-  //Query Clothes Categories
-  // useEffect(() => {
-  //   const getClothNavItems = async () => {
-  //     const res = await fetch('/api/lib/subcategory?productTypeId=2');
-  //     const data = await res.json();
-  //     console.log(res);
-  //     console.log(data);
-  //     if (data) {
-  //       SetClothNavItems(data);
-  //     }
-  //   };
-  //   getClothNavItems();
   // }, []);
 
   //Query Accessory Categories
@@ -164,115 +170,92 @@ export default function Products({
   //   getGenderNavItems();
   // }, []);
 
-  //Query Sport
-  // useEffect(() => {
-  //   const getSportNavItems = async () => {
-  //     const res = await fetch('/api/lib/sports');
-  //     const data = await res.json();
-  //     console.log(res);
-  //     console.log(data);
-  //     if (data) {
-  //       setSportNavItems(data);
-  //     }
-  //   };
-  //   getSportNavItems();
-  // }, []);
+  // Query Colours
+  useEffect(() => {
+    const getColourNavItems = async () => {
+      const res = await getRequest({
+        endPoint: '/api/v1/colours/filter-and-sort?PageIndex=1&PageSize=100',
+      });
+      console.log('🚀 ~ getColourNavItems ~ res:', res);
+
+      if (res) {
+        setColourNavItems(res.value.items);
+      }
+    };
+    getColourNavItems();
+  }, []);
+  console.log('🚀 ~ getColourNavItems ~ getColourNavItems:', colourNavItems);
 
   // Create query string
-  // const createQueryString = React.useCallback(
-  //   (params: Record<string, string | number | null>) => {
-  //     const newSearchParams = new URLSearchParams(searchParams?.toString());
+  const createQueryString = React.useCallback(
+    (params: Record<string, string | number | null>) => {
+      const newSearchParams = new URLSearchParams(searchParams?.toString());
 
-  //     for (const [key, value] of Object.entries(params)) {
-  //       if (value === null) {
-  //         newSearchParams.delete(key);
-  //       } else {
-  //         newSearchParams.set(key, String(value));
-  //       }
-  //     }
+      for (const [key, value] of Object.entries(params)) {
+        if (value === null) {
+          newSearchParams.delete(key);
+        } else {
+          newSearchParams.set(key, String(value));
+        }
+      }
 
-  //     return newSearchParams.toString();
-  //   },
-  //   [searchParams]
-  // );
+      return newSearchParams.toString();
+    },
+    [searchParams]
+  );
 
   // Price filter
-  // const [priceRange, setPriceRange] = React.useState<[number, number]>([
-  //   0, 5000000,
-  // ]);
-  // const debouncedPrice = useDebounce(priceRange, 500);
+  const [priceRange, setPriceRange] = React.useState<[number, number]>([
+    0, 300,
+  ]);
+  const debouncedPrice = useDebounce(priceRange, 500);
 
-  // React.useEffect(() => {
-  //   const [min, max] = debouncedPrice;
-  //   startTransition(() => {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         price_range: `${min}-${max}`,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     );
-  //   });
-  //   refetchData();
-  // }, [debouncedPrice]);
-
-  // Gender filter
-  const [selectedGenders, setSelectedGenders] = React.useState([]);
-
-  // React.useEffect(() => {
-  //   startTransition(() => {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         gender: selectedGenders?.length
-  //           ? // Join categories with a dot to make search params prettier
-  //             selectedGenders.map((c) => c).join('.')
-  //           : null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     );
-  //   });
-  //   refetchData();
-  // }, [selectedGenders]);
-  // const toggleGender = (gender) => {
-  //   setSelectedGenders((prev) =>
-  //     prev.includes(gender)
-  //       ? prev.filter((c) => c !== gender)
-  //       : [...prev, gender]
-  //   );
-  // };
+  React.useEffect(() => {
+    const [min, max] = debouncedPrice;
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          price_range: `${min}-${max}`,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [debouncedPrice]);
 
   // Category filter
-  const [selectedCategories, setSelectedCategories] = React.useState([]);
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
+    []
+  );
 
-  // React.useEffect(() => {
-  //   startTransition(() => {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         categories: selectedCategories?.length
-  //           ? // Join categories with a dot to make search params prettier
-  //             selectedCategories.map((c) => c).join('.')
-  //           : null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     );
-  //   });
-  //   refetchData();
-  // }, [selectedCategories]);
-  // const toggleCategory = (category) => {
-  //   setSelectedCategories((prev) =>
-  //     prev.includes(category)
-  //       ? prev.filter((c) => c !== category)
-  //       : [...prev, category]
-  //   );
-  // };
+  React.useEffect(() => {
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          categoryIds: selectedCategories?.length
+            ? // Join categories with a dot to make search params prettier
+              selectedCategories.map((c) => c).join('.')
+            : null,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [selectedCategories]);
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+  };
 
   // subCategory filter
-  const [selectedSubCategories, setSelectedSubCategories] = React.useState([]);
+  // const [selectedSubCategories, setSelectedSubCategories] = React.useState([]);
 
   // React.useEffect(() => {
   //   startTransition(() => {
@@ -300,40 +283,35 @@ export default function Products({
 
   // Search bar
 
-  // const [searchQuery, setSearchQuery] = useState<string | null>(q ? q : '');
-  // const debouncedSearch = useDebounce(searchQuery, 500);
+  const [searchQuery, setSearchQuery] = useState<string | null>(
+    SearchTerm ? SearchTerm : ''
+  );
+  const debouncedSearch = useDebounce(searchQuery, 500);
 
-  // React.useEffect(() => {
-  //   const encodedSearchQuery = encodeURI(debouncedSearch);
-  //   startTransition(() => {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         q: encodedSearchQuery ? encodedSearchQuery : null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     );
-  //   });
-  //   refetchData();
-  // }, [debouncedSearch]);
+  React.useEffect(() => {
+    const encodedSearchQuery = encodeURI(debouncedSearch || '');
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          SearchTerm: encodedSearchQuery ? encodedSearchQuery : null,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [debouncedSearch]);
 
-  // React.useEffect(() => {
-  //   if (gender) {
-  //     const genders = gender.split('.').map((g) => parseInt(g, 10));
-  //     setSelectedGenders(genders);
-  //   }
-  // }, [gender]);
+  // Category filter initialization from query parameter
+  React.useEffect(() => {
+    if (categoryIds) {
+      const categoryIdsTemp = categoryIds.split('.').map((c) => c);
+      setSelectedCategories(categoryIdsTemp);
+    }
+  }, [categoryIds]);
 
-  // // Category filter initialization from query parameter
-  // React.useEffect(() => {
-  //   if (categories) {
-  //     const categoryIds = categories.split('.').map((c) => parseInt(c, 10));
-  //     setSelectedCategories(categoryIds);
-  //   }
-  // }, [categories]);
-
-  // // SubCategory filter initialization from query parameter
+  // SubCategory filter initialization from query parameter
   // React.useEffect(() => {
   //   if (subcategories) {
   //     const subCategoryIds = subcategories
@@ -368,7 +346,7 @@ export default function Products({
               </div>
             </Button>
           </SheetTrigger>
-          {/* <SheetContent className="flex flex-col">
+          <SheetContent className="flex flex-col">
             <SheetHeader className="px-1">
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
@@ -399,7 +377,7 @@ export default function Products({
                 <DropdownMenuContent align="start" className="w-48">
                   <DropdownMenuLabel>Sort by</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {sortOptions.map((option) => (
+                  {/* {sortOptions.map((option) => (
                     <DropdownMenuItem
                       key={option.label}
                       className={cn(option.value === sort && 'font-bold')}
@@ -418,7 +396,7 @@ export default function Products({
                     >
                       {option.label}
                     </DropdownMenuItem>
-                  ))}
+                  ))} */}
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -474,22 +452,22 @@ export default function Products({
                     type="multiple"
                     className="w-full overflow-auto no-scrollbar"
                   >
-                    <AccordionItem value="genders">
+                    <AccordionItem value="cloth">
                       <AccordionTrigger className="text-sm">
-                        Gender
+                        Clothes
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="flex flex-col">
-                          {genderNavItems?.map((subItem, index) =>
+                          {clothNavItems?.map((subItem: ColourNavItem, index) =>
                             subItem.name ? (
                               <Checkbox
                                 key={index}
                                 // Set the checked value based on whether the category is in selectedCategories
-                                isSelected={selectedGenders.includes(
+                                isSelected={selectedCategories.includes(
                                   subItem.id
                                 )}
                                 // Pass a callback function that toggles the category on change
-                                onChange={() => toggleGender(subItem.id)}
+                                onChange={() => toggleCategory(subItem.id)}
                               >
                                 {subItem.name}
                               </Checkbox>
@@ -498,12 +476,11 @@ export default function Products({
                         </div>
                       </AccordionContent>
                     </AccordionItem>
-
                     <AccordionItem value="shoes">
                       <AccordionTrigger className="text-sm">
                         Shoes
                       </AccordionTrigger>
-                      <AccordionContent>
+                      {/* <AccordionContent>
                         <div className="flex flex-col">
                           {shoesNavItems?.map((subItem, index) =>
                             subItem.name ? (
@@ -521,38 +498,14 @@ export default function Products({
                             ) : null
                           )}
                         </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="cloth">
-                      <AccordionTrigger className="text-sm">
-                        Clothes
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <div className="flex flex-col">
-                          {clothNavItems?.map((subItem, index) =>
-                            subItem.name ? (
-                              <Checkbox
-                                key={index}
-                                // Set the checked value based on whether the category is in selectedCategories
-                                isSelected={selectedSubCategories.includes(
-                                  subItem.id
-                                )}
-                                // Pass a callback function that toggles the category on change
-                                onChange={() => toggleSubCategory(subItem.id)}
-                              >
-                                {subItem.name}
-                              </Checkbox>
-                            ) : null
-                          )}
-                        </div>
-                      </AccordionContent>
+                      </AccordionContent> */}
                     </AccordionItem>
 
-                    <AccordionItem value="Accessory">
+                    <AccordionItem value="Glasses">
                       <AccordionTrigger className="text-sm">
-                        Accessories
+                        Glasses
                       </AccordionTrigger>
-                      <AccordionContent>
+                      {/* <AccordionContent>
                         <div className="flex flex-col">
                           {accessoryNavItems?.map((subItem, index) =>
                             subItem.name ? (
@@ -570,16 +523,16 @@ export default function Products({
                             ) : null
                           )}
                         </div>
-                      </AccordionContent>
+                      </AccordionContent> */}
                     </AccordionItem>
 
-                    <AccordionItem value="Sport">
+                    <AccordionItem value="Colours">
                       <AccordionTrigger className="text-sm">
-                        Sport
+                        Colours
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="flex flex-col">
-                          {sportNavItems?.map((subItem, index) =>
+                          {colourNavItems?.map((subItem, index) =>
                             subItem.name ? (
                               <Checkbox
                                 key={index}
@@ -613,8 +566,6 @@ export default function Products({
                       router.push('/products');
                       setPriceRange([0, 5000000]);
                       setSelectedCategories([]);
-                      setSelectedSubCategories([]);
-                      setSelectedGenders([]);
                     });
                   }}
                   disabled={isPending}
@@ -623,7 +574,7 @@ export default function Products({
                 </Button>
               </SheetFooter>
             </div>
-          </SheetContent> */}
+          </SheetContent>
         </Sheet>
       </div>
       {!isPending && !data?.pages?.[0]?.totalItems ? (
