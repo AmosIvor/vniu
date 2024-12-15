@@ -1,5 +1,5 @@
 'use client';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 // import React, { useEffect } from 'react';
 import { currencyFormat } from '@/lib/utils';
@@ -50,8 +50,8 @@ export default function ProductCard({ product }) {
   useEffect(() => {
     if (!wishList) return;
 
-    const isProductInWishList = wishList.data.some(
-      (wishListProduct) => wishListProduct.productId === product.id
+    const isProductInWishList = wishList.some(
+      (wishListProduct) => wishListProduct.id === product.id
     );
     setIsLiked(isProductInWishList);
   }, [wishList]);

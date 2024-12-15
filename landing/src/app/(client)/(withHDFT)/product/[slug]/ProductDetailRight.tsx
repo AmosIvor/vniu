@@ -12,145 +12,134 @@ import { currencyFormat, parseJSON } from '@/lib/utils';
 import React, { use, useEffect, useState } from 'react';
 import { IoMdHeartEmpty } from 'react-icons/io';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import { useCart } from '@/hooks/useCart';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
-type TOption = {
-  productItemId: string;
-  sizeName: string;
-  colourName: string;
-  optionName: string;
-};
-function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
-  const [optionData, setOptionData] = useState<TOption[]>([]);
-  const [optionName, setOptionName] = useState<string>('');
+function ProductDetailRight({ data, selectedColor, handleColorSelect }) {
   const [showError, setShowError] = useState(false);
-  const { cart } = useCart();
-  const { onSelectProduct, onToggleDialog } = useSelectedProduct();
-  useEffect(() => {
-    const options = data.productItems.map((item) => {
-      const { productItemId } = item;
-      const { sizeName } = item.variations[0].size;
-      const { colourName } = item.colourVMs[0];
-      const optionName = `${colourName} - ${sizeName}`;
+  const [selectedSize, setSelectedSize] = useState<{
+    sizeOptionName: string;
+    sizeOptionQuantityInStock: number;
+  } | null>(null);
 
-      return {
-        productItemId,
-        sizeName,
-        colourName,
-        optionName,
-      };
-    });
-    setOptionData(options);
-    setOptionName(options[0].optionName);
-  }, [data]);
-  if (!optionData) return <div>Loading...</div>;
-  console.log(cart);
+  const { onSelectProduct, onToggleDialog } = useSelectedProduct();
+
+  const { cart } = useCart();
   return (
     <div className="flex-[1] py-3">
       {/* Product Title */}
       <div className="text-[34px] font-semibold mb-2 leading-tight">
-        {data.productName}
+        {data?.name}
       </div>
 
       {/* Product Subtitle */}
-      <div className="text-lg font-semibold mb-5">
-        {data.productDescription}
-      </div>
-
-      {/* Product Price */}
-      <div className="text-lg font-semibold ">{currencyFormat(data.price)}</div>
-
-      {data.original_price && (
-        <div>
-          <p className="text-base font-medium line-through ">
-            {currencyFormat(data.original_price)}
-          </p>
-          <p className="ml-auto text-base font-medium text-green-500">
-            {' '}
-            17% off
-          </p>
-        </div>
-      )}
+      <div className="text-lg font-semibold mb-5">{data?.description}</div>
 
       {/* Product size */}
 
       <div className="mb-10">
         {/* Heading */}
         <div className="flex justify-between mb-2">
-          <div className="text-md font-semibold">Chọn kích cỡ</div>
+          <div className="text-md font-semibold">Chọn màu sắc</div>
           <div className="text-md font-medium text-black/[0.5] cursor pointer">
-            Kích cỡ
+            Màu sắc
           </div>
         </div>
         {/* Heading */}
 
         {/* Size start */}
-        <div id="sizesGrid" className="grid grid-cols-3 gap-2">
-          {/* {optionData?.map((option, index) => (
-            <div
-              onClick={
-                // option. > 0 ?
-                () => {
-                  setOptionName(option.optionName);
-                  const foundItem = data?.productItems?.find(
-                    (i: { productItemId: any }) =>
-                      i.productItemId === item?.productItemId
-                  );
-                  if (foundItem) {
-                    setSelectedItem(foundItem);
-                  }
-                  setShowError(false);
-                }
-                // : () => {}
-              }
-              key={index}
-              className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
-                // size.number > 0 ?
-                'hover:border-black cursor-pointer'
-                // : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
-              } ${optionName === option.optionName ? 'border-black' : ''} `}
-            >
-              {option.optionName}
-            </div>
-          ))} */}
-          {optionData?.map((option, index) => (
+        <div id="coloursGrid" className="grid grid-cols-3 gap-2">
+          {data?.colours?.map((colour, index) => (
             <div
               onClick={() => {
-                console.log('🚀 ~ ProductDetailRight ~ option:', option);
+                console.log('🚀 ~ ProductDetailRight ~ colour:', colour);
 
-                setOptionName(option.optionName);
-                const foundItem = data?.productItems?.find(
-                  (i: { productItemId: any }) =>
-                    i.productItemId === option?.productItemId
-                );
-                console.log('🚀 ~ ProductDetailRight ~ foundItem:', foundItem);
-
-                if (foundItem) {
-                  setSelectedItem(foundItem);
-                }
+                handleColorSelect(colour.id);
                 setShowError(false);
               }}
               key={index}
               className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${'hover:border-black cursor-pointer'} ${
-                optionName === option.optionName ? 'border-black' : ''
+                selectedColor === colour.id ? 'border-black' : ''
               } `}
+              style={{
+                backgroundColor: colour.hexCode,
+                color: colour.hexCode?.includes('000000') ? 'white' : 'black',
+              }}
             >
-              {option.optionName}
+              {colour.name}
             </div>
           ))}
         </div>
         {/* Size end */}
 
         {/* Show error */}
-        {showError && (
-          <div className="text-red-600 mt-1">Vui lòng chọn loai</div>
+        {showError && !selectedColor && (
+          <div className="text-red-600 mt-1">Please choose colour</div>
         )}
         {/* Show error */}
       </div>
+      {/* Product Price */}
+      {data?.activeObject?.activeProductItem?.salePrice && (
+        <div className="text-lg font-semibold ">
+          {currencyFormat(data?.activeObject?.activeProductItem?.salePrice)}
+        </div>
+      )}
+
+      {data?.activeObject?.activeProductItem?.originalPrice && (
+        <div>
+          <p className="text-base font-medium line-through ">
+            {currencyFormat(
+              data?.activeObject?.activeProductItem?.originalPrice
+            )}
+          </p>
+          <p className="ml-auto text-base font-medium text-green-500">
+            {' '}
+            12% off
+          </p>
+        </div>
+      )}
+      {/* Size start */}
+      <div id="sizesGrid" className="grid grid-cols-3 gap-2">
+        {data?.activeObject?.activeSizeOptionAndQuantityInStocks?.map(
+          (size, index) => (
+            <div
+              onClick={
+                size.sizeOptionQuantityInStock > 0
+                  ? () => {
+                      setSelectedSize(size);
+                      setShowError(false);
+                    }
+                  : () => {}
+              }
+              key={index}
+              className={`border-2 rounded-md text-center py-2.5 font-medium
+    hover:bg-slate-300 
+      cursor-pointer ${
+        size.number > 0
+          ? 'hover:border-black cursor-pointer'
+          : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
+      } ${
+                selectedSize?.sizeOptionName === size.sizeOptionName
+                  ? 'border-black'
+                  : ''
+              } `}
+            >
+              {size.sizeOptionName}
+              {' - '}
+              {size.sizeOptionQuantityInStock > 0
+                ? `(${size.sizeOptionQuantityInStock})`
+                : '0'}
+            </div>
+          )
+        )}
+      </div>
+      {/* Size end */}
+      {showError && !selectedSize && (
+        <div className="text-red-600 mt-1">Please choose size</div>
+      )}
       <div className="flex flex-col gap-2 w-full items-center justify-center">
         {/* Product size */}
-        {!optionName ? (
+        {selectedSize ? (
           <Sheet>
             <div>
               <SheetTrigger
@@ -167,7 +156,7 @@ function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
                     onToggleDialog();
                   }}
                 >
-                  Thêm vào giỏ hàng
+                  Add to Cart
                 </Button>
               </SheetTrigger>
             </div>
@@ -178,18 +167,18 @@ function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
                     className="text-green-500 mr-2"
                     size={20}
                   />
-                  <SheetTitle>Đã thêm vào giỏ hàng!</SheetTitle>
+                  <SheetTitle>Add to Cart Success!</SheetTitle>
                 </div>
                 <div className=" flex flex-row gap-4 w-full">
                   <div className="relative aspect-square h-24 w-16 min-w-fit overflow-hidden rounded">
                     <Image
                       alt="add to cart"
                       src={
-                        parseJSON(data?.thumbnail)?.url ||
+                        data?.activeObject?.activeProductImages[0].imageUrl ||
                         '/assets/placeholder.png'
                       }
                       sizes="(max-width: '768px') 100vw, (max-width: 1200px) 50vw, 33vw"
-                      fill
+                      layout="fill"
                       className="absolute object-cover"
                       loading="lazy"
                     />
@@ -199,26 +188,26 @@ function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
                       className="text-black text-sm
         font-medium"
                     >
-                      {data.name}
+                      {data?.name}
                     </span>
                     <span
                       className="text-black text-sm
         font-normal"
                     >
-                      Giày
+                      Cloth
                     </span>
                     <span
                       className="text-black text-sm
         font-normal"
                     >
-                      {optionName}
+                      {selectedColor}
                     </span>
 
                     <span
                       className="text-black text-sm
         font-medium"
                     >
-                      {currencyFormat(data.price)}
+                      {currencyFormat(data?.price)}
                     </span>
                   </div>
                 </div>
@@ -233,12 +222,19 @@ function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
             </SheetContent>
           </Sheet>
         ) : (
-          <div className="w-full flex ">
+          <div className="w-full flex">
             <Button
               className="w-full py-4  rounded-full bg-black text-white text-lg
         font-medium transition-transform active:scale-95 mb-3 hover:opacity-75"
               onClick={() => {
-                if (!optionName) {
+                if (!selectedColor) {
+                  setShowError(true);
+                  document.getElementById('coloursGrid')?.scrollIntoView({
+                    block: 'center',
+                    behavior: 'smooth',
+                  });
+                }
+                if (!selectedSize) {
                   setShowError(true);
                   document.getElementById('sizesGrid')?.scrollIntoView({
                     block: 'center',
@@ -247,27 +243,24 @@ function ProductDetailRight({ data, selectedItem, setSelectedItem }) {
                 }
               }}
             >
-              Thêm vào giỏ hàng
+              Add to Cart
             </Button>
           </div>
         )}
-        <div className="w-full flex ">
+        {/* <div className="w-full flex ">
           <Button
             variant={'outline'}
-            className="w-full py-4 rounded-full border border-black
-        text-lg font-medium transition-transform active:scale-95 flex items-center
-        justify-center gap-2 hover:opacity-75 mb-10
-                "
+            className="w-full py-4 rounded-full border border-black text-lg font-medium transition-transform active:scale-95 flex items-center justify-center gap-2 hover:opacity-75 mb-10"
           >
             Yêu thích
             <IoMdHeartEmpty size={20} />
           </Button>
-        </div>
+        </div> */}
       </div>
 
       <div>
         <div className="text-lg font-bold mb-5">Thông tin chi tiết</div>
-        <div className="markdown text-md mb-5">{data.description}</div>
+        <div className="markdown text-md mb-5">{data?.description}</div>
       </div>
     </div>
   );

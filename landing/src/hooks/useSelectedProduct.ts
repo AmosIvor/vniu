@@ -19,15 +19,11 @@ export const useSelectedProduct = () => {
 
   const onSelectProduct = useCallback(async (data: any) => {
     try {
-      const productDetail = await getRequest({
-        endPoint: `/api/product/${data?.data.productId}`,
-      });
-      console.log(
-        '🚀 ~ onSelectProduct ~ `/api/product/${data?.data.productId}`:',
-        `/api/product/${data?.data.productId}`
-      );
+      // const productDetail = await getRequest({
+      //   endPoint: `/api/product/${data?.data.id}`,
+      // });
 
-      dispatch(selectProduct(productDetail));
+      dispatch(selectProduct(data.data));
     } catch (error) {
       console.error(error);
     }

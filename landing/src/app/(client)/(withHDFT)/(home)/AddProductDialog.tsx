@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 import { parseJSON } from '@/lib/utils';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import { Controller, useForm } from 'react-hook-form';
 import { Input } from '@nextui-org/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -35,6 +35,8 @@ const AddProductDialog = () => {
     // onUnselectProduct,
   } = useSelectedProduct();
   const [selectedSize, setSizeSelected] = useState(null);
+  console.log('🚀 ~ AddProductDialog ~ selectedSize:', selectedSize);
+
   const [selectedQuantity, setSelectedQuantity] = useState(null);
   const [showError, setShowError] = useState(false);
   // const [showSuccess, setShowSuccess] = useState(false);
@@ -73,11 +75,11 @@ const AddProductDialog = () => {
       onToggleSuccess();
       resetFormAndState();
 
-      await onAddToCart({
-        data: selectedProduct,
-        quantity: data.quantity,
-        selectedSize: selectedSize,
-      });
+      // await onAddToCart({
+      //   data: selectedProduct,
+      //   quantity: data.quantity,
+      //   selectedSize: selectedSize,
+      // });
     } catch (error) {
       console.error('Failed to add product to cart:', error);
       return Promise.reject(error);
@@ -113,17 +115,19 @@ const AddProductDialog = () => {
       <div className="flex flex-col w-full h-auto pr-4 gap-6">
         <div className="w-full h-fit flex flex-col pt-2 items-center gap-3">
           <span className="text-[12px] sm:text-sm md:text-base font-semibold">
-            Thông tin Sản phẩm
+            Product's details
           </span>
           <span className="text-[10px] sm:text-sm text-gray-500">
-            Chọn thông tin chi tiết của sản phẩm
+            Select size and quantity
           </span>
           <div className="w-full h-fit mt-2 flex flex-row gap-3 items-center">
             {isLoading ? (
               <Skeleton className="h-20 w-20 rounded-lg" />
             ) : (
               <Image
-                src={parseJSON(selectedProduct.images)[0].url}
+                src={
+                  selectedProduct?.activeObject.activeProductImages[0].imageUrl
+                }
                 alt={selectedProduct?.name}
                 width={60}
                 height={50}
@@ -131,13 +135,46 @@ const AddProductDialog = () => {
               />
             )}
             {isLoading ? (
-              (<Skeleton className="w-20 h-10" />) // Sử dụng component Skeleton từ thư viện react-loading-skeleton
+              <Skeleton className="w-20 h-10" /> // Sử dụng component Skeleton từ thư viện react-loading-skeleton
             ) : (
               <span className="text-[10px] sm:text-sm text-gray-700">
                 {selectedProduct?.name}
               </span>
             )}
           </div>
+        </div>
+
+        <div className="mb-10">
+          {/* Heading */}
+          <div className="flex justify-between mb-2">
+            <div className="text-md font-semibold">Chọn màu sắc</div>
+            <div className="text-md font-medium text-black/[0.5] cursor pointer">
+              Màu sắc
+            </div>
+          </div>
+          {/* Heading */}
+
+          {/* Size start */}
+          <div id="coloursGrid" className="grid grid-cols-3 gap-2">
+            <div
+              className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer 'border-black' ${'hover:border-black cursor-pointer'}`}
+              style={{
+                backgroundColor:
+                  selectedProduct.activeObject.activeColour.hexCode,
+                color:
+                  selectedProduct.activeObject.activeColour.hexCode?.includes(
+                    '000000'
+                  )
+                    ? 'white'
+                    : 'black',
+              }}
+            >
+              {selectedProduct.activeObject.activeColour.name}
+            </div>
+          </div>
+          {/* Size end */}
+
+          {/* Show error */}
         </div>
 
         <div className="mb-10">
@@ -168,27 +205,35 @@ const AddProductDialog = () => {
                 </div>
               </>
             ) : (
-              selectedProduct.productSizes?.map((size, index) => (
-                <div
-                  onClick={
-                    size.quantity > 0
-                      ? () => {
-                          setSizeSelected(size.size);
-                          setSelectedQuantity(size.quantity);
-                          setShowError(false);
-                        }
-                      : () => {}
-                  }
-                  key={index}
-                  className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
-                    size.quantity > 0
-                      ? 'hover:border-black cursor-pointer'
-                      : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
-                  } ${selectedSize === size.size ? 'border-black' : ''} `}
-                >
-                  {size.size}
-                </div>
-              ))
+              selectedProduct?.activeObject.activeSizeOptionAndQuantityInStocks?.map(
+                (size, index) => (
+                  <div
+                    onClick={
+                      size.sizeOptionQuantityInStock > 0
+                        ? () => {
+                            setSizeSelected(size.sizeOptionName);
+                            setSelectedQuantity(size.sizeOptionQuantityInStock);
+                            setShowError(false);
+                          }
+                        : () => {}
+                    }
+                    key={index}
+                    className={`border-2 rounded-md text-center py-2.5 font-medium hover:bg-slate-300 cursor-pointer ${
+                      size.sizeOptionQuantityInStock > 0
+                        ? 'hover:border-black cursor-pointer'
+                        : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
+                    } ${
+                      selectedSize === size.sizeOptionName ? 'border-black' : ''
+                    } `}
+                  >
+                    {size.sizeOptionName}
+                    {' - '}
+                    {size.sizeOptionQuantityInStock > 0
+                      ? `(${size.sizeOptionQuantityInStock})`
+                      : '0'}
+                  </div>
+                )
+              )
             )}
           </div>
           {/* Size end */}
@@ -221,7 +266,7 @@ const AddProductDialog = () => {
                     onChange={field.onChange}
                   />
                   {errors.quantity && (
-                    <p className="text-red-500">{errors.quantity.message}</p>
+                    <p className="text-red-500">Select Failed</p>
                   )}
                 </div>
               );
@@ -257,7 +302,7 @@ const AddProductDialog = () => {
             }}
             disabled={!isValid}
           >
-            Xác nhận
+            Confirm
           </Button>
         </div>
       </div>

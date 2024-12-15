@@ -4,7 +4,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 // import { User } from '@/models';
-import { getRequest } from '@/lib/fetch';
+import { getRequest, postRequest } from '@/lib/fetch';
 //dispatch, selector
 import {
   addToCart,
@@ -22,11 +22,12 @@ export const useCart = () => {
   const dispatch = useDispatch();
   const reduxCart = useSelector((state: any) => state.cart) || null;
 
-  const fetchUserCart = async (userId) => {
+  const fetchUserCart = async () => {
+    // Shopping Cart
     const userShoppingCart = await getRequest({
-      endPoint: `/api/user/cart/cart-item?userId=${userId}`,
+      endPoint: `/api/v1/cart-items?PageIndex=1&PageSize=100`,
     });
-    return userShoppingCart;
+    return userShoppingCart.value.items;
   };
 
   const {
@@ -35,12 +36,12 @@ export const useCart = () => {
     isLoading,
   } = useQuery({
     queryKey: ['useCart'],
-    queryFn: () => fetchUserCart(session?.user.id),
+    queryFn: () => fetchUserCart(),
     enabled: !!session,
   });
 
-  const convertToReduxCart = (prismaCart) => {
-    const listItem = prismaCart.cartItems.map((item) => ({
+  const convertToReduxCart = (userCart) => {
+    const listItem = userCart.map((item) => ({
       data: item.product,
       quantity: item.quantity,
       selectedSize: item.selectedSize, // Cần cung cấp thông tin này từ Prisma nếu có
@@ -74,19 +75,15 @@ export const useCart = () => {
   // }, [session]);
 
   const addToCartMutationFn = async ({ data, selectedSize, quantity }) => {
-    const response = await axios.post(
-      `/api/user/cart/cart-item?userId=${session?.user.id}`,
-      {
+    const response = await postRequest({
+      endPoint: `/api/user/cart/cart-item?userId=${session?.user?.id}`,
+      formData: {
         ...data,
         selectedSize: selectedSize,
         quantity: quantity,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+      isFormData: false,
+    });
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error('Failed to add to cart');
@@ -136,7 +133,7 @@ export const useCart = () => {
     );
 
     const response = await axios.put(
-      `/api/user/cart/cart-item?userId=${session?.user.id}`,
+      `/api/user/cart/cart-item?userId=${session?.user?.id}`,
       {
         ...data,
         selectedSize: selectedSize,
@@ -213,7 +210,7 @@ export const useCart = () => {
   >(
     async ({ data, selectedSize, quantity }) => {
       const response = await axios.delete(
-        `/api/user/cart/cart-item?userId=${session?.user.id}`,
+        `/api/user/cart/cart-item?userId=${session?.user?.id}`,
         {
           data: {
             ...data,

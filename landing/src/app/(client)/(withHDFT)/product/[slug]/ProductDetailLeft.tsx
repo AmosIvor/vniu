@@ -3,9 +3,9 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a lo
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { BiArrowBack } from 'react-icons/bi';
-import { parseJSON } from '@/lib/utils';
 
 function ProductDetailLeft({ data }) {
+  console.log('🚀 ~ ProductDetailLeft ~ data:', data);
   return (
     <div className=" text-white text-[20px] w-full max-w-[1360px] sticky top-[50px]">
       <Carousel
@@ -35,11 +35,17 @@ function ProductDetailLeft({ data }) {
         thumbWidth={60}
         className="productCarousel"
       >
-        {data.productImages.map((item, index) => (
-          <div key={`${item.productId}-${index}`}>
-            <img src={item.productImageUrl} alt="product" />
-          </div>
-        ))}
+        {data?.activeObject
+          ? data?.activeObject?.activeProductImages.map((item, index) => (
+              <div key={`${item.id}-${index}`}>
+                <img src={item.imageUrl} alt="product" />
+              </div>
+            ))
+          : data?.productImages.slice(0, 3).map((item, index) => (
+              <div key={`${item.id}-${index}`}>
+                <img src={item.imageUrl} alt="product" />
+              </div>
+            ))}
       </Carousel>
     </div>
   );

@@ -87,9 +87,8 @@ export default function Products({
       keepPreviousData: true,
       refetchOnWindowFocus: false,
       getNextPageParam: (lastPage, pages) => {
-        if (lastPage.page === 0 && pages.length < lastPage.totalPages) return 1;
-        if (pages.length <= lastPage.totalPages) return pages.length;
-        else return undefined;
+        const nextPage = pages.length + 1;
+        return nextPage <= lastPage.totalPages ? nextPage : undefined;
       },
     }
   ); // Add this line for debugging
@@ -123,7 +122,6 @@ export default function Products({
         endPoint:
           '/api/v1/categories/get-by-parent/filter-and-sort?ParentCategoryId=245ff55d-c9f6-45d4-8338-e8584a499412&PageIndex=1&PageSize=100',
       });
-      console.log('🚀 ~ getClothNavItems ~ res:', res);
 
       if (res) {
         SetClothNavItems(res.value.categories);
@@ -131,15 +129,12 @@ export default function Products({
     };
     getClothNavItems();
   }, []);
-  console.log('🚀 ~ clothNavItems:', clothNavItems);
 
   //Query Shoes Categories
   // useEffect(() => {
   //   const getShoesNavItems = async () => {
   //     const res = await fetch('/api/lib/subcategory?productTypeId=1');
   //     const data = await res.json();
-  //     console.log(res);
-  //     console.log(data);
   //     if (data) {
   //       setShoesNavItems(data);
   //     }
@@ -152,8 +147,6 @@ export default function Products({
   //   const getAccessoryNavItems = async () => {
   //     const res = await fetch('/api/lib/subcategory?productTypeId=3');
   //     const data = await res.json();
-  //     console.log(res);
-  //     console.log(data);
   //     if (data) {
   //       SetAccessoryNavItems(data);
   //     }
@@ -165,8 +158,6 @@ export default function Products({
   //   const getGenderNavItems = async () => {
   //     const res = await fetch('/api/lib/gender');
   //     const data = await res.json();
-  //     console.log(res);
-  //     console.log(data);
   //     if (data) {
   //       setGenderNavItems(data);
   //     }
@@ -180,7 +171,6 @@ export default function Products({
       const res = await getRequest({
         endPoint: '/api/v1/colours?PageIndex=1&PageSize=100',
       });
-      console.log('🚀 ~ getColourNavItems ~ res:', res);
 
       if (res) {
         setColourNavItems(res.value.items);
@@ -188,17 +178,17 @@ export default function Products({
     };
     getColourNavItems();
   }, []);
-  console.log('🚀 ~ colourNavItems:', colourNavItems);
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const searchParamsString = searchParams.toString();
+      const newSearchParams = new URLSearchParams(searchParamsString);
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
           newSearchParams.delete(key);
         } else {
-          newSearchParams.set(key, String(value));
+          newSearchParams.set(key, value.toString());
         }
       }
 
@@ -412,8 +402,8 @@ export default function Products({
                 <Slider
                   variant="range"
                   thickness="thin"
-                  defaultValue={[0, 5000000]}
-                  max={5000000}
+                  defaultValue={[0, 300]}
+                  max={300}
                   step={1}
                   value={priceRange}
                   onValueChange={(value: typeof priceRange) =>
@@ -438,7 +428,7 @@ export default function Products({
                     type="number"
                     inputMode="numeric"
                     min={priceRange[0]}
-                    max={500000}
+                    max={300}
                     className="h-9"
                     value={priceRange[1]}
                     onChange={(e) => {
@@ -537,25 +527,19 @@ export default function Products({
                         <div className="flex flex-col">
                           {colourNavItems?.map((subItem, index) =>
                             subItem.name ? (
-                              <div
+                              <Checkbox
                                 key={index}
-                                style={{
-                                  backgroundColor: subItem.hexCode,
-                                  padding: '10px',
-                                  borderRadius: '5px',
-                                }}
+                                // Set the checked value based on whether the category is in selectedCategories
+                                isSelected={selectedCategories.includes(
+                                  subItem.id
+                                )}
+                                // Pass a callback function that toggles the category on change
+                                onChange={() => toggleCategory(subItem.id)}
                               >
-                                <Checkbox
-                                  // Set the checked value based on whether the category is in selectedCategories
-                                  isSelected={selectedCategories.includes(
-                                    subItem.id
-                                  )}
-                                  // Pass a callback function that toggles the category on change
-                                  onChange={() => toggleCategory(subItem.id)}
-                                >
+                                <span style={{ color: subItem.hexCode }}>
                                   {subItem.name}
-                                </Checkbox>
-                              </div>
+                                </span>
+                              </Checkbox>
                             ) : null
                           )}
                         </div>
@@ -575,7 +559,7 @@ export default function Products({
                   onClick={() => {
                     startTransition(() => {
                       router.push('/products');
-                      setPriceRange([0, 5000000]);
+                      setPriceRange([0, 300]);
                       setSelectedCategories([]);
                     });
                   }}

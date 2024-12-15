@@ -2,14 +2,24 @@ import { useParams } from 'next/navigation';
 import { getRequest, postRequest } from '@/lib/fetch';
 
 export const useProduct = () => {
-  const onGetProductDetail = async (slug) => {
-    const productDetail = await getRequest({
-      endPoint: `/api/Product/${slug}`,
+  const onGetProductDetail = async ({
+    slug,
+    colourId,
+  }: {
+    slug: string;
+    colourId?: string;
+  }) => {
+    const formData = colourId ? { colourId } : {};
+
+    const productDetail = await postRequest({
+      endPoint: `/api/v1/products/${slug}`,
+      formData,
+      isFormData: false,
     });
     console.log('🚀 ~ onGetProductDetail ~ productDetail:', productDetail);
     // const data = await productDetail?.json();
 
-    return productDetail;
+    return productDetail.value;
   };
 
   // const getProductsAction = async (
@@ -106,7 +116,6 @@ export const useProduct = () => {
       },
       isFormData: false,
     });
-    console.log('🚀 ~ useProduct ~ products:', products);
     return {
       data: products.value.items,
       totalPages: Math.round(products.value.totalCount / PageSize),

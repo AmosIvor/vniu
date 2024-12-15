@@ -123,13 +123,14 @@ export function ImageDialog<TFieldValues extends FieldValues>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {
-customButton ?  customButton  :<Button variant='outline' disabled={disabled}>
-Upload Images
-<span className='sr-only'>Upload Images</span>
-</Button>
-        }
-       
+        {customButton ? (
+          customButton
+        ) : (
+          <Button variant="outline" disabled={disabled}>
+            Upload Images
+            <span className="sr-only">Upload Images</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
         <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
@@ -266,12 +267,14 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
   return (
     <div className="relative flex items-center justify-between gap-2.5">
       <div className="flex items-center gap-2">
-        <Zoom><ImageCus
-          src={cropData ? cropData : file.preview}
-          alt={file.name}
-          className="h-12 w-12 shrink-0 rounded-md"
-        /></Zoom>
-        
+        <Zoom>
+          <ImageCus
+            src={cropData ? cropData : file.preview}
+            alt={file.name}
+            className="h-12 w-12 shrink-0 rounded-md"
+          />
+        </Zoom>
+
         <div className="flex flex-col">
           <p className="line-clamp-1 text-sm font-medium text-muted-foreground">
             {file.name.length > 30 ? file.name.slice(0, 30) + '...' : file.name}
@@ -298,7 +301,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                 <span className="sr-only"> Crop image</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className='w-[80%] lg:w-[70%]'>
+            <DialogContent className="w-[80%] lg:w-[70%]">
               <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
                 Crop image{' '}
               </p>
