@@ -34,7 +34,9 @@ export const putRequest = async ({ endPoint, formData, isFormData }) => {
   );
   return res;
 };
-export const deleteRequest = async ({ endPoint }) => {
-  const res = await axiosClient.delete(endPoint);
+export const deleteRequest = async ({ endPoint, formData }) => {
+  const res = await axiosClient.delete(endPoint, {
+    data: formData,
+  });
   return res;
 };

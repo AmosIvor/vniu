@@ -16,7 +16,6 @@ export const useProduct = () => {
       formData,
       isFormData: false,
     });
-    console.log('🚀 ~ onGetProductDetail ~ productDetail:', productDetail);
     // const data = await productDetail?.json();
 
     return productDetail.value;
@@ -102,7 +101,6 @@ export const useProduct = () => {
         endpoint += `&${key}=${value}`;
       }
     }
-    console.log('🚀 ~ useProduct ~ endpoint:', endpoint);
 
     const products = await postRequest({
       endPoint: endpoint,

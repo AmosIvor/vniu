@@ -1,6 +1,6 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import React from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -95,7 +95,7 @@ function ShopByCollection() {
                   src={collection.image}
                   alt={'Jordan'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  fill
+                  layout={'fill'}
                   className="object-cover transition-transform group-hover:scale-105"
                   priority
                 />

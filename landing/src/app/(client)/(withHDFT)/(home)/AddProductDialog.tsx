@@ -34,8 +34,8 @@ const AddProductDialog = () => {
     onToggleSuccess,
     // onUnselectProduct,
   } = useSelectedProduct();
+  console.log('🚀 ~ AddProductDialog ~ selectedProduct:', selectedProduct);
   const [selectedSize, setSizeSelected] = useState(null);
-  console.log('🚀 ~ AddProductDialog ~ selectedSize:', selectedSize);
 
   const [selectedQuantity, setSelectedQuantity] = useState(null);
   const [showError, setShowError] = useState(false);
@@ -54,6 +54,7 @@ const AddProductDialog = () => {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log('🚀 ~ onSubmit ~ data:', data);
     if (errors.quantity) {
       return;
     }
@@ -71,15 +72,13 @@ const AddProductDialog = () => {
 
     try {
       onToggleDialog();
-      await new Promise((resolve) => setTimeout(resolve, 4000));
+      await onAddToCart({
+        data: selectedProduct,
+        quantity: data.quantity,
+        selectedSize: selectedSize,
+      });
       onToggleSuccess();
       resetFormAndState();
-
-      // await onAddToCart({
-      //   data: selectedProduct,
-      //   quantity: data.quantity,
-      //   selectedSize: selectedSize,
-      // });
     } catch (error) {
       console.error('Failed to add product to cart:', error);
       return Promise.reject(error);
@@ -101,7 +100,7 @@ const AddProductDialog = () => {
     setSizeSelected(null);
     setSelectedQuantity(null);
     // setShowSuccess(false);
-    setIsLoading(true);
+    // setIsLoading(true);
   }, []);
 
   return isShowDialog ? (
@@ -211,7 +210,7 @@ const AddProductDialog = () => {
                     onClick={
                       size.sizeOptionQuantityInStock > 0
                         ? () => {
-                            setSizeSelected(size.sizeOptionName);
+                            setSizeSelected(size);
                             setSelectedQuantity(size.sizeOptionQuantityInStock);
                             setShowError(false);
                           }
@@ -223,7 +222,9 @@ const AddProductDialog = () => {
                         ? 'hover:border-black cursor-pointer'
                         : 'cursor-not-allowed disabled bg-black/[0.1] opacity-50'
                     } ${
-                      selectedSize === size.sizeOptionName ? 'border-black' : ''
+                      selectedSize?.sizeOptionName === size.sizeOptionName
+                        ? 'border-black'
+                        : ''
                     } `}
                   >
                     {size.sizeOptionName}

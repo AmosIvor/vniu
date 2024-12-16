@@ -1,6 +1,6 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from "next/legacy/image";
+import Image from 'next/legacy/image';
 import React from 'react';
 import { Balancer } from 'react-wrap-balancer';
 import 'swiper/css';
@@ -93,7 +93,7 @@ function Categories() {
                 <Image
                   src={category.image}
                   alt={category.title}
-                  fill
+                  layout="fill"
                   className="object-cover transition-transform group-hover:scale-105"
                   priority
                 />

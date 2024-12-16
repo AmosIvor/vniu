@@ -5,7 +5,6 @@ import { Carousel } from 'react-responsive-carousel';
 import { BiArrowBack } from 'react-icons/bi';
 
 function ProductDetailLeft({ data }) {
-  console.log('🚀 ~ ProductDetailLeft ~ data:', data);
   return (
     <div className=" text-white text-[20px] w-full max-w-[1360px] sticky top-[50px]">
       <Carousel
