@@ -22,7 +22,7 @@ function page() {
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo', session?.data?.user?.id],
     queryFn: async () => {
-      const res = await onGetUserDetail(session?.data?.user?.id);
+      const res = await onGetUserDetail();
       setIsLoaded(true);
       return res;
     },

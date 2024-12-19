@@ -17,8 +17,8 @@ import Loader from '@/components/Loader';
 interface CheckoutModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (input: boolean) => void;
-  checkedItems: any;
-  total: number;
+  checkedItems?: any;
+  total?: number;
 }
 
 const CheckoutModal = ({
@@ -27,8 +27,6 @@ const CheckoutModal = ({
   checkedItems,
   total,
 }: CheckoutModalProps) => {
-  console.log('🚀 ~ file: CheckoutModal.tsx:27 ~ total:', total);
-  console.log('🚀 ~ file: CheckoutModal.tsx:27 ~ checkedItems:', checkedItems);
   const [page, setPage] = useState('1');
   const [userFullName, setUserFullName] = useState('');
   const [userAddress, setUserAddress] = useState('');
@@ -38,25 +36,26 @@ const CheckoutModal = ({
   const { data: userInfo, isLoading: isLoadingUserInfo } = useQuery({
     queryKey: ['userInfo', session?.data?.user?.id],
     queryFn: async () => {
-      const res = await onGetUserDetail(session?.data?.user?.id);
+      const res = await onGetUserDetail();
       return res;
     },
     enabled: !!session?.data?.user?.id,
   });
+
   const { data: userAddresses, isLoading: isLoadingUserAddresses } = useQuery(
     ['userAddresses', session?.data?.user?.id],
     async () => {
       const res = await getRequest({
-        endPoint: `/api/user/address?id=${session?.data?.user?.id}`,
+        endPoint: `/api/v1/users/${session?.data?.user?.id}/user-address`,
       });
-      return res;
+      return res.value;
     },
     { enabled: !!session?.data?.user?.id }
   );
 
   useEffect(() => {
     if (userInfo) {
-      setUserFullName(userInfo?.name);
+      setUserFullName(userInfo?.fullName);
       setUserEmail(userInfo?.email);
     }
   }, [userInfo]);
@@ -77,7 +76,7 @@ const CheckoutModal = ({
         ) : (
           <div className="flex w-full flex-col gap-y-5">
             <MultiStepProgressBar page={page} onPageNumberClick={() => {}} />
-            <Label>Tổng thành tiền của bạn: {currencyFormat(total)} </Label>
+            <Label>Your total amount: {currencyFormat(total)} </Label>
             <Tabs
               selectedKey={page}
               classNames={{
@@ -123,7 +122,7 @@ const CheckoutModal = ({
                         setPage('1');
                       }}
                     >
-                      Quay lại
+                      Back
                     </Button>
                   </div>
                 </div>
@@ -131,8 +130,8 @@ const CheckoutModal = ({
               <Tab key={'3'} title="Hoàn tất">
                 <Card>
                   <CardBody>
-                    Xin cảm ơn quý khách vì đã mua hàng! Chúc quý khách có những
-                    trải nghiệm tốt nhất với sản phẩm của chúng tôi!
+                    Thank you for your purchase! We hope you have the best
+                    experience with our products!
                   </CardBody>
                 </Card>
               </Tab>

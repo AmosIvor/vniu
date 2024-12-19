@@ -2,14 +2,10 @@
 
 import { AddAddress } from '@/app/(authenticated)/user/profile/AddAddress';
 import Loader from '@/components/Loader';
-import { SelectAddress } from '@/components/select-address';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useUser } from '@/hooks/useUser';
 import { Select, SelectItem } from '@nextui-org/react';
-import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react';
 
 const AuthInformationForm = ({
@@ -27,7 +23,7 @@ const AuthInformationForm = ({
     new Set([addresses?.[0]?.addressValue?.toString()])
   );
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [fullName, setFullName] = useState(user?.name);
+  const [fullName, setFullName] = useState(user?.fullName);
   const [email, setEmail] = useState(user?.email);
   useEffect(() => {
     if (selectedType.size > 0) {
@@ -84,7 +80,7 @@ const AuthInformationForm = ({
           })}
         </Select>
         <Button
-          disabled={!addressValue || !fullName || !email}
+          disabled={!fullName || !email}
           className="w-32"
           onClick={() => {
             setIsAddressModalOpen(true);

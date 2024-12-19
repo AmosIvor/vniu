@@ -20,7 +20,13 @@ import { useWishList } from '@/hooks/useWishList';
 // import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({
+  product,
+  productId,
+}: {
+  product: any;
+  productId?: any;
+}) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = useState<boolean>(false);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
@@ -59,7 +65,7 @@ export default function ProductCard({ product }) {
   return (
     <div>
       <div className="relative">
-        <Link href={`/product/${product?.id}`}>
+        <Link href={`/product/${productId ? productId : product?.id}`}>
           <Image
             objectFit="cover"
             width={900}

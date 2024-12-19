@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { Select, SelectItem } from "@nextui-org/react";
-import { getRequest } from "@/lib/fetch";
-import { Input } from "@/components/ui/input";
-import DialogCustom from "@/components/ui/dialogCustom";
-import { Button } from "@/components/ui/button";
-import { Label } from "./ui/label";
+import React, { useEffect } from 'react';
+import { Select, SelectItem } from '@nextui-org/react';
+import { getRequest } from '@/lib/fetch';
+import { Input } from '@/components/ui/input';
+import DialogCustom from '@/components/ui/dialogCustom';
+import { Button } from '@/components/ui/button';
+import { Label } from './ui/label';
+import data from '@/assets/db.json';
 
 export const SelectAddress = ({ addressValue, setAddressValue }) => {
   const [selectedProvince, setSelectedProvince] = React.useState(new Set([]));
@@ -28,53 +29,40 @@ export const SelectAddress = ({ addressValue, setAddressValue }) => {
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  const [streetValue, setStreetValue] = React.useState("");
-  const [houseNumberValue, setHouseNumberValue] = React.useState("");
+  const [streetValue, setStreetValue] = React.useState('');
+  const [houseNumberValue, setHouseNumberValue] = React.useState('');
 
   useEffect(() => {
-    async function getProvince() {
-      setIsLoadingProvince(true);
-      const res = await getRequest({
-        endPoint: "https://provinces.open-api.vn/api/p/",
-      });
-
-      setProvince(res);
-      setIsLoadingProvince(false);
-    }
-    getProvince();
+    setProvince(data.province);
+    setIsLoadingProvince(false);
   }, []);
+
   useEffect(() => {
     setDistrict([]);
     setWard([]);
-    async function getDistrict() {
-      if (selectedProvince.size > 0) {
-        setIsLoadingDistrict(true);
-        const valuesArray = Array.from(selectedProvince);
-        const provinceCode = valuesArray[0];
-        const res = await getRequest({
-          endPoint: `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`,
-        });
-        setDistrict(res?.districts);
-        setIsLoadingDistrict(false);
-      }
+    if (selectedProvince.size > 0) {
+      setIsLoadingDistrict(true);
+      const valuesArray = Array.from(selectedProvince);
+      const provinceCode = valuesArray[0];
+      const filteredDistricts = data.district.filter(
+        (d) => d.idProvince === provinceCode
+      );
+      setDistrict(filteredDistricts);
+      setIsLoadingDistrict(false);
     }
-    getDistrict();
   }, [selectedProvince]);
-  useEffect(() => {
-    async function getWard() {
-      if (selectedDistrict.size > 0) {
-        setIsLoadingWard(true);
-        const valuesArray = Array.from(selectedDistrict);
-        const districtCode = valuesArray[0];
-        const res = await getRequest({
-          endPoint: `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`,
-        });
-        setWard(res?.wards);
-        setIsLoadingWard(false);
-      }
-    }
 
-    getWard();
+  useEffect(() => {
+    if (selectedDistrict.size > 0) {
+      setIsLoadingWard(true);
+      const valuesArray = Array.from(selectedDistrict);
+      const districtCode = valuesArray[0];
+      const filteredWards = data.commune.filter(
+        (c) => c.idDistrict === districtCode
+      );
+      setWard(filteredWards);
+      setIsLoadingWard(false);
+    }
   }, [selectedDistrict]);
   console.log(wards);
   const isProvinceValid = selectedProvince.size > 0;
@@ -85,18 +73,18 @@ export const SelectAddress = ({ addressValue, setAddressValue }) => {
     const valuesArrayProvince = Array.from(selectedProvince);
     const provinceCode = valuesArrayProvince[0];
     const provinceValue = provinces.find(
-      (province) => province.code == provinceCode
+      (province) => province.idProvince == provinceCode
     )?.name;
 
     const valuesArrayDistrict = Array.from(selectedDistrict);
     const districtCode = valuesArrayDistrict[0];
     const districtValue = districts.find(
-      (district) => district.code == districtCode
+      (district) => district.idDistrict == districtCode
     )?.name;
 
     const valuesArrayWard = Array.from(selectedWard);
     const wardCode = valuesArrayWard[0];
-    const wardValue = wards.find((ward) => ward.code == wardCode)?.name;
+    const wardValue = wards.find((ward) => ward.idCommune == wardCode)?.name;
     console.log(
       provinceValue,
       districtValue,
@@ -104,24 +92,24 @@ export const SelectAddress = ({ addressValue, setAddressValue }) => {
       streetValue,
       houseNumberValue
     );
-setAddressValue(`${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtValue}, ${provinceValue}`)
+    setAddressValue(
+      `${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtValue}, ${provinceValue}`
+    );
     setIsModalOpen(false);
   };
   return (
     <div className="flex flex-col w-full gap-y-3">
-  
-
-<Label>
-  Address
-</Label>
+      <Label>Address</Label>
       <Select
         isOpen={false}
         label="Your Address"
         placeholder="Choose your address"
-        selectedKeys={addressValue !== "" ? [addressValue] : null}
-        isInvalid={addressValue !== "" || !diaChiTouched ? false : true}
+        selectedKeys={addressValue !== '' ? [addressValue] : null}
+        isInvalid={addressValue !== '' || !diaChiTouched ? false : true}
         errorMessage={
-          addressValue !== "" || !diaChiTouched ? "" : "Please choose your address"
+          addressValue !== '' || !diaChiTouched
+            ? ''
+            : 'Please choose your address'
         }
         className="w-full"
         radius="sm"
@@ -147,14 +135,14 @@ setAddressValue(`${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtVa
           <div className="flex flex-col gap-y-6 w-[95%] px-1">
             <p className="font-medium">Address</p>
             <Select
-              key={"province"}
-              radius={"sm"}
+              key={'province'}
+              radius={'sm'}
               label="City, Provice"
               isInvalid={isProvinceValid || !provinceTouched ? false : true}
               errorMessage={
                 isProvinceValid || !provinceTouched
-                  ? ""
-                  : "Please choose your city, province"
+                  ? ''
+                  : 'Please choose your city, province'
               }
               autoFocus={false}
               placeholder="Chose city"
@@ -165,20 +153,23 @@ setAddressValue(`${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtVa
               onClose={() => setProvinceTouched(true)}
             >
               {provinces?.map((province) => (
-                <SelectItem key={province.code} value={province.code}>
+                <SelectItem
+                  key={province.idProvince}
+                  value={province.idProvince}
+                >
                   {province.name}
                 </SelectItem>
               ))}
             </Select>
             <Select
-              key={"district"}
-              radius={"sm"}
+              key={'district'}
+              radius={'sm'}
               label="District"
               isInvalid={isDistrictValid || !districtTouched ? false : true}
               errorMessage={
                 isDistrictValid || !districtTouched
-                  ? ""
-                  : "Please choose your district"
+                  ? ''
+                  : 'Please choose your district'
               }
               autoFocus={false}
               placeholder="Choose district"
@@ -189,18 +180,21 @@ setAddressValue(`${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtVa
               onClose={() => setDistrictTouched(true)}
             >
               {districts?.map((district) => (
-                <SelectItem key={district.code} value={district.code}>
+                <SelectItem
+                  key={district.idDistrict}
+                  value={district.idDistrict}
+                >
                   {district.name}
                 </SelectItem>
               ))}
             </Select>
             <Select
-              key={"ward"}
-              radius={"sm"}
+              key={'ward'}
+              radius={'sm'}
               label="Ward"
               isInvalid={isWardValid || !wardTouched ? false : true}
               errorMessage={
-                isWardValid || !wardTouched ? "" : "Please choose your ward"
+                isWardValid || !wardTouched ? '' : 'Please choose your ward'
               }
               autoFocus={false}
               placeholder="Choose ward"
@@ -211,15 +205,13 @@ setAddressValue(`${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtVa
               onClose={() => setWardTouched(true)}
             >
               {wards?.map((ward) => (
-                <SelectItem key={ward.code} value={ward.code}>
+                <SelectItem key={ward.idCommune} value={ward.idCommune}>
                   {ward.name}
                 </SelectItem>
               ))}
             </Select>
             <div className="flex flex-col gap-3 ">
-<Label>
-  Street name
-</Label>
+              <Label>Street name</Label>
               <Input
                 value={streetValue}
                 onChange={(e) => {
@@ -228,9 +220,7 @@ setAddressValue(`${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtVa
                 className="w-full "
                 placeholder="Street name"
               />
-              <Label>
-House number
-</Label>
+              <Label>House number</Label>
               <Input
                 value={houseNumberValue}
                 onChange={(e) => {
@@ -240,10 +230,6 @@ House number
                 placeholder="House number"
               />
             </div>
-
-            
-        
-           
 
             <div className="w-full flex items-center justify-center">
               <Button
@@ -257,7 +243,7 @@ House number
                 onClick={onSubmit}
                 className="w-[50%]"
               >
-           Confirm
+                Confirm
               </Button>
             </div>
           </div>
