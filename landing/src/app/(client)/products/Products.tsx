@@ -48,8 +48,8 @@ interface ProductsProps {
   // sort: string | null;
   // gender: string | null;
   categoryIds: string | null;
-  // subcategories: string | null;
-  // price_range: string | null;
+  colourIds: string | null;
+  price_range: string | null;
 }
 
 export default function Products({
@@ -57,8 +57,8 @@ export default function Products({
   // sort,
   // gender,
   categoryIds,
-  // subcategories,
-  // price_range = '',
+  colourIds,
+  price_range,
   ...props
 }: ProductsProps) {
   const { fetchProduct } = useProduct();
@@ -79,8 +79,8 @@ export default function Products({
         // sort,
         // gender,
         categoryIds,
-        // subcategories,
-        // price_range,
+        colourIds,
+        price_range,
       }),
     {
       staleTime: 1000 * 60 * 1,
@@ -103,10 +103,8 @@ export default function Products({
   // const page = searchParams?.get('page') ?? '1';
   // const per_page = searchParams?.get('per_page') ?? '8';
   // const sort = searchParams?.get('sort') ?? 'id.desc';
-  const [genderNavItems, setGenderNavItems] = useState([]);
-  const [shoesNavItems, setShoesNavItems] = useState([]);
+
   const [clothNavItems, SetClothNavItems] = useState([]);
-  const [accessoryNavItems, SetAccessoryNavItems] = useState([]);
   interface ColourNavItem {
     id: string;
     name: string;
@@ -129,41 +127,6 @@ export default function Products({
     };
     getClothNavItems();
   }, []);
-
-  //Query Shoes Categories
-  // useEffect(() => {
-  //   const getShoesNavItems = async () => {
-  //     const res = await fetch('/api/lib/subcategory?productTypeId=1');
-  //     const data = await res.json();
-  //     if (data) {
-  //       setShoesNavItems(data);
-  //     }
-  //   };
-  //   getShoesNavItems();
-  // }, []);
-
-  //Query Accessory Categories
-  // useEffect(() => {
-  //   const getAccessoryNavItems = async () => {
-  //     const res = await fetch('/api/lib/subcategory?productTypeId=3');
-  //     const data = await res.json();
-  //     if (data) {
-  //       SetAccessoryNavItems(data);
-  //     }
-  //   };
-  //   getAccessoryNavItems();
-  // }, []);
-  //Query Gender
-  // useEffect(() => {
-  //   const getGenderNavItems = async () => {
-  //     const res = await fetch('/api/lib/gender');
-  //     const data = await res.json();
-  //     if (data) {
-  //       setGenderNavItems(data);
-  //     }
-  //   };
-  //   getGenderNavItems();
-  // }, []);
 
   // Query Colours
   useEffect(() => {
@@ -247,32 +210,34 @@ export default function Products({
     );
   };
 
-  // subCategory filter
-  // const [selectedSubCategories, setSelectedSubCategories] = React.useState([]);
+  // colourIds filter
+  const [selectedColourIds, setSelectedColourIds] = React.useState<string[]>(
+    []
+  );
 
-  // React.useEffect(() => {
-  //   startTransition(() => {
-  //     router.push(
-  //       `${pathname}?${createQueryString({
-  //         subcategories: selectedSubCategories?.length
-  //           ? // Join categories with a dot to make search params prettier
-  //             selectedSubCategories.map((c) => c).join('.')
-  //           : null,
-  //       })}`,
-  //       {
-  //         scroll: false,
-  //       }
-  //     );
-  //   });
-  //   refetchData();
-  // }, [selectedSubCategories]);
-  // const toggleSubCategory = (subcategory) => {
-  //   setSelectedSubCategories((prev) =>
-  //     prev.includes(subcategory)
-  //       ? prev.filter((c) => c !== subcategory)
-  //       : [...prev, subcategory]
-  //   );
-  // };
+  React.useEffect(() => {
+    startTransition(() => {
+      router.push(
+        `${pathname}?${createQueryString({
+          colourIds: selectedColourIds?.length
+            ? // Join categories with a dot to make search params prettier
+              selectedColourIds.map((c) => c).join('.')
+            : null,
+        })}`,
+        {
+          scroll: false,
+        }
+      );
+    });
+    refetchData();
+  }, [selectedColourIds]);
+  const toggleColourIds = (subcategory: string) => {
+    setSelectedColourIds((prev) =>
+      prev.includes(subcategory)
+        ? prev.filter((c) => c !== subcategory)
+        : [...prev, subcategory]
+    );
+  };
 
   // Search bar
 
@@ -304,28 +269,18 @@ export default function Products({
     }
   }, [categoryIds]);
 
-  // SubCategory filter initialization from query parameter
-  // React.useEffect(() => {
-  //   if (subcategories) {
-  //     const subCategoryIds = subcategories
-  //       .split('.')
-  //       .map((s) => parseInt(s, 10));
-  //     setSelectedSubCategories(subCategoryIds);
-  //   }
-  // }, [subcategories]);
+  React.useEffect(() => {
+    if (colourIds) {
+      const colourIdsTemp = colourIds.split('.').map((c) => c);
+      setSelectedColourIds(colourIdsTemp);
+    }
+  }, [colourIds]);
+
   return (
     <section className="flex flex-col space-y-6" {...props}>
       <div className="flex space-x-2 items-end px-4">
         <Sheet>
           <SheetTrigger asChild>
-            {/* <Button
-              aria-label="Filter products"
-              size="sm"
-              disabled={isPending}
-              className="fixed center-x top-150 left-100 w-50 z-50"
-            >
-              Filter
-            </Button> */}
             <Button
               aria-label="Filter products"
               className="fixed top-[55px] left-50 w-[30px] h-[30px] z-50 p-2 rounded-full bg-white shadow-md hover:shadow-lg"
@@ -469,11 +424,11 @@ export default function Products({
                         </div>
                       </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="shoes">
+                    {/* <AccordionItem value="shoes">
                       <AccordionTrigger className="text-sm">
                         Shoes
                       </AccordionTrigger>
-                      {/* <AccordionContent>
+                      <AccordionContent>
                         <div className="flex flex-col">
                           {shoesNavItems?.map((subItem, index) =>
                             subItem.name ? (
@@ -483,7 +438,6 @@ export default function Products({
                                 isSelected={selectedSubCategories.includes(
                                   subItem.id
                                 )}
-                                // Pass a callback function that toggles the category on change
                                 onChange={() => toggleSubCategory(subItem.id)}
                               >
                                 {subItem.name}
@@ -491,14 +445,14 @@ export default function Products({
                             ) : null
                           )}
                         </div>
-                      </AccordionContent> */}
+                      </AccordionContent>
                     </AccordionItem>
 
                     <AccordionItem value="Glasses">
                       <AccordionTrigger className="text-sm">
                         Glasses
                       </AccordionTrigger>
-                      {/* <AccordionContent>
+                      <AccordionContent>
                         <div className="flex flex-col">
                           {accessoryNavItems?.map((subItem, index) =>
                             subItem.name ? (
@@ -516,8 +470,8 @@ export default function Products({
                             ) : null
                           )}
                         </div>
-                      </AccordionContent> */}
-                    </AccordionItem>
+                      </AccordionContent>
+                    </AccordionItem> */}
 
                     <AccordionItem value="Colours">
                       <AccordionTrigger className="text-sm">
@@ -530,11 +484,11 @@ export default function Products({
                               <Checkbox
                                 key={index}
                                 // Set the checked value based on whether the category is in selectedCategories
-                                isSelected={selectedCategories.includes(
+                                isSelected={selectedColourIds.includes(
                                   subItem.id
                                 )}
                                 // Pass a callback function that toggles the category on change
-                                onChange={() => toggleCategory(subItem.id)}
+                                onChange={() => toggleColourIds(subItem.id)}
                               >
                                 <span style={{ color: subItem.hexCode }}>
                                   {subItem.name}
@@ -561,6 +515,7 @@ export default function Products({
                       router.push('/products');
                       setPriceRange([0, 300]);
                       setSelectedCategories([]);
+                      setSelectedColourIds([]);
                     });
                   }}
                   disabled={isPending}

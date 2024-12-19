@@ -67,29 +67,33 @@ export const useProduct = () => {
 
   const fetchProduct = async ({
     PageIndex = 1,
-    PageSize = 4,
+    PageSize = 8,
     //   q,
     //   sort,
     //   gender,
-    //   categoryIds,
-    //   subcategories,
-    //   price_range,
+    colourIds,
+    price_range,
     SearchTerm,
     categoryIds,
+    productItemIds = [],
   }: {
     PageIndex: number;
     PageSize: number;
     SearchTerm: string | null;
     categoryIds: string | null;
+    price_range: string | null;
+    colourIds: string | null;
+    productItemIds?: string[] | null;
   }) => {
+    console.log('🚀 ~ useProduct ~ productItemIds:', productItemIds);
     const params = {
       PageIndex,
       // PageSize,
       SearchTerm,
       //   sort,
       //   gender,
-      //   subcategories,
-      //   price_range,
+      // colourIds,
+      price_range,
     };
 
     // Construct the base endpoint
@@ -101,16 +105,24 @@ export const useProduct = () => {
         endpoint += `&${key}=${value}`;
       }
     }
-
+    const CategoryIds = categoryIds ? categoryIds.split('.') : [];
+    const ColourIds = colourIds ? colourIds.split('.') : [];
+    const { minPrice, maxPrice } = price_range
+      ? {
+          minPrice: price_range.split('-')[0],
+          maxPrice: price_range.split('-')[1],
+        }
+      : { minPrice: 0, maxPrice: 500 };
     const products = await postRequest({
       endPoint: endpoint,
       formData: {
-        CategoryIds: [],
+        CategoryIds,
         ratingValue: 0,
-        minPrice: 0,
-        maxPrice: 500,
-        colourIds: [],
+        minPrice,
+        maxPrice,
+        colourIds: ColourIds,
         sizeOptionIds: [],
+        productItemIds,
       },
       isFormData: false,
     });

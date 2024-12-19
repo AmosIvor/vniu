@@ -1,8 +1,17 @@
+// import React from 'react';
+// import ImageSearchWithCrop from './ImageSearch1';
+
+// export default function Page() {
+//   return (
+//     <div className="w-full h-full">
+//       <ImageSearchWithCrop />
+//     </div>
+//   );
+// }
 'use client';
 
 import React, { use } from 'react';
-import AddProductDialog from '../(withHDFT)/(home)/AddProductDialog';
-import Products from './Products';
+import ImageSearchWithCrop from './ImageSearch2';
 
 export default function Page({
   searchParams,
@@ -20,14 +29,13 @@ export default function Page({
 
   return (
     <div className="w-full h-full">
-      <Products
+      <ImageSearchWithCrop
         categoryIds={categoryIds}
         SearchTerm={SearchTerm}
         colourIds={colourIds}
         // sort={resolvedSearchParams?.sort}
         price_range={price_range}
       />
-      <AddProductDialog />
     </div>
   );
 }

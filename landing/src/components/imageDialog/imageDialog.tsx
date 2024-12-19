@@ -26,6 +26,8 @@ import { Icons } from '@/assets/Icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ImageCus } from '@/components/ui/ImageCus';
 import { Zoom } from '../ui/zoom-image';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {
@@ -133,9 +135,9 @@ export function ImageDialog<TFieldValues extends FieldValues>({
         )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
-        <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-          Upload your files
-        </p>
+        <VisuallyHidden className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
+          <DialogTitle>Upload your files</DialogTitle>
+        </VisuallyHidden>
 
         {(files && files?.length < maxFiles) || !files ? (
           <div>
@@ -302,9 +304,9 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
               </Button>
             </DialogTrigger>
             <DialogContent className="w-[80%] lg:w-[70%]">
-              <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-                Crop image{' '}
-              </p>
+              <VisuallyHidden className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
+                <DialogTitle>Crop image</DialogTitle>
+              </VisuallyHidden>
               <div className="mt-8 grid place-items-center space-y-5">
                 <Cropper
                   ref={cropperRef}
@@ -334,7 +336,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                     }}
                   >
                     <Icons.crop className="mr-2 h-3.5 w-3.5 text-secondary-50" />
-                    Crop image{' '}
+                    Crop image
                   </Button>
                   <Button
                     aria-label="Reset crop"
@@ -351,7 +353,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                       className="mr-2 h-3.5 w-3.5 text-primary"
                       aria-hidden="true"
                     />
-                    Discard changes{' '}
+                    Discard changes
                   </Button>
                 </div>
               </div>

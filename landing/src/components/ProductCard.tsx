@@ -40,10 +40,6 @@ export default function ProductCard({
   const { wishList, onAddUserWishList, onRemoveUserWishList } = useWishList();
 
   useEffect(() => {
-    console.log(isAddToCart, isShowDialog);
-  }, []);
-
-  useEffect(() => {
     const found = cart?.listItem.find(
       (item) => item.data.productId === product?.id
     );
