@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const config = {
-  baseURL: `https://localhost:7257/`,
+  baseURL: `${process.env.NEXT_PUBLIC_SOCKET_URL}`,
   headers: {
     // Accept: 'application/json',
     'Content-Type': 'application/json',
