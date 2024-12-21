@@ -26,6 +26,8 @@ import { Icons } from '@/assets/Icons';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ImageCus } from '@/components/ui/ImageCus';
 import { Zoom } from '../ui/zoom-image';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 // FIXME Your proposed upload exceeds the maximum allowed size, this should trigger toast.error too
 type FileWithPreview = FileWithPath & {
@@ -123,18 +125,19 @@ export function ImageDialog<TFieldValues extends FieldValues>({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {
-customButton ?  customButton  :<Button variant='outline' disabled={disabled}>
-Upload Images
-<span className='sr-only'>Upload Images</span>
-</Button>
-        }
-       
+        {customButton ? (
+          customButton
+        ) : (
+          <Button variant="outline" disabled={disabled}>
+            Upload Images
+            <span className="sr-only">Upload Images</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[480px]">
-        <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-          Upload your files
-        </p>
+        <VisuallyHidden className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
+          <DialogTitle>Upload your files</DialogTitle>
+        </VisuallyHidden>
 
         {(files && files?.length < maxFiles) || !files ? (
           <div>
@@ -266,12 +269,14 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
   return (
     <div className="relative flex items-center justify-between gap-2.5">
       <div className="flex items-center gap-2">
-        <Zoom><ImageCus
-          src={cropData ? cropData : file.preview}
-          alt={file.name}
-          className="h-12 w-12 shrink-0 rounded-md"
-        /></Zoom>
-        
+        <Zoom>
+          <ImageCus
+            src={cropData ? cropData : file.preview}
+            alt={file.name}
+            className="h-12 w-12 shrink-0 rounded-md"
+          />
+        </Zoom>
+
         <div className="flex flex-col">
           <p className="line-clamp-1 text-sm font-medium text-muted-foreground">
             {file.name.length > 30 ? file.name.slice(0, 30) + '...' : file.name}
@@ -298,10 +303,10 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                 <span className="sr-only"> Crop image</span>
               </Button>
             </DialogTrigger>
-            <DialogContent className='w-[80%] lg:w-[70%]'>
-              <p className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
-                Crop image{' '}
-              </p>
+            <DialogContent className="w-[80%] lg:w-[70%]">
+              <VisuallyHidden className="absolute left-5 top-4 text-base font-medium text-muted-foreground">
+                <DialogTitle>Crop image</DialogTitle>
+              </VisuallyHidden>
               <div className="mt-8 grid place-items-center space-y-5">
                 <Cropper
                   ref={cropperRef}
@@ -331,7 +336,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                     }}
                   >
                     <Icons.crop className="mr-2 h-3.5 w-3.5 text-secondary-50" />
-                    Crop image{' '}
+                    Crop image
                   </Button>
                   <Button
                     aria-label="Reset crop"
@@ -348,7 +353,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
                       className="mr-2 h-3.5 w-3.5 text-primary"
                       aria-hidden="true"
                     />
-                    Discard changes{' '}
+                    Discard changes
                   </Button>
                 </div>
               </div>

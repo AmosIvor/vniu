@@ -11,7 +11,7 @@ import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import Loader from '@/components/Loader';
-
+import data from '@/assets/db.json';
 export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
   const session = useSession();
   const [addressValue, setAddressValue] = React.useState('');
@@ -37,51 +37,37 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = React.useState(false);
   useEffect(() => {
-    async function getProvince() {
-      setIsLoadingProvince(true);
-      const res = await getRequest({
-        endPoint: 'https://provinces.open-api.vn/api/p/',
-      });
-
-      setProvince(res);
-      setIsLoadingProvince(false);
-    }
-    getProvince();
+    setProvince(data.province);
+    setIsLoadingProvince(false);
   }, []);
+
   useEffect(() => {
     setDistrict([]);
     setWard([]);
-    async function getDistrict() {
-      if (selectedProvince.size > 0) {
-        setIsLoadingDistrict(true);
-        const valuesArray = Array.from(selectedProvince);
-        const provinceCode = valuesArray[0];
-        const res = await getRequest({
-          endPoint: `https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`,
-        });
-        setDistrict(res?.districts);
-        setIsLoadingDistrict(false);
-      }
+    if (selectedProvince.size > 0) {
+      setIsLoadingDistrict(true);
+      const valuesArray = Array.from(selectedProvince);
+      const provinceCode = valuesArray[0];
+      const filteredDistricts = data.district.filter(
+        (d) => d.idProvince === provinceCode
+      );
+      setDistrict(filteredDistricts);
+      setIsLoadingDistrict(false);
     }
-    getDistrict();
   }, [selectedProvince]);
-  useEffect(() => {
-    async function getWard() {
-      if (selectedDistrict.size > 0) {
-        setIsLoadingWard(true);
-        const valuesArray = Array.from(selectedDistrict);
-        const districtCode = valuesArray[0];
-        const res = await getRequest({
-          endPoint: `https://provinces.open-api.vn/api/d/${districtCode}?depth=2`,
-        });
-        setWard(res?.wards);
-        setIsLoadingWard(false);
-      }
-    }
 
-    getWard();
+  useEffect(() => {
+    if (selectedDistrict.size > 0) {
+      setIsLoadingWard(true);
+      const valuesArray = Array.from(selectedDistrict);
+      const districtCode = valuesArray[0];
+      const filteredWards = data.commune.filter(
+        (c) => c.idDistrict === districtCode
+      );
+      setWard(filteredWards);
+      setIsLoadingWard(false);
+    }
   }, [selectedDistrict]);
-  console.log(wards);
   const isProvinceValid = selectedProvince.size > 0;
   const isDistrictValid = selectedDistrict.size > 0;
   const isWardValid = selectedWard.size > 0;
@@ -90,44 +76,58 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
     const valuesArrayProvince = Array.from(selectedProvince);
     const provinceCode = valuesArrayProvince[0];
     const provinceValue = provinces.find(
-      (province) => province.code == provinceCode
+      (province) => province.idProvince == provinceCode
     )?.name;
 
     const valuesArrayDistrict = Array.from(selectedDistrict);
     const districtCode = valuesArrayDistrict[0];
     const districtValue = districts.find(
-      (district) => district.code == districtCode
+      (district) => district.idDistrict == districtCode
     )?.name;
 
     const valuesArrayWard = Array.from(selectedWard);
     const wardCode = valuesArrayWard[0];
-    const wardValue = wards.find((ward) => ward.code == wardCode)?.name;
-    console.log(
-      provinceValue,
-      districtValue,
-      wardValue,
-      streetValue,
-      houseNumberValue
-    );
+    const wardValue = wards.find((ward) => ward.idWard == wardCode)?.name;
+    console.log('🚀 ~ onSubmit ~ districtValue:', districtValue);
+    console.log('🚀 ~ onSubmit ~ provinceValue:', provinceValue);
+    console.log('🚀 ~ onSubmit ~ wardValue:', wardValue);
+    console.log('🚀 ~ onSubmit ~ streetValue:', streetValue);
+    console.log('🚀 ~ onSubmit ~ houseNumberValue:', houseNumberValue);
     // setAddressValue(
     //   `${houseNumberValue}, ${streetValue}, ${wardValue}, ${districtValue}, ${provinceValue}`
     // );
     setIsLoading(true);
     const res = await postRequest({
-      endPoint: '/api/user/address',
+      endPoint: '/api/v1/addresses',
       formData: {
+        unitNumber: houseNumberValue,
+        streetNumber: streetValue,
+        addressLine1: wardValue,
+        addressLine2: ' ',
         city: provinceValue,
-        district: districtValue,
-        ward: wardValue,
-        street: streetValue,
-        houseNumber: houseNumberValue,
-        userId: session?.data?.user?.id,
+        province: districtValue,
       },
       isFormData: false,
     });
+
     setIsLoading(false);
-    if (res?.message === 'success') {
-      toast.success('Thêm địa chỉ thành công');
+
+    if (!res.isSuccess) {
+      throw new Error('Failed to add to address');
+    }
+    if (res.isSuccess) {
+      const response = await postRequest({
+        endPoint: '/api/v1/user-addresses',
+        formData: {
+          userId: session?.data?.user?.id,
+          addressId: res.value.id,
+          isDefault: 0,
+        },
+        isFormData: false,
+      });
+      if (!response.isSuccess) {
+        throw new Error('Failed to add to address');
+      } else toast.success('Thêm địa chỉ thành công');
     }
     queryClient.refetchQueries(['userInfo', session?.data?.user?.id]);
     queryClient.refetchQueries(['userAddresses', session?.data?.user?.id]);
@@ -173,7 +173,10 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
                 onClose={() => setProvinceTouched(true)}
               >
                 {provinces?.map((province) => (
-                  <SelectItem key={province.code} value={province.code}>
+                  <SelectItem
+                    key={province.idProvince}
+                    value={province.idProvince}
+                  >
                     {province.name}
                   </SelectItem>
                 ))}
@@ -197,7 +200,10 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
                 onClose={() => setDistrictTouched(true)}
               >
                 {districts?.map((district) => (
-                  <SelectItem key={district.code} value={district.code}>
+                  <SelectItem
+                    key={district.idDistrict}
+                    value={district.idDistrict}
+                  >
                     {district.name}
                   </SelectItem>
                 ))}
@@ -219,7 +225,7 @@ export const AddAddress = ({ isModalOpen, setIsModalOpen }) => {
                 onClose={() => setWardTouched(true)}
               >
                 {wards?.map((ward) => (
-                  <SelectItem key={ward.code} value={ward.code}>
+                  <SelectItem key={ward.idWard} value={ward.idWard}>
                     {ward.name}
                   </SelectItem>
                 ))}

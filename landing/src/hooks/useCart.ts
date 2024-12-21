@@ -4,7 +4,12 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from 'next-auth/react';
 // import { User } from '@/models';
-import { getRequest } from '@/lib/fetch';
+import {
+  deleteRequest,
+  getRequest,
+  postRequest,
+  putRequest,
+} from '@/lib/fetch';
 //dispatch, selector
 import {
   addToCart,
@@ -22,11 +27,12 @@ export const useCart = () => {
   const dispatch = useDispatch();
   const reduxCart = useSelector((state: any) => state.cart) || null;
 
-  const fetchUserCart = async (userId) => {
+  const fetchUserCart = async () => {
+    // Shopping Cart
     const userShoppingCart = await getRequest({
-      endPoint: `/api/user/cart/cart-item?userId=${userId}`,
+      endPoint: `/api/v1/users/${session?.user?.id}/cart-items/filter-and-sort?PageIndex=1&PageSize=100`,
     });
-    return userShoppingCart;
+    return userShoppingCart.value.items;
   };
 
   const {
@@ -35,19 +41,20 @@ export const useCart = () => {
     isLoading,
   } = useQuery({
     queryKey: ['useCart'],
-    queryFn: () => fetchUserCart(session?.user.id),
+    queryFn: () => fetchUserCart(),
     enabled: !!session,
   });
 
-  const convertToReduxCart = (prismaCart) => {
-    const listItem = prismaCart.cartItems.map((item) => ({
-      data: item.product,
-      quantity: item.quantity,
-      selectedSize: item.selectedSize, // Cần cung cấp thông tin này từ Prisma nếu có
+  const convertToReduxCart = (userCart) => {
+    const listItem = userCart.map((item) => ({
+      data: item,
+      quantity: item.cartItem.quantity,
+      selectedSize: item.sizeOptionName,
+      selectedColour: item.colourName,
     }));
 
     const total = listItem.reduce(
-      (sum, item) => sum + item.data.price * item.quantity,
+      (sum, item) => sum + item.data.salePrice * item.quantity,
       0
     );
 
@@ -74,21 +81,25 @@ export const useCart = () => {
   // }, [session]);
 
   const addToCartMutationFn = async ({ data, selectedSize, quantity }) => {
-    const response = await axios.post(
-      `/api/user/cart/cart-item?userId=${session?.user.id}`,
-      {
-        ...data,
-        selectedSize: selectedSize,
-        quantity: quantity,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
+    console.log('🚀 ~ updateCartMutationFn ~ quantity:', quantity);
+    console.log('🚀 ~ updateCartMutationFn ~ selectedSize:', selectedSize);
+    console.log(
+      '🚀 ~ file: useCart.ts:126 ~ updateCartMutationFn ~ data:',
+      data
     );
+    const response = await postRequest({
+      endPoint: `/api/v1/cart-items`,
+      formData: {
+        quantity: quantity,
+        productItemId: data.activeObject.activeProductItem.id,
+        variationId: selectedSize.variationId,
+      },
 
-    if (response.status !== 200 && response.status !== 201) {
+      isFormData: false,
+    });
+    console.log('🚀 ~ addToCartMutationFn ~ response:', response);
+
+    if (!response.isSuccess) {
       throw new Error('Failed to add to cart');
     }
 
@@ -103,14 +114,14 @@ export const useCart = () => {
     mutationKey: ['onAddToCart'],
     mutationFn: addToCartMutationFn,
     onError: (error) => {
-      console.error(error);
+      console.log('🚀 ~ useCart ~ error:', error);
     },
     onSettled: (data, error) => {
       if (error) {
-        console.error('Mutation failed with error:', error);
+        console.log('Mutation failed with error:', error);
       } else {
         queryClient.refetchQueries(['useCart']);
-        queryClient.removeQueries(['cartQuery']);
+        // queryClient.resetQueries(['cartQuery']);
       }
     },
   });
@@ -128,27 +139,16 @@ export const useCart = () => {
   };
 
   const updateCartMutationFn = async ({ data, selectedSize, quantity }) => {
-    console.log(
-      '🚀 ~ file: useCart.ts:126 ~ updateCartMutationFn ~ data:',
-      data,
-      selectedSize,
-      quantity
-    );
-
-    const response = await axios.put(
-      `/api/user/cart/cart-item?userId=${session?.user.id}`,
-      {
-        ...data,
-        selectedSize: selectedSize,
+    const response = await putRequest({
+      endPoint: `/api/v1/cart-items`,
+      formData: {
         quantity: quantity,
+        productItemId: data.cartItem.productItemId,
+        variationId: data.cartItem.variationId,
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
+      isFormData: false,
+    });
+    console.log('🚀 ~ updateCartMutationFn ~ response:', response);
     if (response.status < 200 || response.status >= 300) {
       throw new Error('Failed to update cart');
     }
@@ -157,6 +157,7 @@ export const useCart = () => {
     if (response.status === 201) {
       toast.success(response.data.message);
     }
+    queryClient.refetchQueries(['useCart']);
 
     return response.data;
   };
@@ -212,19 +213,13 @@ export const useCart = () => {
     { data: any; selectedSize: any; quantity: any }
   >(
     async ({ data, selectedSize, quantity }) => {
-      const response = await axios.delete(
-        `/api/user/cart/cart-item?userId=${session?.user.id}`,
-        {
-          data: {
-            ...data,
-            selectedSize: selectedSize,
-            quantity: quantity,
-          },
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+      const response = await deleteRequest({
+        endPoint: `/api/v1/cart-items/delete-by-id`,
+        formData: {
+          productItemId: data.cartItem.productItemId,
+          variationId: data.cartItem.variationId,
+        },
+      });
 
       if (response.status !== 200) {
         throw new Error('Failed to delete item from cart');

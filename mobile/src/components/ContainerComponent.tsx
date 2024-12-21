@@ -1,11 +1,16 @@
+import React from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { ReactNode } from 'react'
 import { View, ScrollView, ImageBackground, SafeAreaView, Image, StyleProp, ViewStyle } from 'react-native'
-import { appColors, appFonts } from '@constants'
+import { appColors } from '@constants/appColors'
+import { appFonts } from '@constants/appFonts'
 import { ArrowLeft } from 'iconsax-react-native'
 import { globalStyles } from 'src/styles/globalStyles'
-import { CircleComponent, RowComponent, SpaceComponent, TextComponent } from '@components'
-import { IMAGES } from '@assets'
+import { IMAGES } from '@assets/images'
+import RowComponent from './RowComponent'
+import TextComponent from './TextComponent'
+import SpaceComponent from './SpaceComponent'
+import CircleComponent from './CircleComponent'
 
 interface Props {
   isImageBg?: boolean

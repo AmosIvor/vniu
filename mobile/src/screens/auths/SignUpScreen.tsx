@@ -10,8 +10,8 @@ import {
   Keyboard,
   ActivityIndicator
 } from 'react-native'
-import { IMAGES } from '@assets'
-import { appColors } from '@constants'
+import { IMAGES } from '@assets/images'
+import { appColors } from '@constants/appColors'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
 import { ENV } from '@configs/env'
 import { setStorage } from 'src/functions/storageFunctions'

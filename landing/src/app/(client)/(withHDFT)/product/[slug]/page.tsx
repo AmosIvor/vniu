@@ -1,24 +1,50 @@
-import ProductDetailLeft from './ProductDetailLeft';
+'use client';
 import ProductDetailRight from './ProductDetailRight';
-import { useProduct } from '@/hooks/useProduct';
 import ProductUserMayLike from './ProductUserMayLike';
 import ProductReview from './ProductReview';
 import AddProductDialog from '../../(home)/AddProductDialog';
+import { useState, useEffect, useMemo, use } from 'react';
+import ProductDetailLeft from './ProductDetailLeft';
+import { useProduct } from '@/hooks/useProduct';
+import React from 'react';
 
-async function page({ params }) {
-  const { slug } = params;
+function page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const { onGetProductDetail } = useProduct();
-  // const productDetail = await fetch(
-  //   `${process.env.API_HOST}/api/product/detail?productId=${slug}`,
-  //   {
-  //     cache: 'no-cache',
-  //   }
-  // );
-  // const data = await productDetail?.json();
-  // console.log(data);
-  const res = await onGetProductDetail(slug);
+  const [data, setData] = useState(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [error, setError] = useState<string>('');
+  useEffect(() => {
+    if (slug) {
+      const fetchProductDetail = async () => {
+        try {
+          const productDetail = await onGetProductDetail({
+            slug: slug,
+          });
+          setData(productDetail);
+        } catch (err) {
+          setError('Failed to fetch product details');
+        }
+      };
+      fetchProductDetail();
+    }
+  }, []);
 
-  const data = res;
+  const handleColorSelect = async (colourId: string) => {
+    try {
+      if (slug) {
+        const productDetail = await onGetProductDetail({
+          slug: slug,
+          colourId,
+        });
+        setData(productDetail);
+        setSelectedColor(colourId);
+      }
+    } catch (err) {
+      setError('Failed to fetch product details for the selected color');
+    }
+  };
+
   return (
     <div className="w-full md:py-20 overflow-hidden">
       <div
@@ -31,15 +57,21 @@ async function page({ params }) {
           </div>
 
           <div className="flex-[0.8] py-5">
-            <ProductDetailRight data={data} />
+            <ProductDetailRight
+              data={data}
+              selectedColor={selectedColor}
+              handleColorSelect={handleColorSelect}
+              // selectedItem={selectedItem}
+              // setSelectedItem={setSelectedItem}
+            />
           </div>
         </div>
-        <div>
+        {/* <div>
           <ProductReview product={data} />
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <ProductUserMayLike data={data} />
-        </div>
+        </div> */}
       </div>
 
       <AddProductDialog />

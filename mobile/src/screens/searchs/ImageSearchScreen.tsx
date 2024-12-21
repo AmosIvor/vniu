@@ -3,78 +3,117 @@ import {
   View,
   ActivityIndicator,
   FlatList,
-  Image,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
   Text,
   Button,
-  Alert
+  Alert,
+  Image
 } from 'react-native'
-import ImagePicker from 'react-native-image-crop-picker'
+import ImagePicker, { ImageOrVideo } from 'react-native-image-crop-picker'
 import axios from 'axios'
 import { ENV } from '@configs/env'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native'
-import { IMAGES } from '@assets'
+import { IMAGES } from '@assets/images'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
+import FastImage from 'react-native-fast-image'
 
 //TTT
 const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload'
 const CLOUDINARY_UPLOAD_PRESET = 'ma9g4xzz'
-const FASTAPI_URL = 'https://vniuimagesearch.azurewebsites.net/search/'
-// const FASTAPI_URL = 'http://10.0.2.2:8000/search/'
+// const FASTAPI_URL = 'https://vniuimagesearch.azurewebsites.net/search/'
+const FASTAPI_URL = 'http://10.0.2.2:8000/retrieve-image/'
+function getRandomInt(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+type ProductItem = {
+  ProductItemId: string
+  ProductImageUrl: string
+  productName: string
+}
 const ImageSearchScreen = () => {
   const { colors } = useTheme()
   const navigation = useNavigation()
   const [image, setImage] = useState(null)
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState(null)
-
   const pickImage = () => {
     ImagePicker.openPicker({
-      width: 300,
-      height: 400,
+      mediaType: 'photo',
+      width: 100,
+      height: 80,
+      maxFiles: 1,
+      minFiles: 1,
       cropping: true
     })
       .then((image) => {
         setImage(image.path)
+        setResults(null)
         uploadImage(image)
       })
       .catch((err) => {
         console.log('ImagePicker Error: ', err)
       })
   }
-
-  const uploadImage = (image) => {
+  const uploadImage = async (image: ImageOrVideo) => {
     setLoading(true)
     const formData = new FormData()
     formData.append('file', {
       uri: image.path,
       type: image.mime,
-      name: 'uploaded_image.jpg'
+      name: `${getRandomInt(1, 10000)}.jpg`
     })
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-    formData.append('cloud_name', 'dwhzyu0oo')
+    console.log('🚀 ~ uploadImage ~ formData:', formData)
 
-    fetch('https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        searchImage(data.url)
+    try {
+      const response = await fetch(FASTAPI_URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data'
+        }
       })
-      .catch((error) => {
-        Alert.alert('Error While Uploading')
-      })
+      const data = await response.json()
+      setResults(data.retrieved_images) // Setting results directly from the API response
+      setLoading(false)
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      setLoading(false)
+    }
   }
-  const searchImage = (imageUrl) => {
+
+  // const uploadImage = (image) => {
+  //   setLoading(true)
+  //   const formData = new FormData()
+  //   formData.append('file', {
+  //     uri: image.path,
+  //     type: image.mime,
+  //     name: 'uploaded_image.jpg'
+  //   })
+  //   formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+  //   formData.append('cloud_name', 'dwhzyu0oo')
+
+  //   fetch('https://api.cloudinary.com/v1_1/dwhzyu0oo/image/upload', {
+  //     method: 'POST',
+  //     body: formData,
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'multipart/form-data'
+  //     }
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       searchImage(data.url)
+  //     })
+  //     .catch((error) => {
+  //       Alert.alert('Error While Uploading')
+  //     })
+  // }
+  const searchImage = (imageUrl: string) => {
     const params = new URLSearchParams()
     params.append('url', imageUrl)
 
@@ -87,7 +126,7 @@ const ImageSearchScreen = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        const productItemIds = data.nearest_images.map((result) => result[1])
+        const productItemIds: string[] = data.nearest_images.map((result: [string, string]) => result[1])
         const uniqueProductItemIds = [...new Set(productItemIds)] // Loại bỏ trùng lặp
         fetchProducts(uniqueProductItemIds)
         setLoading(false)
@@ -110,29 +149,32 @@ const ImageSearchScreen = () => {
         return res.json()
       })
       .then((data) => {
-        console.log('🚀 ~ .then ~ data:', data)
+        // console.log('🚀 ~ .then ~ data:', data)
         setResults(data.data)
       })
       .catch((err) => {
         console.error('Error fetching products:', err)
       })
   }
-  const renderItem = ({ item }: { item: any }) => {
-    const productItem = item.productItems[0]
-    const productImageUrl = productItem?.productImage?.productImageUrl
-    const originalPrice = productItem?.originalPrice
+  const navigateToDetails = (productId: string) => {
+    navigation.navigate('Details', {
+      id: productId
+    })
+  }
+  const renderItem = ({ item }: { item: ProductItem }) => {
+    // console.log('🚀 ~ renderItem ~ item:', item)
+    // const productItem = item.productItems[0]
+    const productImageUrl = item.ProductImageUrl
+    // console.log('🚀 ~ renderItem ~ productImageUrl:', productImageUrl)
+    const productId = item.ProductItemId
+    // const productImageUrl = require('D:/DoAn/DoAn2/vniu/mobile/src/dataset/cloth/Calvin-Klein-Jeans-Utility-Overshirt-In-Olive-Green_14.jpg')
+
+    const originalPrice = 100
     const discount = 5
     const rating = 5
 
     return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Details', {
-            id: item.productId
-          })
-        }}
-        style={styles.productContainer}
-      >
+      <TouchableOpacity onPress={() => navigateToDetails(productId)} style={styles.productContainer}>
         <Image source={{ uri: productImageUrl }} style={styles.productImage} />
         <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 8, color: colors.text }}>{item.productName}</Text>
         <Text style={{ fontSize: 14, marginTop: 4, color: colors.text }}>

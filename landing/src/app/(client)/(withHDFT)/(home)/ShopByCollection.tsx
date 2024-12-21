@@ -1,6 +1,6 @@
 'use client';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React from 'react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -85,14 +85,17 @@ function ShopByCollection() {
         className="w-full h-auto overflow-visible relative"
       >
         {productCollections?.map((collection) => (
-          <SwiperSlide className="h-full relative mb-16 overflow-visible">
+          <SwiperSlide
+            className="h-full relative mb-16 overflow-visible"
+            key={collection.image.toString()}
+          >
             <div className="group relative overflow-hidden rounded-md">
               <AspectRatio ratio={5 / 6}>
                 <Image
                   src={collection.image}
                   alt={'Jordan'}
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  fill
+                  layout={'fill'}
                   className="object-cover transition-transform group-hover:scale-105"
                   priority
                 />

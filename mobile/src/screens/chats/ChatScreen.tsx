@@ -1,7 +1,8 @@
+import React from 'react'
 import { chatApi } from '@apis'
 import { MessageResponseType } from '@appTypes/chat.type'
-import { ContainerComponent } from '@components'
-import { appColors } from '@constants'
+import  ContainerComponent  from '@components/ContainerComponent'
+import { appColors } from '@constants/appColors'
 import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
@@ -67,7 +68,7 @@ const ChatScreen = () => {
   useEffect(() => {
     const connect = new HubConnectionBuilder()
       .configureLogging(LogLevel.Debug)
-      .withUrl('http://10.0.2.2:5000/chathub', {
+      .withUrl(`http://10.0.2.2:5000/chathub`, {
         // .withUrl('https://vniuapi20240429122410.azurewebsites.net/chathub', {
         skipNegotiation: true,
         transport: HttpTransportType.WebSockets

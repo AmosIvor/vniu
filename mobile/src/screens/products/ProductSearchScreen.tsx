@@ -1,16 +1,16 @@
-import {
-  ContainerComponent,
-  InputComponent,
-  RowComponent,
-  SectionComponent,
-  SpaceComponent,
-  TextComponent
-} from '@components'
+import React from 'react'
 import { ModalFiltering } from '@modals'
 import { SearchNormal, Sort } from 'iconsax-react-native'
 import { useState } from 'react'
 import { TouchableOpacity, View } from 'react-native'
-import { appColors, appFonts } from '@constants'
+import ContainerComponent from '@components/ContainerComponent'
+import SpaceComponent from '@components/SpaceComponent'
+import SectionComponent from '@components/SectionComponent'
+import RowComponent from '@components/RowComponent'
+import InputComponent from '@components/InputComponent'
+import { appColors } from '@constants/appColors'
+import TextComponent from '@components/TextComponent'
+import { appFonts } from '@constants/appFonts'
 
 const ProductSearchScreen = () => {
   const [search, setSearch] = useState('')

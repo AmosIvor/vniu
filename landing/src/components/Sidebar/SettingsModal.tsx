@@ -11,7 +11,7 @@ import { User } from '@prisma/client';
 import { Input } from '../ui/input';
 import Modal from '../modals/Modal';
 import { Button } from '../ui/button';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 // import { toast } from 'react-hot-toast';
 
 interface SettingsModalProps {

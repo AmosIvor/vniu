@@ -1,8 +1,8 @@
 'use client';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Link from 'next/link';
 // import React, { useEffect } from 'react';
-import { currencyFormat, parseJSON } from '@/lib/utils';
+import { currencyFormat } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 // import DialogCustom from './ui/dialogCustom';
 // import { Label } from './ui/label';
@@ -20,7 +20,13 @@ import { useWishList } from '@/hooks/useWishList';
 // import { FaCheckCircle, FaStar, FaExclamationTriangle } from 'react-icons/fa';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';
 
-export default function ProductCard({ product }) {
+export default function ProductCard({
+  product,
+  productId,
+}: {
+  product: any;
+  productId?: any;
+}) {
   const [isLiked, setIsLiked] = useState<boolean>(false);
   const [isAddToCart, setIsAddToCart] = useState<boolean>(false);
   const [isShowDialog, setIsShowDialog] = useState<boolean>(false);
@@ -34,11 +40,9 @@ export default function ProductCard({ product }) {
   const { wishList, onAddUserWishList, onRemoveUserWishList } = useWishList();
 
   useEffect(() => {
-    console.log(isAddToCart, isShowDialog);
-  }, []);
-
-  useEffect(() => {
-    const found = cart?.listItem.find((item) => item.data.id === product?.id);
+    const found = cart?.listItem.find(
+      (item) => item.data.productId === product?.id
+    );
     if (found) {
       setIsAddToCart(true);
     }
@@ -57,16 +61,12 @@ export default function ProductCard({ product }) {
   return (
     <div>
       <div className="relative">
-        <Link
-          className="
-    "
-          href={`/product/${product?.id}`}
-        >
+        <Link href={`/product/${productId ? productId : product?.id}`}>
           <Image
             objectFit="cover"
             width={900}
             height={900}
-            src={parseJSON(product?.thumbnail)?.url}
+            src={product.productImages[0].imageUrl}
             className="transform duration-200 
     hover:scale-105"
             priority
@@ -125,11 +125,11 @@ export default function ProductCard({ product }) {
           <h2 className="text-lg font-medium">{product?.name}</h2>
           <div className="flex flex-wrap items-center text-black/[0.5]">
             <p className="mr-2 text-sm font-semibold ">
-              {currencyFormat(product?.price)}
+              {currencyFormat(product?.salePriceMin)}
             </p>
             {1 && (
               <p className="text-sm font-medium line-through ">
-                {currencyFormat(product?.price * 1.3)}
+                {currencyFormat(product?.salePriceMax * 1.3)}
               </p>
             )}
           </div>

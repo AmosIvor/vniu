@@ -24,6 +24,7 @@ import { CartSheet } from '../CartSheet';
 import { Badge } from '../ui/badge';
 import Logo from '../logo';
 import { useWishList } from '@/hooks/useWishList';
+import { Camera, Upload, X } from 'lucide-react';
 
 const NavigationMenuDemo = ({ session }) => {
   const [user] = useState(session?.user);
@@ -64,7 +65,6 @@ const NavigationMenuDemo = ({ session }) => {
     >
       <MobileNav session={session} />
       <div className="hidden lg:flex py-2  ">
-        {' '}
         <Logo />
         <NavigationMenu.Root className="NavigationMenuRoot">
           <NavigationMenu.List className="NavigationMenuList">
@@ -73,12 +73,12 @@ const NavigationMenuDemo = ({ session }) => {
                 className="NavigationMenuLink"
                 href={'/products'}
               >
-                Tất Cả Sản Phẩm
+                All
               </NavigationMenu.Link>
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Thể Thao <CaretDownIcon className="CaretDown" aria-hidden />
+                Shirt <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List one">
@@ -96,103 +96,85 @@ const NavigationMenuDemo = ({ session }) => {
                           <path d="M12 0H4V8H12V0Z"></path>
                           <path d="M17 8C19.2091 8 21 6.20914 21 4C21 1.79086 19.2091 0 17 0C14.7909 0 13 1.79086 13 4C13 6.20914 14.7909 8 17 8Z"></path>
                         </svg>
-                        <div className="CalloutHeading">Tất Cả Sản Phẩm</div>
+                        <div className="CalloutHeading">All</div>
                       </a>
                     </NavigationMenu.Link>
                   </li>
 
                   <ListItem
-                    href="/products?categories=1"
-                    title="Bóng Đá"
+                    href="/products?categoryIds=de3b7ec3-5d4d-4a74-b772-1a32b3fe8b64"
+                    title="Hoodie"
                   ></ListItem>
                   <ListItem
-                    href="/products?categories=2"
-                    title="Bóng Rổ"
+                    href="/products?categoryIds=1ba3ff22-f0e4-4a69-9f56-f55fa9deeae8"
+                    title="Polo"
                   ></ListItem>
                   <ListItem
-                    href="/products?categories=3"
-                    title="Bóng Chuyền"
+                    href="/products?categoryIds=832c6153-0a8b-463b-b868-0c6666647ced"
+                    title="Shirt"
                   ></ListItem>
                   <ListItem
-                    href="/products?categories=4"
-                    title="Quần Vợt"
+                    href="/products?categoryIds=2843d48f-8274-413b-ba3d-2115cb57c366"
+                    title="T-Shirt"
                   ></ListItem>
                   <ListItem
-                    href="/products?categories=5"
-                    title="Chạy Bộ"
-                  ></ListItem>
-                  <ListItem
-                    href="/products?categories=6"
-                    title="Gym"
+                    href="/products?categoryIds=eab1fd95-1fd0-4076-9e4f-939743f1f9b1"
+                    title="Vest"
                   ></ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Đàn Ông <CaretDownIcon className="CaretDown" aria-hidden />
+                Trouser <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
                   <ListItem
-                    title="Giày"
-                    href="/products?gender=1&subcategories=1.2.3.4.9.10"
+                    title="Jeans"
+                    href="/products?categoryIds=eab1fd95-1fd0-4076-9e4f-939743f1f9b1"
                   ></ListItem>
                   <ListItem
-                    title="Quần Áo"
-                    href="/products?gender=1&subcategories=5.6.11.12.13.14"
+                    title="Tall"
+                    href="/products?categoryIds=181ae735-fea6-4d5c-aca1-24265090d7f2"
                   ></ListItem>
                   <ListItem
-                    title="Phụ Kiện"
-                    href="/products?gender=1&subcategories=7.8.15.16.17.18"
+                    title="Short"
+                    href="/products?categoryIds=299099c6-223f-43dd-aeda-f3433494ad72"
                   ></ListItem>
+                  <ListItem
+                    title="Baggy"
+                    href="/products?categoryIds=99f2d2c0-b5a2-4ec0-9f8c-5f8b92ed4d07"
+                  ></ListItem>
+                </ul>
+              </NavigationMenu.Content>
+            </NavigationMenu.Item>
+
+            {/* <NavigationMenu.Item>
+              <NavigationMenu.Trigger className="NavigationMenuTrigger">
+                Shoe <CaretDownIcon className="CaretDown" aria-hidden />
+              </NavigationMenu.Trigger>
+              <NavigationMenu.Content className="NavigationMenuContent">
+                <ul className="List two">
+                  <ListItem title="Shoe"></ListItem>
+                  <ListItem title="Shoe"></ListItem>
+                  <ListItem title="Shoe"></ListItem>
                 </ul>
               </NavigationMenu.Content>
             </NavigationMenu.Item>
 
             <NavigationMenu.Item>
               <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Phụ Nữ <CaretDownIcon className="CaretDown" aria-hidden />
+                Glass <CaretDownIcon className="CaretDown" aria-hidden />
               </NavigationMenu.Trigger>
               <NavigationMenu.Content className="NavigationMenuContent">
                 <ul className="List two">
-                  <ListItem
-                    title="Giày"
-                    href="/products?gender=2&subcategories=1.2.3.4.9.10"
-                  ></ListItem>
-                  <ListItem
-                    title="Quần Áo"
-                    href="/products?gender=2&subcategories=5.6.11.12.13.14"
-                  ></ListItem>
-                  <ListItem
-                    title="Phụ Kiện"
-                    href="/products?gender=2&subcategories=7.8.15.16.17.18"
-                  ></ListItem>
+                  <ListItem title="Glass"></ListItem>
+                  <ListItem title="Glass"></ListItem>
+                  <ListItem title="Glass"></ListItem>
                 </ul>
               </NavigationMenu.Content>
-            </NavigationMenu.Item>
-
-            <NavigationMenu.Item>
-              <NavigationMenu.Trigger className="NavigationMenuTrigger">
-                Trẻ Em <CaretDownIcon className="CaretDown" aria-hidden />
-              </NavigationMenu.Trigger>
-              <NavigationMenu.Content className="NavigationMenuContent">
-                <ul className="List two">
-                  <ListItem
-                    title="Giày"
-                    href="/products?gender=3&subcategories=1.2.3.4.9.10"
-                  ></ListItem>
-                  <ListItem
-                    title="Quần Áo"
-                    href="/products?gender=3&subcategories=5.6.11.12.13.14"
-                  ></ListItem>
-                  <ListItem
-                    title="Phụ Kiện"
-                    href="/products?gender=3&subcategories=7.8.15.16.17.18"
-                  ></ListItem>
-                </ul>
-              </NavigationMenu.Content>
-            </NavigationMenu.Item>
+            </NavigationMenu.Item> */}
 
             {/* <NavigationMenu.Item>
               <NavigationMenu.Link
@@ -214,6 +196,12 @@ const NavigationMenuDemo = ({ session }) => {
         </NavigationMenu.Root>
         {user ? (
           <div className="flex flex-row gap-5 items-center justify-center">
+            <Link href={'/image/search'}>
+              <label className="cursor-pointer flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-4 py-2">
+                <Camera className="w-5 h-5" />
+                <span className="text-sm flex ">Search</span>
+              </label>
+            </Link>
             <Link href={'/favorite'}>
               <Button variant="outline" size="icon" className="relative">
                 {wishListCount > 0 && (
@@ -232,7 +220,6 @@ const NavigationMenuDemo = ({ session }) => {
             <CartSheet />
             <DropdownMenu>
               <DropdownMenuTrigger>
-                {' '}
                 <Avatar>
                   <AvatarImage src={user.avatar} />
                   <AvatarFallback>CN</AvatarFallback>
@@ -252,7 +239,10 @@ const NavigationMenuDemo = ({ session }) => {
                   <Link href={'/user/conversations'}>Chat</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => signOut({ callbackUrl: '/auth/login' })}
+                  onClick={() => {
+                    localStorage.removeItem('accessToken');
+                    signOut({ callbackUrl: '/auth/login' });
+                  }}
                   className="border-solid border-t-2 mt-2  gap-2"
                 >
                   <div className="">{AuthSvg.signIn()}</div>

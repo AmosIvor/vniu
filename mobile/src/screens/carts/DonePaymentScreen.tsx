@@ -1,10 +1,15 @@
-import { ContainerComponent, SectionComponent, SpaceComponent, TextComponent } from '@components'
-import { appColors, appFonts } from '@constants'
+import React from 'react'
+import ContainerComponent from '@components/ContainerComponent'
+import SectionComponent from '@components/SectionComponent'
 import { useQueryClient } from '@tanstack/react-query'
 import { TickSquare } from 'iconsax-react-native'
 import { TouchableOpacity } from 'react-native'
 import { getStringStorage } from 'src/functions/storageFunctions'
 import { RootStackScreenProps } from 'src/navigators/RootNavigator'
+import { appColors } from '@constants/appColors'
+import SpaceComponent from '@components/SpaceComponent'
+import TextComponent from '@components/TextComponent'
+import { appFonts } from '@constants/appFonts'
 const userId = getStringStorage('id')
 
 const DonePaymentScreen = ({ navigation }: RootStackScreenProps<'DonePaymentScreen'>) => {

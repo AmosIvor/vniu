@@ -31,7 +31,7 @@ const NewMessage: React.FC<MessageBoxProps> = ({ data }) => {
   const { onGetUserDetail } = useUser();
   useEffect(() => {
     async function getData() {
-      const response = await onGetUserDetail(session?.data?.user?.id);
+      const response = await onGetUserDetail();
       const userData = response; // specify the type of the response data
       setOtherUser(userData);
     }

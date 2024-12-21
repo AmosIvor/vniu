@@ -8,18 +8,21 @@
     "baseUrl": ".",
     "paths": {
       "@apis": ["src/apis/index"],
-      "@assets": ["src/assets/index"],
-      "@components": ["src/components/index"],
-      "@constants": ["src/constants/index"],
-      "@contexts": ["src/contexts/index"],
-      "@hooks": ["src/hooks/index"],
+      "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
+      "@contexts/*": ["src/contexts/index"],
+      "@hooks/*": ["src/hooks/*"],
+      "@assets/*": ["src/assets/*"],     
       "@modals": ["src/modals/index"],
       "@navigators": ["src/navigators/index"],
       "@screens/*": ["src/screens/*"],
       "@theme/*": ["src/theme/*"],
       "@appTypes/*": ["src/types/*"],
+      "@services/*": ["src/services/*"],
+      "@type/*": ["src/type/*"],
+      "@utils/*": ["src/utils/*"],
+      "@navigation/*": ["src/navigation/*"],
       "@configs/*": ["src/configs/*"],
-      "@utils": ["src/utils/index"]
     }
   }
 }

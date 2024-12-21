@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { appColors } from 'src/constants/appColors'
 import { globalStyles } from 'src/styles/globalStyles'

@@ -47,9 +47,31 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
     },
   });
   async function onSubmit(data) {
-    console.log(data);
-
     setIsLoading(true);
+    const response = await fetch('http://localhost:5199/api/v1/auths/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password,
+      }),
+    });
+
+    if (!response.ok) {
+      setIsLoading(false);
+      toast.error("Couldn't login, please try again later");
+
+      return;
+    }
+
+    const user = await response.json();
+
+    if (!user) {
+      return null; // Authentication failed
+    }
+    localStorage.setItem('accessToken', user.value.accessToken);
     const res = await signIn('credentials', {
       email: data.email,
       password: data.password,
@@ -63,10 +85,8 @@ const Login = ({ className }: { className?: string; providers: unknown }) => {
       return;
     }
 
-    console.log(res);
     if (!res?.error) router.refresh();
     setIsLoading(false);
-    console.log(res);
   }
   if (isLoading)
     return (

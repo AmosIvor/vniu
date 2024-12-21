@@ -1,6 +1,5 @@
-import { getRequest } from '@/lib/fetch';
+import { getRequest, postRequest } from '@/lib/fetch';
 import { Wishlist } from '@/models';
-import { Product } from '@prisma/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
@@ -11,27 +10,28 @@ export const useWishList = () => {
   const { data: session } = useSession();
   const queryClient = useQueryClient();
 
-  const fetchUserWishList = async (userId) => {
+  const fetchUserWishList = async () => {
+    //Tam WishList
     const userWishList = await getRequest({
-      endPoint: `/api/user/wishlist?userId=${userId}`,
+      endPoint: `/api/v1/users/${session?.user?.id}/cart-items/filter-and-sort?PageIndex=1&PageSize=100`,
     });
-    return userWishList;
+    return userWishList.value.items;
   };
 
   // Chỉ hoạt động với khách hàng có đăng nhập
   const { data: userWishList } = useQuery({
     queryKey: ['useWishList'],
-    queryFn: () => fetchUserWishList(session?.user.id),
+    queryFn: () => fetchUserWishList(),
     enabled: !!session,
     staleTime: 1000 * 60 * 60 * 24, // 1 day
   });
 
-  const onAddUserWishList = async (product: Product) => {
+  const onAddUserWishList = async (product) => {
     try {
       const userId = session?.user?.id;
 
       // Cập nhật dữ liệu cho query 'useWishList' trước khi gọi API
-      queryClient.setQueryData(['useWishList'], (oldData: Array<Product>) => {
+      queryClient.setQueryData(['useWishList'], (oldData: Array<any>) => {
         return [...oldData, product];
       });
       toast.success(`Đã thêm ${product.name} vào danh sách yêu thích`);
@@ -51,7 +51,7 @@ export const useWishList = () => {
     }
   };
 
-  const onRemoveUserWishList = async (product: Product) => {
+  const onRemoveUserWishList = async (product) => {
     try {
       // Cập nhật dữ liệu cho query 'useWishList'
       queryClient.setQueryData(['useWishList'], (oldData: Array<Wishlist>) => {

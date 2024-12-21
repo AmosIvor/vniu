@@ -1,5 +1,4 @@
 import type { Option } from '@/models';
-import prisma from '@/lib/prisma';
 
 export const sortOptions = [
   { label: 'Price: Low to high', value: 'price.asc' },
@@ -59,28 +58,28 @@ export async function getSubcategories(category?: number): Promise<Option[]> {
   if (!category) return [];
 
   try {
-    const productCategory = await prisma.productType.findFirst({
-      where: {
-        id: category,
-      },
-      include: {
-        Subcategory: true,
-      },
-    });
+    // const productCategory = await prisma.productType.findFirst({
+    //   where: {
+    //     id: category,
+    //   },
+    //   include: {
+    //     Subcategory: true,
+    //   },
+    // });
 
-    if (productCategory) {
-      const subcategories: Option[] = productCategory.Subcategory.map((s) => ({
-        label: s.name,
-        value: s.name, // Assuming there's a field named 'slug' for subcategories
-      }));
+    // if (productCategory) {
+    //   const subcategories: Option[] = productCategory.Subcategory.map((s) => ({
+    //     label: s.name,
+    //     value: s.name, // Assuming there's a field named 'slug' for subcategories
+    //   }));
 
-      return subcategories;
-    }
+    //   return subcategories;
+    // }
 
     return [];
   } catch (error) {
     throw new Error(`Error fetching subcategories: ${error.message}`);
   } finally {
-    await prisma.$disconnect();
+    // await prisma.$disconnect();
   }
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useState } from 'react';
 import { format, isToday } from 'date-fns';
 import { useSession } from 'next-auth/react';

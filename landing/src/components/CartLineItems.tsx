@@ -1,7 +1,6 @@
 'use client';
 
-import Image from 'next/image';
-import type { CartLineItem } from '@/types';
+import Image from 'next/legacy/image';
 import { Slot } from '@radix-ui/react-slot';
 import { cn, currencyFormat, parseJSON } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -27,13 +26,15 @@ import toast from 'react-hot-toast';
 // import { Icons } from '@/components/icons';
 
 interface CartLineItemsProps extends React.HTMLAttributes<HTMLDivElement> {
-  items: CartLineItem[];
+  items: any[];
   isScrollable?: boolean;
   isEditable?: boolean;
   variant?: 'default' | 'minimal';
-  checkedItems: { [key: string]: boolean };
+  checkedItems: Record<string, { data: { price: number }; quantity: number }>;
   setCheckedItems: React.Dispatch<
-    React.SetStateAction<{ [key: string]: boolean }>
+    React.SetStateAction<
+      Record<string, { data: { price: number }; quantity: number }>
+    >
   >;
   enableCheck?: boolean;
 }
@@ -53,11 +54,6 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
   // Thêm trạng thái loading
   const [isLoading, setIsLoading] = useState(false);
 
-  // console.log(
-  //   '🚀 ~ file: CartLineItems.tsx:55 ~ CartItem ~ setIsLoading:',
-  //   setIsLoading
-  // );
-
   const itemKey = `${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`;
 
   const debouncedOnUpdateCart = useDebouncedCallback(
@@ -71,23 +67,23 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
     500
   );
 
-  // Định nghĩa hàm fetchProductSizeQuantity như một hàm bất đồng bộ
-  const fetchProductSizeQuantity = async (item) => {
-    const response = await fetch(
-      `/api/product/quantity?productId=${item?.data?.id}&selectedSize=${item?.selectedSize}`
-    );
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  };
+  // // Định nghĩa hàm fetchProductSizeQuantity như một hàm bất đồng bộ
+  // const fetchProductSizeQuantity = async (item) => {
+  //   const response = await fetch(
+  //     `/api/product/quantity?productId=${item?.data?.id}&selectedSize=${item?.selectedSize}`
+  //   );
+  //   if (!response.ok) {
+  //     throw new Error('Network response was not ok');
+  //   }
+  //   return response.json();
+  // };
 
-  // Sử dụng useQuery trong component
-  const { data: productSizeQuantity } = useQuery({
-    queryKey: ['ProductSizeQuantity'],
-    queryFn: () => fetchProductSizeQuantity(item),
-  });
-
+  // // Sử dụng useQuery trong component
+  // const { data: productSizeQuantity } = useQuery({
+  //   queryKey: ['ProductSizeQuantity'],
+  //   queryFn: () => fetchProductSizeQuantity(item),
+  // });
+  const productSizeQuantity = [{ quantity: 100 }];
   const handleIncreaseItemQuantity = async () => {
     const newQuantity = quantity + 1;
     setQuantity(newQuantity);
@@ -166,7 +162,7 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
             )}
 
             <Image
-              src={parseJSON(item?.data?.thumbnail)?.url}
+              src={item?.data?.productImages[0].imageUrl}
               alt={item?.data?.name}
               width={90}
               height={80}
@@ -174,20 +170,26 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
           </div>
         )}
       </div>
-
       <div className="w-full flex flex-col">
         {isLoading ? (
           <Skeleton className="h-full w-full rounded-t-lg" />
         ) : (
           <div className="flex flex-col  justify-between">
             <div className="text-sm md:text-lg font-semibold text-black/[0.8]">
-              {item?.data?.name}
+              {item?.data?.productName}
             </div>
-            <div className="text-sm md:text-md font-medium text-black/[0.5] block ">
-              {item?.data?.subtitle ? item?.data?.subtitle : `Giày`}
-            </div>
-            <div className="text-sm md:text-md font-bold text-black/[0.5] mt-2">
-              {currencyFormat(item?.data?.price)}
+            {/* <div className="text-sm md:text-md font-medium text-black/[0.5] block ">
+              {item?.data?.subtitle ? item?.data?.subtitle : `Cloth`}
+            </div> */}
+            <div className="flex flex-row flex-wrap mt-4 gap-2 text-black/[0.5] text-sm md:text-md">
+              <div className="flex items-center gap-1 flex-wrap md:mt-0 mt-4">
+                <div className="font-semibold">Colour:</div>
+                {item.selectedColour}
+              </div>
+              <div className="flex items-center gap-1 flex-wrap md:mt-0 mt-4">
+                <div className="font-semibold">Size:</div>
+                {item.selectedSize}
+              </div>
             </div>
           </div>
         )}
@@ -195,10 +197,11 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
         {isLoading ? (
           <Skeleton className="h-full w-full rounded-b-lg" />
         ) : (
-          <div className="flex flex-row flex-wrap justify-between mt-4 gap-2 text-black/[0.5] text-sm md:text-md">
+          <div className="flex flex-row flex-wrap content-center mt-4 gap-2 text-black/[0.5] text-sm md:text-md">
             <div className="flex items-center gap-1 flex-wrap md:mt-0 mt-4">
-              <div className="font-semibold">Kích cỡ:</div>
-              {item.selectedSize}
+              <div className="text-sm md:text-md font-bold text-black">
+                {currencyFormat(item?.data?.salePrice)}
+              </div>
             </div>
             <div className="flex items-center justify-center gap-1 md:flex-row flex-col">
               <div className="font-semibold">Số lượng:</div>
@@ -225,19 +228,6 @@ const CartItem = ({ item, isChecked, onCheck, enableCheck }) => {
                     text-sm mb-3"
                     value={quantity}
                     disabled
-                    // onChange={(e) => {
-                    //   startTransition(async () => {
-                    //     try {
-                    //       await updateCartItemAction({
-                    //         productId: cartLineItem.id,
-                    //         quantity: Number(e.target.value),
-                    //       });
-                    //     } catch (err) {
-                    //       catchError(err);
-                    //     }
-                    //   });
-                    // }}
-                    // disabled={isPending}
                   />
                 </div>
 
@@ -304,12 +294,12 @@ export function CartLineItems({
   ...props
 }: CartLineItemsProps) {
   const Wrapper = isScrollable ? ScrollArea : Slot;
-
+  const { cart } = useCart();
   // Start select all checkbox
   const [allSelected, setAllSelected] = useState(false);
 
   const areAllItemsChecked = () => {
-    return items?.every(
+    return cart?.listItem?.every(
       (item) =>
         !!checkedItems[
           `${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`
@@ -328,7 +318,7 @@ export function CartLineItems({
 
   const checkAll = () => {
     const newCheckedItems = {};
-    items.forEach((item) => {
+    cart?.listItem.forEach((item) => {
       const itemKey = `${item?.data?.id}-${item?.data?.name}-${item?.selectedSize}`;
       newCheckedItems[itemKey] = { ...item, quantity: item.quantity };
     });
@@ -356,9 +346,8 @@ export function CartLineItems({
 
   // Start set-up infinite scroll
   const fetchCartItem = async (page: number) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
     const start = (page - 1) * 3;
-    return items.slice(start, start + 3);
+    return cart?.listItem.slice(start, start + 3);
   };
 
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
@@ -372,7 +361,7 @@ export function CartLineItems({
         return pages.length + 1;
       },
       initialData: {
-        pages: [items?.slice(0, 3)],
+        pages: [cart?.listItem?.slice(0, 3)],
         pageParams: [1],
       },
     }

@@ -3,48 +3,33 @@ import DiscordProvider from 'next-auth/providers/discord';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import https from 'https';
 // import prisma from '@/lib/prisma';
 import jwt from 'jsonwebtoken';
+import apiAuthSignIn from '@/utils/auth';
+import { postRequest } from '@/lib/fetch';
 const options: AuthOptions = {
   //SIGN IN CHAY TRUOC JWT, TRONG SIGNIN SE RETURN 1 THANG USER, JWT CHAY TRUOC SESSION
   // Configure one or more authentication providers
-  session: {
-    strategy: 'jwt',
-  },
   providers: [
     DiscordProvider({
       clientId: String(process.env.DISCORD_CLIENT_ID),
       clientSecret: String(process.env.DISCORD_CLIENT_SECRET),
       async profile(profile) {
-        console.log('profile in discord: ', profile);
         //cai profile nay se truyen xuong jwt function
-        const user = {
-          id: -1,
-          name: '',
-          email: '',
-          role: '',
-          avatar: '',
-          isEmailVerified: false,
-        };
+
         // const user = await prisma.user.findUnique({
         //   where: {
         //     email: profile.email,
         //   },
         // });
-        if (!user)
-          return {
-            name: profile.username,
-            email: profile.email,
-            id: -1,
-          };
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar,
-          role: user.role,
-          isVerified: user.isEmailVerified,
+        const user = {
+          id: '4b98e7c5-8440-4789-8b31-de5d10171404',
+          name: 'Customer',
+          email: 'customer@gmail.com',
+          role: 'customer',
         };
+        return user;
       },
     }),
 
@@ -52,7 +37,6 @@ const options: AuthOptions = {
       clientId: String(process.env.GITHUB_CLIENT_ID),
       clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
       async profile(profile) {
-        console.log('inside prfileeeeeeeeeeeeeee');
         //cai profile nay se truyen xuong jwt function
         // const user = await prisma.user.findUnique({
         //   where: {
@@ -60,27 +44,12 @@ const options: AuthOptions = {
         //   },
         // });
         const user = {
-          id: -1,
-          name: '',
-          email: '',
-          role: '',
-          avatar: '',
-          isEmailVerified: false,
+          id: '4b98e7c5-8440-4789-8b31-de5d10171404',
+          name: 'Customer',
+          email: 'customer@gmail.com',
+          role: 'customer',
         };
-        if (!user)
-          return {
-            name: profile.name,
-            email: profile.email,
-            id: -1,
-          };
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar,
-          role: user.role,
-          isVerified: user.isEmailVerified,
-        };
+        return user;
       },
     }),
     GoogleProvider({
@@ -94,7 +63,6 @@ const options: AuthOptions = {
         },
       },
       async profile(profile) {
-        console.log('inside prfileeeeeeeeeeeeeee');
         //cai profile nay se truyen xuong jwt function
         // const user = await prisma.user.findUnique({
         //   where: {
@@ -102,120 +70,73 @@ const options: AuthOptions = {
         //   },
         // });
         const user = {
-          id: -1,
-          name: '',
-          email: '',
-          role: '',
-          avatar: '',
-          isEmailVerified: false,
+          id: '4b98e7c5-8440-4789-8b31-de5d10171404',
+          name: 'Customer',
+          email: 'customer@gmail.com',
+          role: 'customer',
         };
-        if (!user)
-          return {
-            name: profile.name,
-            email: profile.email,
-            id: -1,
-          };
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          avatar: user.avatar,
-          role: user.role,
-          isVerified: user.isEmailVerified,
-        };
+        return user;
       },
     }),
 
     CredentialsProvider({
       name: 'Credentials',
+      credentials: {
+        email: {
+          label: 'Email',
+          type: 'email',
+          placeholder: 'example@example.com',
+        },
+        password: { label: 'Password', type: 'password' },
+      },
       async authorize(credentials) {
-        const { email, password } = credentials as {
-          email: string;
-          password: string;
-        };
+        console.log('Received credentials:', credentials);
 
-        // const user = await prisma.user.findUnique({
-        //   where: {
-        //     email: email,
-        //   },
-        // });
+        if (!credentials) {
+          throw new Error('Invalid credentials');
+        }
+
+        if (
+          credentials.email !== 'customer@gmail.com' ||
+          credentials.password !== 'Test@123'
+        ) {
+          return null; // Authentication failed
+        }
         const user = {
-          id: -1,
-          name: '',
-          email: '',
-          role: '',
-          avatar: '',
-          isEmailVerified: false,
+          id: '4b98e7c5-8440-4789-8b31-de5d10171404',
+          name: 'Customer',
+          email: 'customer@gmail.com',
+          role: 'customer',
         };
-
-        if (!user) throw new Error('Email or password is incorrect');
-        if (user.password !== password)
-          throw new Error('Email or password is incorrect');
-
-        return {
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          id: user.id,
-          avatar: user.avatar,
-          isVerified: user.isEmailVerified,
-        };
+        return user; // Return authenticated user
       },
     }),
 
     // ...add more providers here
   ],
 
+  session: {
+    strategy: 'jwt',
+  },
+  jwt: {
+    secret: process.env.NEXT_PUBLIC_JWT_SECRET, // Replace with your JWT secret
+  },
   callbacks: {
-    async signIn(params) {
-      console.log('paramssssssssssssssssssssssssssssssssssssssssssssss: ');
-      console.log(params);
-      if (!params?.user?.id || parseInt(params?.user?.id) === -1) {
-        const payload = jwt.sign(
-          { email: params?.user?.email, name: params?.user?.name },
-          process.env.NEXT_PUBLIC_JWT_SECRET,
-          { expiresIn: '1h' }
-        );
-        return `/auth/register/?payload=${payload}`;
-      }
-
-      return true;
-    },
-    //first it run the jwt function, the jwt function will return the token , then in the session function we can access the token
-    async jwt({ token, user, trigger, session }) {
-      console.log('🚀 ~ file: options.ts:154 ~ jwt ~ user:', user);
-      console.log('🚀 ~ file: options.ts:154 ~ jwt ~ token:', token);
-      if (trigger === 'update') {
-        return { ...token, ...session.user };
-      }
+    async jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
         token.id = user.id;
-        token.avatar = user.avatar;
         token.name = user.name;
-        token.email = user.email;
-        token.isEmailVerified = user.isVerified;
       }
-      //user is from the oauth config or in the credentials setting options
-
-      //return final token
       return token;
     },
+
     async session({ token, session }) {
-      // if (!userFind) {
-      //   return {
-      //     redirectTo: `/auth/login?email=${session?.user.email}&name=${session?.user.name}`,
-      //   };
-      // }
       console.log('token in sessionnnnnnnnnnnnnnnnn: ', token);
       if (session.user) {
         (session.user as { id: string }).id = token.id as string;
         (session.user as { name: string }).name = token.name as string;
-        (session.user as { role: string }).role = token.role as string;
-        (session.user as { avatar: string }).avatar = token.avatar as string;
-        (session.user as { email: string }).email = token.email as string;
-        (session.user as { isEmailVerified: boolean }).isEmailVerified =
-          token.isEmailVerified as boolean;
+        (session.user as { access_token: string }).access_token =
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJhZG1pbkBnbWFpbC5jb20iLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9naXZlbm5hbWUiOiJBZG1pbiIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IltcIkFkbWluXCJdIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiJkMDU2ZjJkYi0yZDIwLTRjM2MtYjIyNC04N2ZjZjU3YTFiMGIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJleHAiOjYxNzMzOTQxMjY5LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUxOTkiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUxOTkifQ.gm5M55Tae5ih2JUPwYqbMwEknK_9njMdng1usBNEmMM';
       }
       return session;
     },

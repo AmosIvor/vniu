@@ -1,20 +1,24 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, Image, ScrollView, Keyboard, Alert, ActivityIndicator } from 'react-native'
-import { CustomInput } from '@components'
-import { appColors } from '@constants'
-import { RootStackScreenProps } from 'src/navigators/RootNavigator'
-import { getAllKeysStorage, getStringStorage, setStorage } from 'src/functions/storageFunctions'
+import { appColors } from '@constants/appColors'
+import {setStorage } from 'src/functions/storageFunctions'
 import { ENV } from '@configs/env'
 import { useTheme } from '@react-navigation/native'
+import  CustomInput  from '@components/Input/CustomInput'
+import { useAppNavigation } from 'src/navigators/AppRouters'
 
-const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
+const SignInScreen = () => {
+  const  navigation  = useAppNavigation()
   const { colors } = useTheme()
   const [showPassword, setShowPassword] = React.useState(false)
   const [inputs, setInputs] = useState({
     Email: '',
     Password: ''
   })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({
+    Email: null,
+    Password: null
+  })
   const [loading, setLoading] = useState(false)
 
   const togglePasswordVisibility = () => {
@@ -59,7 +63,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
 
     setLoading(true)
     try {
-      const response = await fetch(`${ENV.API_URL}/api/Auth/login`, {
+      const response = await fetch(`http://10.0.2.2:5000/api/Auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -70,6 +74,8 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
         })
       })
 
+      console.log('🚀 ~ handleSubmitForm ~ response:', response)
+
       const data = await response.json()
 
       if (data.message === 'Login Successfully') {
@@ -77,7 +83,7 @@ const SignInScreen = ({ navigation }: RootStackScreenProps<'SignInScreen'>) => {
         setStorage('userName', data.data.user.userName)
         setStorage('email', data.data.user.email)
         setStorage('id', data.data.user.id)
-        navigation.navigate('TabsStack')
+        navigation.navigate('TabsStack', { screen: 'Home' })
       } else {
         Alert.alert('Login Failed', 'Invalid email or password')
       }

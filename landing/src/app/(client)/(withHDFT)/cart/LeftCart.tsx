@@ -21,10 +21,7 @@ function LeftCart({ checkedItems, setCheckedItems }) {
     if (cartLineItems?.length > 0) {
       setIsLoading(false);
     }
-    console.log(
-      '🚀 ~ file: LeftCart.tsx:55 ~ useEffect ~ isLoading:',
-      isLoading
-    );
+
     // Nếu cartLineItems đã sẵn sàng, đặt isLoading thành false
   }, [cartLineItems]);
 

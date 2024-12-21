@@ -158,7 +158,6 @@ export function MobileNav({ session }) {
                             href={String(subItem.href)}
                             pathname={pathname}
                             setIsOpen={setIsOpen}
-                            disabled={subItem.disabled}
                           >
                             {subItem.title}
                           </MobileLink>
@@ -188,7 +187,6 @@ export function MobileNav({ session }) {
                           href={String(item.href)}
                           pathname={pathname}
                           setIsOpen={setIsOpen}
-                          disabled={item.disabled}
                         >
                           {item.title}
                         </MobileLink>

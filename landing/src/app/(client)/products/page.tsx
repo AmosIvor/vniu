@@ -1,27 +1,31 @@
-import React from 'react';
-import Test from './Test';
+'use client';
+
+import React, { use } from 'react';
 import AddProductDialog from '../(withHDFT)/(home)/AddProductDialog';
+import Products from './Products';
 
 export default function Page({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined | null };
 }) {
-  // const sort = searchParams ? searchParams?.sort : null;
-  // const gender = searchParams ? searchParams?.gender : null;
-  // const categories = searchParams ? searchParams?.categories : null;
-  // const subcategories = searchParams ? searchParams?.subcategories : null;
-  // const price_range = searchParams ?searchParams?.price_range: null;
-  // const q = searchParams ? searchParams?.q : null;
+  const { categoryIds, SearchTerm, price_range, colourIds } = use(
+    searchParams
+  ) as {
+    categoryIds?: string | null;
+    SearchTerm?: string | null;
+    price_range?: string;
+    colourIds?: string | null;
+  };
+
   return (
     <div className="w-full h-full">
-      <Test
-        q={searchParams?.q}
-        sort={searchParams?.sort}
-        gender={searchParams?.gender}
-        categories={searchParams?.categories}
-        subcategories={searchParams?.subcategories}
-        price_range={searchParams?.price_range}
+      <Products
+        categoryIds={categoryIds}
+        SearchTerm={SearchTerm}
+        colourIds={colourIds}
+        // sort={resolvedSearchParams?.sort}
+        price_range={price_range}
       />
       <AddProductDialog />
     </div>

@@ -17,7 +17,7 @@ function RightCart({ checkedItems }) {
     const newTotal = Object.values(checkedItems)
       .filter((item) => item !== null) // Lọc ra các mục đã được chọn
       .reduce(
-        (sum: number, item: any) => sum + item.data.price * item.quantity,
+        (sum: number, item: any) => sum + item.data.salePrice * item.quantity,
         0
       );
     setTotal(newTotal);

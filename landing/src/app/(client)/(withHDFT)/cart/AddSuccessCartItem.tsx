@@ -7,7 +7,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 // import { currencyFormat, parseJSON } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useSelectedProduct } from '@/hooks/useSelectedProduct';

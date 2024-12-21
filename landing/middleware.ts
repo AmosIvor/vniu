@@ -1,5 +1,5 @@
 import { withAuth, NextRequestWithAuth } from 'next-auth/middleware';
-import { NextResponse } from 'next/server';
+import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
@@ -26,5 +26,26 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ['/api/admin/product/create'] };
+export function middleware(req: NextRequest, event: NextFetchEvent) {
+  try {
+    const token = req.cookies.get('next-auth.session-token');
+    console.log('🚀 ~ middleware ~ token:', token);
+
+    if (!token?.value) {
+      // Authentication failed
+      return NextResponse.redirect(new URL('/auth/login', req.url)); // Redirect to login
+    }
+
+    // Authentication successful, continue to the requested page
+    return NextResponse.next();
+  } catch (error) {
+    // Handle authentication errors
+    console.error('Authentication error:', error);
+    return NextResponse.json(
+      { success: false, message: 'An error occurred during authentication.' },
+      { status: 401 }
+    );
+  }
+}
+export const config = {};
 //authorization is done in the middleware

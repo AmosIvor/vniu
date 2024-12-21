@@ -1,11 +1,19 @@
-module.exports = {
-  arrowParens: 'always',
-  semi: false,
-  trailingComma: 'none',
-  tabWidth: 2,
-  endOfLine: 'auto',
-  useTabs: false,
-  singleQuote: true,
-  printWidth: 120,
-  jsxSingleQuote: true,
-};
+{
+  "arrowParens": "avoid",
+    "bracketSameLine": true,
+      "bracketSpacing": false,
+        "singleQuote": true,
+          "trailingComma": "all",
+            "importOrder": [
+              "^react$",
+              "^react-native$",
+              "^(@contexts|./contexts)",
+              "^@stacks",
+              "^(@common|@components|./components)",
+              "^(@utils|@types|@styles|@types|@constants|@navigation|@configs)",
+              "^(@assets/(.*)|@assets)",
+              "^(./(.*)$|../(.*)$)"
+            ],
+              "importOrderSeparation": true,
+                "importOrderSortSpecifiers": true
+}

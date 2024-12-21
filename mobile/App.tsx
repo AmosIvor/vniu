@@ -1,4 +1,4 @@
-import { appThemes } from '@constants'
+import { appThemes } from '@constants/appTheme'
 import { AppContext } from '@contexts'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { RootNavigator } from '@navigators'

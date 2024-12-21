@@ -1,5 +1,7 @@
+import React from 'react'
+
 import { paymentApi } from '@apis'
-import { appColors } from '@constants'
+import { appColors } from '@constants/appColors'
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import queryString from 'query-string'

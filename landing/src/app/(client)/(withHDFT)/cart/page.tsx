@@ -22,13 +22,6 @@ function page() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(
-      '🚀 ~ file: page.tsx:54 ~ useEffect ~ checkedItems:',
-      checkedItems
-    );
-  }, [checkedItems]);
-
   return (
     <div className="w-full py-10 md:py-20">
       <div

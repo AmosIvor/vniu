@@ -1,7 +1,7 @@
 'use client';
 import Loader from '@/components/Loader';
 import { parseJSON } from '@/lib/utils';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import 'swiper/css';
@@ -9,7 +9,6 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 const ProductUserMayLike = ({ data }) => {
-  const random = Math.floor(Math.random() * 1000000);
   const router = useRouter();
   return (
     <div>

@@ -1,11 +1,16 @@
-import { RowComponent, SpaceComponent, TextComponent } from '@components'
-import { appColors, appFonts, appThemes } from '@constants'
+import React from 'react'
 import { AppContext } from '@contexts'
 import { useTheme } from '@react-navigation/native'
 import { ReactNode, useContext, useMemo } from 'react'
 import { Alert } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import SwitchToggle from 'react-native-switch-toggle'
+import { appThemes } from '@constants/appTheme'
+import RowComponent from '@components/RowComponent'
+import SpaceComponent from '@components/SpaceComponent'
+import TextComponent from '@components/TextComponent'
+import { appColors } from '@constants/appColors'
+import { appFonts } from '@constants/appFonts'
 
 interface Props {
   isToggle?: boolean

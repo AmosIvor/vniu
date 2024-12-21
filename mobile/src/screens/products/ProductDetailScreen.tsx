@@ -21,8 +21,6 @@ import { Dropdown } from 'react-native-element-dropdown'
 import { getStringStorage } from 'src/functions/storageFunctions'
 import { useQueryClient } from '@tanstack/react-query'
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL']
-
 const ProductDetailScreen = ({
   navigation,
   route: {
@@ -33,10 +31,17 @@ const ProductDetailScreen = ({
   const { colors } = useTheme()
   const [product, setProduct] = useState()
   const [selectedImage, setSelectedImage] = useState()
-  const [selectedItem, setSelectedItem] = useState()
+  const [selectedItem, setSelectedItem] = useState({
+    productItemId: null,
+    salePrice: 0,
+    originalPrice: 0,
+    productItemSold: 0,
+    productImages: [],
+    variations: [{ size: { sizeName: null }, variationId: null }],
+    colourVMs: [{ colourName: null }]
+  })
   const [isFocus, setIsFocus] = useState(false)
   const [optionData, setOptionData] = useState([])
-  const [option, setOption] = useState(null)
   const [optionName, setOptionName] = useState(null)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [quantity, setQuantity] = useState(1)
@@ -102,7 +107,7 @@ const ProductDetailScreen = ({
       const data = await response.json()
       console.log('🚀 ~ createCartItem ~ data:', data)
       if (data.message === 'Create cart item successfully') {
-        queryClient.invalidateQueries('cartItems', userId)
+        queryClient.invalidateQueries({ queryKey: ['cartItems', userId] })
 
         setIsModalVisible(false)
         navigation.navigate('TabsStack', { screen: 'Cart' })
@@ -224,7 +229,7 @@ const ProductDetailScreen = ({
                 opacity: 0.5
               }}
             >
-              {'(' + 3 + ' ) | đã bán ' + selectedItem?.productItemSold}
+              {'(' + 3 + ' ) | sold ' + (selectedItem?.productItemSold || 0)}
             </Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -259,9 +264,8 @@ const ProductDetailScreen = ({
           onFocus={() => setIsFocus(true)}
           onBlur={() => setIsFocus(false)}
           onChange={(item) => {
-            setOption(item.optionName)
             setOptionName(item.optionName)
-            const foundItem = product.productItems.find((i) => i.productItemId === item.productItemId)
+            const foundItem = product?.productItems?.find((i: { productItemId: any }) => i.productItemId === item?.productItemId)
             if (foundItem) {
               setSelectedItem(foundItem)
               setSelectedImage(foundItem.productImages[0])

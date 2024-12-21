@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { ENV } from '@configs/env'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useTheme } from '@react-navigation/native'
-import { IMAGES } from '@assets'
+import { IMAGES } from '@assets/images'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 const SearchScreen = () => {
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 30,
-    top: 30,
+    top: 50,
     width: 30,
     height: 30,
     backgroundColor: '#E0E0E0',

@@ -1,7 +1,7 @@
 'use client';
 import { CommonSvg } from '@/assets/CommonSvg';
 import { parseJSON } from '@/lib/utils';
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Zoom } from './ui/zoom-image';
 

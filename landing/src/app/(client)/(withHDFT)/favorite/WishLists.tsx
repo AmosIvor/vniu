@@ -79,9 +79,12 @@ function WishLists() {
             className="w-full h-auto overflow-visible relative"
           >
             {wishList ? (
-              wishList?.map((product) => (
-                <SwiperSlide key={product.id}>
-                  <ProductCard product={product} />
+              wishList?.map((product, index) => (
+                <SwiperSlide key={index}>
+                  <ProductCard
+                    product={product}
+                    productId={product.productId}
+                  />
                 </SwiperSlide>
               ))
             ) : (

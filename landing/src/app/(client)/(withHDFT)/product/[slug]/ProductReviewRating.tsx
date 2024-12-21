@@ -72,7 +72,7 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
   );
 
   return (
-    <div className="flex flex-col overflow-auto items-center justify-center w-auto space-y-6 pb-16">
+    (<div className="flex flex-col overflow-auto items-center justify-center w-auto space-y-6 pb-16">
       <div className="flex flex-row p-1 w-full items-center justify-center">
         <div className="flex gap-4 mb-0.5 mx-1"></div>
         <div className="w-full flex items-center justify-center">
@@ -269,15 +269,15 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
             </div>
           ) : reviewRatingData?.totalReview == 0 ? (
             // Case 2: reviewRatingData is not null, but totalReview is 0
-            <div>
+            (<div>
               <span className="text-2xl font-light">
                 {' '}
                 Chưa có đánh giá nào cả!
               </span>
-            </div>
+            </div>)
           ) : (
             // Case 3: reviewRatingData is not null and totalReview is not 0
-            <div className="flex flex-col p-1 w-full gap-[15px] items-center justify-center">
+            (<div className="flex flex-col p-1 w-full gap-[15px] items-center justify-center">
               <div>
                 <div className="flex flex-row p-1 w-full gap-4 items-center justify-center">
                   {starArray.map((item) => {
@@ -461,11 +461,11 @@ const ProductreviewRatingData = ({ reviewRatingData }) => {
                   </li>
                 </ul>
               </div>
-            </div>
+            </div>)
           )}
         </div>
       </div>
-    </div>
+    </div>)
   );
 };
 
